@@ -13,9 +13,9 @@ install: skip
 
 script:
 #Build Attendance Service
-- cd attendance/
-- mvn clean verify
-- docker build -t rajagupt/attendance .
+#- cd attendance/
+#- mvn clean verify
+#- docker build -t rajagupt/attendance .
 #Build Management Service
 - cd ../management/
 - mvn clean verify
@@ -37,7 +37,7 @@ script:
 - docker build -t rajagupt/user .
 #Push Images to Docker Hub
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- docker push rajagupt/attendance
+#- docker push rajagupt/attendance
 - docker push rajagupt/management
 - docker push rajagupt/metrics
 - docker push rajagupt/reporting
