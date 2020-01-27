@@ -13,7 +13,7 @@ import com.upresent.user.utils.CommonUtility;
 
 @Service
 public class UserServiceImpl implements UserService {
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -36,8 +36,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String updateUser(UserDetail userDetail) throws UserException {
 		UserDetail existingDetails = fetchUser(userDetail.getRegistrationNumber());
-		//change updated values
-		userRepository.save(userDetail);
+		existingDetails.setName(CommonUtility.isValidString(userDetail.getName())?
+				userDetail.getName() : existingDetails.getName());
+		existingDetails.setPassword(CommonUtility.isValidString(userDetail.getPassword())?
+				userDetail.getPassword() : existingDetails.getPassword());
+		userRepository.save(existingDetails);
 		return "User data successfully updated!";
 	}
 

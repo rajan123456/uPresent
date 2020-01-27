@@ -21,7 +21,7 @@ public class UserDetail {
 	private String registrationNumber;
 	private String userType;
 	@GeoSpatialIndexed
-	private double[] location;
+	private Double[] location;
 	private String imageId;
 	private Integer isActive;
 }
