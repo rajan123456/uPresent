@@ -11,14 +11,19 @@ Mobile App: [![BitRise](https://app.bitrise.io/app/94539fb2e1e99188/status.svg?t
 
 1. Clone this repository and open the project in Visual Studio Code
 2. Run the below command to install expo
-~~~
+
+```
 npm install -g expo
-~~~
+```
+
 3. Download and install dependencies
-~~~
+
+```
 npm install
-~~~
-4. Install and run the android application on the connected AVD or device by executing this command. Ensure port 19001 is not in use - so that the Metro server can be initialized.
-~~~
+```
+
+4. Install and run the android application on the connected AVD or device by executing this command. Ensure port 19002 is not in use - so that the Metro server can be initialized.
+
+```
 npm start
-~~~
+```
