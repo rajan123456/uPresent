@@ -7,10 +7,10 @@ public interface UserService {
 
 	public String registerUser(UserDetail userDetail) throws UserException;
 
-	public UserDetail fetchUser(String registrationNumber) throws UserException;
+	public UserDetail fetchUser(String username) throws UserException;
 
 	public String updateUser(UserDetail userDetail) throws UserException;
 
-	public String deleteUser(String registrationNumber) throws UserException;
+	public String deleteUser(String username) throws UserException;
 	
 }

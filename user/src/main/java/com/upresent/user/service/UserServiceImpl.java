@@ -24,8 +24,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDetail fetchUser(String registrationNumber) throws UserException {
-		List<UserDetail> userDetails = userRepository.findByRegistrationNumber(registrationNumber);
+	public UserDetail fetchUser(String username) throws UserException {
+		List<UserDetail> userDetails = userRepository.findByRegistrationNumber(username);
 		if (CommonUtility.isValidList(userDetails)) {
 			return userDetails.get(0);
 		} else {
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String updateUser(UserDetail userDetail) throws UserException {
-		UserDetail existingDetails = fetchUser(userDetail.getRegistrationNumber());
+		UserDetail existingDetails = fetchUser(userDetail.getUsername());
 		existingDetails.setName(CommonUtility.isValidString(userDetail.getName())?
 				userDetail.getName() : existingDetails.getName());
 		existingDetails.setPassword(CommonUtility.isValidString(userDetail.getPassword())?
@@ -45,8 +45,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String deleteUser(String registrationNumber) throws UserException {
-		UserDetail userDetail = fetchUser(registrationNumber);
+	public String deleteUser(String username) throws UserException {
+		UserDetail userDetail = fetchUser(username);
 		userDetail.setIsActive(0);
 		userRepository.save(userDetail);
 		return "User data successfully deleted!";

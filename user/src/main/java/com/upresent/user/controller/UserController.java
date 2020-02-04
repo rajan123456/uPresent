@@ -29,9 +29,10 @@ public class UserController {
 	}
 
 	@GetMapping
-	public ResponseEntity<RestResponse<UserDetail>> fetchUser(String registrationNumber) {
-		return RestUtils.successResponse(userService.fetchUser(registrationNumber));
+	public ResponseEntity<RestResponse<UserDetail>> fetchUser(String username) {
+		return RestUtils.successResponse(userService.fetchUser(username));
 	}
+	
 
 	@PutMapping
 	public ResponseEntity<RestResponse<String>> updateUser(
@@ -40,7 +41,7 @@ public class UserController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<RestResponse<String>> deleteUser(String registrationNumber) {
-		return RestUtils.successResponse(userService.deleteUser(registrationNumber));
+	public ResponseEntity<RestResponse<String>> deleteUser(String username) {
+		return RestUtils.successResponse(userService.deleteUser(username));
 	}
 }

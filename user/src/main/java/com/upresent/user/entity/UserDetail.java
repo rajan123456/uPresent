@@ -1,5 +1,7 @@
 package com.upresent.user.entity;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,10 +20,12 @@ public class UserDetail {
 	private String name;
 	@JsonIgnore
 	private String password;
-	private String registrationNumber;
-	private String userType;
+	private String username;
+	private String userType="student";
 	@GeoSpatialIndexed
 	private Double[] location;
-	private String imageId;
+	private List<String> imageId;
 	private Integer isActive;
+	
+	//add encryption/decryption logic for password in getter setter
 }
