@@ -80,8 +80,9 @@ const styles = StyleSheet.create({
   },
   multiInput: {
     flex: 2,
-    width: "90%",
-    paddingTop: 20
+    width: "80%",
+    paddingTop: 20,
+    paddingLeft: 10
   },
   buttons: {
     marginTop: 15,

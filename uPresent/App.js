@@ -3,6 +3,7 @@ import { Home } from "./app/views/Home";
 import { Contact } from "./app/views/Contact";
 import { Register } from "./app/views/Register";
 import { Login } from "./app/views/Login";
+import { About } from "./app/views/About";
 import { StackNavigator } from "react-navigation";
 
 const NavigationRoutes = StackNavigator(
@@ -18,6 +19,9 @@ const NavigationRoutes = StackNavigator(
     },
     LoginRT: {
       screen: Login
+    },
+    AboutRT: {
+      screen: About
     }
   },
   {

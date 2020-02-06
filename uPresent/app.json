@@ -9,7 +9,7 @@
     "orientation": "portrait",
     "icon": "./app/sections/img/uPresent_Logo.png",
     "splash": {
-      "image": "./app/sections/img/uPresent.jpg",
+      "image": "./app/sections/img/uPresent.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
