@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, TouchableOpacity, Text, Alert } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 
 export class Menu extends React.Component {
   onPress = () => {
@@ -47,7 +47,7 @@ export class Menu extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 6,
     backgroundColor: "#ffffff"
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
     color: "#000000",
     fontSize: 18
   }
-});
+};

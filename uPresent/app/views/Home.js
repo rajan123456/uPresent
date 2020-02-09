@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { Header } from "../sections/Header";
 import { Hero } from "../sections/Hero";
 import { Menu } from "../sections/Menu";
@@ -22,8 +22,8 @@ export class Home extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1
   }
-});
+};

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Image } from "react-native";
+import { Image } from "react-native";
 
 export class Hero extends React.Component {
   render() {
@@ -9,10 +9,10 @@ export class Hero extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = {
   heroImage: {
     width: undefined,
     height: undefined,
     flex: 8
   }
-});
+};

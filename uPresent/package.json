@@ -12,6 +12,9 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-material-buttons": "^0.6.0",
+    "react-native-material-textfield": "^0.16.1",
+    "react-native-vector-icons": "^6.6.0",
     "react-native-web": "~0.11.7",
     "react-navigation": "^1.6.1"
   },

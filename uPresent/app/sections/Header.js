@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Alert,
-  AsyncStorage
-} from "react-native";
+import { Alert, AsyncStorage, Image, Text, View } from "react-native";
 
 export class Header extends React.Component {
   constructor(props) {
@@ -63,7 +56,7 @@ export class Header extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = {
   headText: {
     paddingTop: 10,
     textAlign: "right",
@@ -85,4 +78,4 @@ const styles = StyleSheet.create({
     width: undefined,
     height: undefined
   }
-});
+};
