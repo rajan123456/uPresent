@@ -1,5 +1,6 @@
 node_modules/**/*
 .expo/*
+.expo-shared/*
 npm-debug.*
 *.jks
 *.p8
@@ -12,3 +13,8 @@ web-report/
 
 # macOS
 .DS_Store
+
+android/.gradle/*
+android/app/build/*
+android/build/*
+android/keystores/*
