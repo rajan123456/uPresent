@@ -1,32 +1,32 @@
-import React from "react";
-import { StackNavigator } from "react-navigation";
-import { About } from "./app/views/About";
-import { Contact } from "./app/views/Contact";
-import { Home } from "./app/views/Home";
-import { Login } from "./app/views/Login";
-import { Register } from "./app/views/Register";
+import React from 'react';
+import {StackNavigator} from 'react-navigation';
+import {About} from './app/views/About';
+import {Contact} from './app/views/Contact';
+import {Home} from './app/views/Home';
+import {Login} from './app/views/Login';
+import {Register} from './app/views/Register';
 
 const NavigationRoutes = StackNavigator(
   {
     HomeRT: {
-      screen: Home
+      screen: Home,
     },
     ContactRT: {
-      screen: Contact
+      screen: Contact,
     },
     RegisterRT: {
-      screen: Register
+      screen: Register,
     },
     LoginRT: {
-      screen: Login
+      screen: Login,
     },
     AboutRT: {
-      screen: About
-    }
+      screen: About,
+    },
   },
   {
-    initialRouteName: "HomeRT"
-  }
+    initialRouteName: 'HomeRT',
+  },
 );
 
 export default class App extends React.Component {

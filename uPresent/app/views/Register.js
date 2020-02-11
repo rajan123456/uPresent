@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Alert,
   AsyncStorage,
@@ -6,15 +6,15 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-  View
-} from "react-native";
-import { TextField } from "react-native-material-textfield";
-import { RaisedTextButton } from "react-native-material-buttons";
-import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+  View,
+} from 'react-native';
+import {TextField} from 'react-native-material-textfield';
+import {RaisedTextButton} from 'react-native-material-buttons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 export class Register extends React.Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
 
   constructor(props) {
@@ -28,22 +28,22 @@ export class Register extends React.Component {
     this.onSubmitPasswordConfirm = this.onSubmitPasswordConfirm.bind(this);
     this.onAccessoryPress = this.onAccessoryPress.bind(this);
 
-    this.usernameRef = this.updateRef.bind(this, "username");
-    this.passwordRef = this.updateRef.bind(this, "password");
-    this.passwordConfirmRef = this.updateRef.bind(this, "passwordConfirm");
+    this.usernameRef = this.updateRef.bind(this, 'username');
+    this.passwordRef = this.updateRef.bind(this, 'password');
+    this.passwordConfirmRef = this.updateRef.bind(this, 'passwordConfirm');
 
     this.renderPasswordAccessory = this.renderPasswordAccessory.bind(this);
 
     this.state = {
-      username: "",
-      password: "",
-      passwordConfirm: "",
-      secureTextEntry: true
+      username: '',
+      password: '',
+      passwordConfirm: '',
+      secureTextEntry: true,
     };
   }
 
   onFocus() {
-    let { errors = {} } = this.state;
+    let {errors = {}} = this.state;
     for (let name in errors) {
       let ref = this[name];
       if (ref && ref.isFocused()) {
@@ -51,15 +51,15 @@ export class Register extends React.Component {
       }
     }
 
-    this.setState({ errors });
+    this.setState({errors});
   }
 
   onChangeText(text) {
-    ["username", "password", "passwordConfirm"]
-      .map(name => ({ name, ref: this[name] }))
-      .forEach(({ name, ref }) => {
+    ['username', 'password', 'passwordConfirm']
+      .map(name => ({name, ref: this[name]}))
+      .forEach(({name, ref}) => {
         if (ref.isFocused()) {
-          this.setState({ [name]: text });
+          this.setState({[name]: text});
         }
       });
   }
@@ -79,35 +79,35 @@ export class Register extends React.Component {
   onSubmit() {
     let errors = {};
 
-    ["username", "password", "passwordConfirm"].forEach(name => {
+    ['username', 'password', 'passwordConfirm'].forEach(name => {
       let value = this[name].value();
 
       if (!value) {
-        errors[name] = "Should not be empty";
+        errors[name] = 'Should not be empty';
       }
     });
 
-    if (this["password"].value() !== this["passwordConfirm"].value()) {
-      errors["passwordConfirm"] = "Passwords do not match";
+    if (this['password'].value() !== this['passwordConfirm'].value()) {
+      errors['passwordConfirm'] = 'Passwords do not match';
     } else {
-      AsyncStorage.getItem(this["username"].value(), (err, result) => {
+      AsyncStorage.getItem(this['username'].value(), (err, result) => {
         if (result !== null) {
-          errors["username"] =
-            "An account with the same username alread exists";
+          errors['username'] =
+            'An account with the same username alread exists';
         }
       });
     }
 
-    this.setState({ errors });
+    this.setState({errors});
 
     if (Object.entries(errors).length === 0 && errors.constructor === Object) {
       AsyncStorage.setItem(
-        this["username"].value(),
-        this["password"].value(),
+        this['username'].value(),
+        this['password'].value(),
         () => {
-          Alert.alert("Account created");
-          this.props.navigation.navigate("HomeRT");
-        }
+          Alert.alert('Account created');
+          this.props.navigation.navigate('HomeRT');
+        },
       );
     }
   }
@@ -117,8 +117,8 @@ export class Register extends React.Component {
   }
 
   renderPasswordAccessory() {
-    let { secureTextEntry } = this.state;
-    let name = secureTextEntry ? "visibility" : "visibility-off";
+    let {secureTextEntry} = this.state;
+    let name = secureTextEntry ? 'visibility' : 'visibility-off';
 
     return (
       <MaterialIcon
@@ -132,27 +132,26 @@ export class Register extends React.Component {
   }
 
   onAccessoryPress() {
-    this.setState(({ secureTextEntry }) => ({
-      secureTextEntry: !secureTextEntry
+    this.setState(({secureTextEntry}) => ({
+      secureTextEntry: !secureTextEntry,
     }));
   }
 
   cancelRegister = () => {
-    Alert.alert("Registration cancelled");
-    this.props.navigation.navigate("HomeRT");
+    Alert.alert('Registration cancelled');
+    this.props.navigation.navigate('HomeRT');
   };
 
   render() {
-    let { errors = {}, secureTextEntry, ...data } = this.state;
-    let { username, password, passwordConfirm } = data;
+    let {errors = {}, secureTextEntry, ...data} = this.state;
+    let {username, password, passwordConfirm} = data;
 
     return (
       <SafeAreaView style={styles.safeContainer}>
         <ScrollView
           style={styles.scroll}
           contentContainerStyle={styles.contentContainer}
-          keyboardShouldPersistTaps="handled"
-        >
+          keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
             <Text style={styles.heading}>Register</Text>
             <TextField
@@ -221,22 +220,22 @@ export class Register extends React.Component {
 
 const styles = {
   scroll: {
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent',
   },
   container: {
     margin: 8,
-    marginTop: Platform.select({ ios: 8, android: 32 }),
-    flex: 1
+    marginTop: Platform.select({ios: 8, android: 32}),
+    flex: 1,
   },
   contentContainer: {
-    padding: 8
+    padding: 8,
   },
   buttonContainer: {
     paddingTop: 8,
-    margin: 8
+    margin: 8,
   },
   safeContainer: {
     flex: 1,
-    backgroundColor: "#E8EAF6"
-  }
+    backgroundColor: '#E8EAF6',
+  },
 };

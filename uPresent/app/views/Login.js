@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Alert,
   AsyncStorage,
@@ -6,20 +6,20 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-  View
-} from "react-native";
-import { TextField } from "react-native-material-textfield";
-import { RaisedTextButton } from "react-native-material-buttons";
-import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+  View,
+} from 'react-native';
+import {TextField} from 'react-native-material-textfield';
+import {RaisedTextButton} from 'react-native-material-buttons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 let defaults = {
-  username: "",
-  password: ""
+  username: '',
+  password: '',
 };
 
 export class Login extends React.Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
 
   constructor(props) {
@@ -32,19 +32,19 @@ export class Login extends React.Component {
     this.onSubmitPassword = this.onSubmitPassword.bind(this);
     this.onAccessoryPress = this.onAccessoryPress.bind(this);
 
-    this.usernameRef = this.updateRef.bind(this, "username");
-    this.passwordRef = this.updateRef.bind(this, "password");
+    this.usernameRef = this.updateRef.bind(this, 'username');
+    this.passwordRef = this.updateRef.bind(this, 'password');
 
     this.renderPasswordAccessory = this.renderPasswordAccessory.bind(this);
 
     this.state = {
       secureTextEntry: true,
-      ...defaults
+      ...defaults,
     };
   }
 
   onFocus() {
-    let { errors = {} } = this.state;
+    let {errors = {}} = this.state;
 
     for (let name in errors) {
       let ref = this[name];
@@ -53,16 +53,15 @@ export class Login extends React.Component {
         delete errors[name];
       }
     }
-
-    this.setState({ errors });
+    this.setState({errors});
   }
 
   onChangeText(text) {
-    ["username", "password"]
-      .map(name => ({ name, ref: this[name] }))
-      .forEach(({ name, ref }) => {
+    ['username', 'password']
+      .map(name => ({name, ref: this[name]}))
+      .forEach(({name, ref}) => {
         if (ref.isFocused()) {
-          this.setState({ [name]: text });
+          this.setState({[name]: text});
         }
       });
   }
@@ -78,38 +77,38 @@ export class Login extends React.Component {
   onSubmit() {
     let errors = {};
 
-    ["username", "password"].forEach(name => {
+    ['username', 'password'].forEach(name => {
       let value = this[name].value();
 
       if (!value) {
-        errors[name] = "Should not be empty";
+        errors[name] = 'Should not be empty';
       }
     });
 
-    this.setState({ errors });
+    this.setState({errors});
 
     if (Object.entries(errors).length === 0 && errors.constructor === Object) {
-      AsyncStorage.getItem("userLoggedIn", (err, result) => {
-        if (result !== "none") {
-          Alert.alert("Someone already logged on");
-          this.props.navigation.navigate("HomeRT");
+      AsyncStorage.getItem('userLoggedIn', (err, result) => {
+        if (result !== 'none') {
+          Alert.alert('Someone already logged on');
+          this.props.navigation.navigate('HomeRT');
         } else {
           AsyncStorage.getItem(this.state.username, (err, result) => {
             if (result !== null) {
               if (result !== this.state.password) {
-                Alert.alert("Password is incorrect");
+                Alert.alert('Password is incorrect');
               } else {
                 AsyncStorage.setItem(
-                  "userLoggedIn",
+                  'userLoggedIn',
                   this.state.username,
                   () => {
-                    Alert.alert("Welcome, you are logged in.");
-                    this.props.navigation.navigate("HomeRT");
-                  }
+                    Alert.alert('Welcome, you are logged in.');
+                    this.props.navigation.navigate('HomeRT');
+                  },
                 );
               }
             } else {
-              Alert.alert("The account does not exist");
+              Alert.alert('The account does not exist');
             }
           });
         }
@@ -118,14 +117,14 @@ export class Login extends React.Component {
   }
 
   onAccessoryPress() {
-    this.setState(({ secureTextEntry }) => ({
-      secureTextEntry: !secureTextEntry
+    this.setState(({secureTextEntry}) => ({
+      secureTextEntry: !secureTextEntry,
     }));
   }
 
   renderPasswordAccessory() {
-    let { secureTextEntry } = this.state;
-    let name = secureTextEntry ? "visibility" : "visibility-off";
+    let {secureTextEntry} = this.state;
+    let name = secureTextEntry ? 'visibility' : 'visibility-off';
 
     return (
       <MaterialIcon
@@ -143,21 +142,20 @@ export class Login extends React.Component {
   }
 
   cancelLogin = () => {
-    Alert.alert("Login cancelled");
-    this.props.navigation.navigate("HomeRT");
+    Alert.alert('Login cancelled');
+    this.props.navigation.navigate('HomeRT');
   };
 
   render() {
-    let { errors = {}, secureTextEntry, ...data } = this.state;
-    let { username, password } = data;
+    let {errors = {}, secureTextEntry, ...data} = this.state;
+    let {username, password} = data;
 
     return (
       <SafeAreaView style={styles.safeContainer}>
         <ScrollView
           style={styles.scroll}
           contentContainerStyle={styles.contentContainer}
-          keyboardShouldPersistTaps="handled"
-        >
+          keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
             <Text style={styles.heading}>Login</Text>
             <TextField
@@ -210,22 +208,22 @@ export class Login extends React.Component {
 
 const styles = {
   scroll: {
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent',
   },
   container: {
     margin: 8,
-    marginTop: Platform.select({ ios: 8, android: 32 }),
-    flex: 1
+    marginTop: Platform.select({ios: 8, android: 32}),
+    flex: 1,
   },
   contentContainer: {
-    padding: 8
+    padding: 8,
   },
   buttonContainer: {
     paddingTop: 8,
-    margin: 8
+    margin: 8,
   },
   safeContainer: {
     flex: 1,
-    backgroundColor: "#E8EAF6"
-  }
+    backgroundColor: '#E8EAF6',
+  },
 };

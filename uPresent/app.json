@@ -1,33 +1,4 @@
 {
-  "expo": {
-    "name": "uPresent",
-    "slug": "uPresent",
-    "privacy": "public",
-    "sdkVersion": "36.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./app/sections/img/uPresent_Logo.png",
-    "splash": {
-      "image": "./app/sections/img/uPresent.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "entryPoint": "node_modules/expo/AppEntry.js"
-  },
-  "displayName": "uPresent",
-  "name": "uPrsesent"
+  "name": "uPresent",
+  "displayName": "uPresent"
 }

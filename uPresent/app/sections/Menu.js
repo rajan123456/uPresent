@@ -1,9 +1,9 @@
-import React from "react";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import React from 'react';
+import {Alert, Text, TouchableOpacity, View} from 'react-native';
 
 export class Menu extends React.Component {
   onPress = () => {
-    Alert.alert("You tapped the button!");
+    Alert.alert('You tapped the button!');
   };
 
   render() {
@@ -15,8 +15,7 @@ export class Menu extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStyles}
-            onPress={() => this.props.navigate("RegisterRT")}
-          >
+            onPress={() => this.props.navigate('RegisterRT')}>
             <Text style={styles.buttonText}>REGISTER</Text>
           </TouchableOpacity>
         </View>
@@ -26,8 +25,7 @@ export class Menu extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStyles}
-            onPress={() => this.props.navigate("ContactRT")}
-          >
+            onPress={() => this.props.navigate('ContactRT')}>
             <Text style={styles.buttonText}>CONTACT</Text>
           </TouchableOpacity>
         </View>
@@ -37,8 +35,7 @@ export class Menu extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStyles}
-            onPress={() => this.props.navigate("AboutRT")}
-          >
+            onPress={() => this.props.navigate('AboutRT')}>
             <Text style={styles.buttonText}>ABOUT</Text>
           </TouchableOpacity>
         </View>
@@ -50,24 +47,24 @@ export class Menu extends React.Component {
 const styles = {
   container: {
     flex: 6,
-    backgroundColor: "#ffffff"
+    backgroundColor: '#ffffff',
   },
   buttonRow: {
     flex: 2,
-    flexDirection: "row",
-    alignItems: "center",
-    borderColor: "#000000",
-    borderBottomWidth: 1
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#000000',
+    borderBottomWidth: 1,
   },
   buttonStyles: {
-    backgroundColor: "#ffffff",
-    width: "50%",
-    height: "50%",
-    justifyContent: "center",
-    alignItems: "center"
+    backgroundColor: '#ffffff',
+    width: '50%',
+    height: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
-    color: "#000000",
-    fontSize: 18
-  }
+    color: '#000000',
+    fontSize: 18,
+  },
 };

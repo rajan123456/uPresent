@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 import {
   Alert,
   Platform,
   SafeAreaView,
   ScrollView,
   Text,
-  View
-} from "react-native";
-import { TextField } from "react-native-material-textfield";
-import { RaisedTextButton } from "react-native-material-buttons";
-import { Header } from "../sections/Header";
+  View,
+} from 'react-native';
+import {TextField} from 'react-native-material-textfield';
+import {RaisedTextButton} from 'react-native-material-buttons';
+import {Header} from '../sections/Header';
 
 export class Contact extends React.Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
   constructor(props) {
     super(props);
@@ -25,19 +25,19 @@ export class Contact extends React.Component {
     this.onSubmitMsg = this.onSubmitMsg.bind(this);
     this.onSubmitEmail = this.onSubmitEmail.bind(this);
 
-    this.nameRef = this.updateRef.bind(this, "name");
-    this.msgRef = this.updateRef.bind(this, "msg");
-    this.emailRef = this.updateRef.bind(this, "email");
+    this.nameRef = this.updateRef.bind(this, 'name');
+    this.msgRef = this.updateRef.bind(this, 'msg');
+    this.emailRef = this.updateRef.bind(this, 'email');
 
     this.state = {
-      name: "",
-      msg: "",
-      email: ""
+      name: '',
+      msg: '',
+      email: '',
     };
   }
 
   onFocus() {
-    let { errors = {} } = this.state;
+    let {errors = {}} = this.state;
 
     for (let name in errors) {
       let ref = this[name];
@@ -47,15 +47,15 @@ export class Contact extends React.Component {
       }
     }
 
-    this.setState({ errors });
+    this.setState({errors});
   }
 
   onChangeText(text) {
-    ["name", "msg", "email"]
-      .map(name => ({ name, ref: this[name] }))
-      .forEach(({ name, ref }) => {
+    ['name', 'msg', 'email']
+      .map(name => ({name, ref: this[name]}))
+      .forEach(({name, ref}) => {
         if (ref.isFocused()) {
-          this.setState({ [name]: text });
+          this.setState({[name]: text});
         }
       });
   }
@@ -75,15 +75,15 @@ export class Contact extends React.Component {
   onSubmit() {
     let errors = {};
 
-    ["name", "email", "msg"].forEach(name => {
+    ['name', 'email', 'msg'].forEach(name => {
       let value = this[name].value();
 
       if (!value) {
-        errors[name] = "Should not be empty";
+        errors[name] = 'Should not be empty';
       }
     });
 
-    this.setState({ errors });
+    this.setState({errors});
 
     if (Object.entries(errors).length === 0 && errors.constructor === Object) {
       Alert.alert(this.state.name, this.state.msg);
@@ -96,17 +96,16 @@ export class Contact extends React.Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
-    let { errors = {}, ...data } = this.state;
-    let { username, password, passwordConfirm } = data;
+    const {navigate} = this.props.navigation;
+    let {errors = {}, ...data} = this.state;
+    let {username, password, passwordConfirm} = data;
 
     return (
       <SafeAreaView style={styles.safeContainer}>
         <ScrollView
           style={styles.scroll}
           contentContainerStyle={styles.contentContainer}
-          keyboardShouldPersistTaps="handled"
-        >
+          keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
             <Header navigate={navigate} message="Press to Login" />
             <Text style={styles.heading}>Contact</Text>
@@ -169,22 +168,22 @@ export class Contact extends React.Component {
 
 let styles = {
   scroll: {
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent',
   },
   container: {
     margin: 8,
-    marginTop: Platform.select({ ios: 8, android: 32 }),
-    flex: 1
+    marginTop: Platform.select({ios: 8, android: 32}),
+    flex: 1,
   },
   contentContainer: {
-    padding: 8
+    padding: 8,
   },
   buttonContainer: {
     paddingTop: 8,
-    margin: 8
+    margin: 8,
   },
   safeContainer: {
     flex: 1,
-    backgroundColor: "#E8EAF6"
-  }
+    backgroundColor: '#E8EAF6',
+  },
 };
