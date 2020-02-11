@@ -18,10 +18,6 @@ let defaults = {
 };
 
 export class Login extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
-
   constructor(props) {
     super(props);
 

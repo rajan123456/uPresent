@@ -10,10 +10,6 @@ const whatIsUPresent =
   'This app is made by students to help students to record their attendance. No cheating though, we use a geo-fence to ensure that you are actually attending your classes';
 
 export class About extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
-
   render() {
     return (
       <ScrollView style={styles.container}>

@@ -9,12 +9,8 @@ import {
 } from 'react-native';
 import {TextField} from 'react-native-material-textfield';
 import {RaisedTextButton} from 'react-native-material-buttons';
-import {Header} from '../sections/Header';
 
 export class Contact extends React.Component {
-  static navigationOptions = {
-    header: null,
-  };
   constructor(props) {
     super(props);
 
@@ -96,7 +92,6 @@ export class Contact extends React.Component {
   }
 
   render() {
-    const {navigate} = this.props.navigation;
     let {errors = {}, ...data} = this.state;
     let {username, password, passwordConfirm} = data;
 
@@ -107,7 +102,6 @@ export class Contact extends React.Component {
           contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
-            <Header navigate={navigate} message="Press to Login" />
             <Text style={styles.heading}>Contact</Text>
             <TextField
               ref={this.nameRef}
