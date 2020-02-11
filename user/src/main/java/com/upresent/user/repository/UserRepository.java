@@ -10,5 +10,5 @@ import com.upresent.user.entity.UserDetail;
 @Repository
 public interface UserRepository extends MongoRepository<UserDetail, String> {
 	
-	List<UserDetail> findByRegistrationNumber(String registrationNumber);
+	List<UserDetail> findByUsername(String username);
 }

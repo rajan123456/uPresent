@@ -20,7 +20,7 @@ public class FileController {
 	private FileService fileService;
 	
 	@PostMapping
-	public ResponseEntity<RestResponse<String>>  uploadUserImage(
+	public ResponseEntity<RestResponse<String>> uploadUserImage(
 			@RequestParam("file") MultipartFile file) {
 		return RestUtils.successResponse(fileService.uploadUserImage(file));
 	}

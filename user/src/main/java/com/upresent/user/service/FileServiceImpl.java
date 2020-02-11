@@ -29,6 +29,8 @@ public class FileServiceImpl implements FileService {
 			String uniqueFileName = UUID.randomUUID().toString() + file.getOriginalFilename();
 			Path copyLocation = Paths
 					.get(env.getProperty("uploadDir") + uniqueFileName);
+			if (!Files.exists(copyLocation.getParent()))
+				Files.createDirectories(copyLocation.getParent());
 			Files.copy(file.getInputStream(), copyLocation, StandardCopyOption.REPLACE_EXISTING);
 			return uniqueFileName;
 		} catch (Exception e) {

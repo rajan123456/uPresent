@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDetail fetchUser(String username) throws UserException {
-		List<UserDetail> userDetails = userRepository.findByRegistrationNumber(username);
+		List<UserDetail> userDetails = userRepository.findByUsername(username);
 		if (CommonUtility.isValidList(userDetails)) {
 			return userDetails.get(0);
 		} else {
