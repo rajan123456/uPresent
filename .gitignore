@@ -2,3 +2,11 @@ scripts/dev/kafka-data-vol
 scripts/dev/zookeeper-data-vol
 scripts/dev/zookeeper-logs-vol
 scripts/dev/mongo-data-vol
+/bin/
+.project
+.classpath
+.idea/
+order.iml
+.settings/
+target/
+.DS_Store
