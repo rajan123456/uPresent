@@ -37,7 +37,6 @@ export class Register extends React.Component {
       password: '',
       passwordConfirm: '',
       secureTextEntry: true,
-      image: null,
       images: null,
     };
   }
@@ -145,24 +144,25 @@ export class Register extends React.Component {
     this.props.navigation.navigate('HomeRT');
   };
 
-  pickSingleWithCamera(cropping, mediaType = 'photo') {
+  pickFromCamera(cropping, mediaType = 'photo') {
     ImagePicker.openCamera({
       cropping: cropping,
-      width: 1000,
-      height: 1000,
+      width: 50,
+      height: 50,
       includeExif: true,
       mediaType,
     })
-      .then(image => {
-        console.log('received image', image);
+      .then(i => {
+        let imageHolder = {
+          uri: i.path,
+          width: i.width,
+          height: i.height,
+          mime: i.mime,
+        };
+        let imagesHolder = this.state.images ? this.state.images : [];
+        imagesHolder.push(imageHolder);
         this.setState({
-          image: {
-            uri: image.path,
-            width: image.width,
-            height: image.height,
-            mime: image.mime,
-          },
-          images: null,
+          images: imagesHolder,
         });
       })
       .catch(e => console.log(e));
@@ -224,16 +224,17 @@ export class Register extends React.Component {
               renderRightAccessory={this.renderPasswordAccessory}
             />
             <RaisedTextButton
-              onPress={() => this.pickSingleWithCamera(true)}
-              title="Add Your Picture"
+              onPress={() => this.pickFromCamera(true)}
+              title="Add Your Pictures"
               color={TextField.defaultProps.tintColor}
               titleColor="white"
             />
             <View style={styles.imageTileView}>
-              <Image
-                source={this.state.image ? this.state.image : null}
-                style={styles.imageTileStyle}
-              />
+              {this.state.images
+                ? this.state.images.map(i => {
+                    return <Image source={i} style={styles.imageTileStyle} />;
+                  })
+                : null}
             </View>
           </View>
           <View style={styles.buttonContainer}>
@@ -276,12 +277,13 @@ const styles = {
     flex: 1,
     backgroundColor: '#E8EAF6',
   },
+  imageTileView: {
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    padding: 20,
+  },
   imageTileStyle: {
     width: 50,
     height: 50,
-  },
-  imageTileView: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 };
