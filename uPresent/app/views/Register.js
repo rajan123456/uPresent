@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Alert,
   AsyncStorage,
+  Image,
   Platform,
   SafeAreaView,
   ScrollView,
@@ -11,6 +12,7 @@ import {
 import {TextField} from 'react-native-material-textfield';
 import {RaisedTextButton} from 'react-native-material-buttons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import ImagePicker from 'react-native-image-crop-picker';
 
 export class Register extends React.Component {
   constructor(props) {
@@ -35,6 +37,8 @@ export class Register extends React.Component {
       password: '',
       passwordConfirm: '',
       secureTextEntry: true,
+      image: null,
+      images: null,
     };
   }
 
@@ -87,6 +91,9 @@ export class Register extends React.Component {
       errors['passwordConfirm'] = 'Passwords do not match';
     } else {
       AsyncStorage.getItem(this['username'].value(), (err, result) => {
+        if (err) {
+          console.log(err);
+        }
         if (result !== null) {
           errors['username'] =
             'An account with the same username alread exists';
@@ -137,6 +144,29 @@ export class Register extends React.Component {
     Alert.alert('Registration cancelled');
     this.props.navigation.navigate('HomeRT');
   };
+
+  pickSingleWithCamera(cropping, mediaType = 'photo') {
+    ImagePicker.openCamera({
+      cropping: cropping,
+      width: 1000,
+      height: 1000,
+      includeExif: true,
+      mediaType,
+    })
+      .then(image => {
+        console.log('received image', image);
+        this.setState({
+          image: {
+            uri: image.path,
+            width: image.width,
+            height: image.height,
+            mime: image.mime,
+          },
+          images: null,
+        });
+      })
+      .catch(e => console.log(e));
+  }
 
   render() {
     let {errors = {}, secureTextEntry, ...data} = this.state;
@@ -193,6 +223,18 @@ export class Register extends React.Component {
               maxLength={15}
               renderRightAccessory={this.renderPasswordAccessory}
             />
+            <RaisedTextButton
+              onPress={() => this.pickSingleWithCamera(true)}
+              title="Add Your Picture"
+              color={TextField.defaultProps.tintColor}
+              titleColor="white"
+            />
+            <View style={styles.imageTileView}>
+              <Image
+                source={this.state.image ? this.state.image : null}
+                style={styles.imageTileStyle}
+              />
+            </View>
           </View>
           <View style={styles.buttonContainer}>
             <RaisedTextButton
@@ -233,5 +275,13 @@ const styles = {
   safeContainer: {
     flex: 1,
     backgroundColor: '#E8EAF6',
+  },
+  imageTileStyle: {
+    width: 50,
+    height: 50,
+  },
+  imageTileView: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 };

@@ -5551,6 +5551,11 @@ react-native-gesture-handler@^1.5.6:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+react-native-image-crop-picker@^0.28.0:
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.28.0.tgz#f121669853278dc14baf14ba25b8e6524b0c234c"
+  integrity sha512-4AqQdeS+uFkdeTlsz+3o2Y5dXoRalZiDjsyPsWR2JOawgbzUdjaMQwXkjd12fXNB+g8kccTjvbH96WlXaoHTTg==
+
 react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
