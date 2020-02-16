@@ -1,6 +1,16 @@
 version: '3.1'
 
 services:
+    user:
+        image: rajagupt/user:latest
+        container_name: piggyback-dev-runner-user-1
+        restart: always
+        ports:
+         - "8083:8080"
+        volumes:
+        - user-data-vol:/app/resources/images
+        depends_on:
+        - mongo
     mongo:
         image: mongo:latest
         container_name: mongo
