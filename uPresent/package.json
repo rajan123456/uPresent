@@ -16,6 +16,7 @@
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-gesture-handler": "^1.5.6",
+    "react-native-image-crop-picker": "^0.28.0",
     "react-native-material-buttons": "^0.6.0",
     "react-native-material-textfield": "^0.16.1",
     "react-native-reanimated": "^1.7.0",
