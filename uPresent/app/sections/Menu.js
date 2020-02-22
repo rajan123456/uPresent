@@ -11,7 +11,7 @@ export class Menu extends React.Component {
       <View style={styles.container}>
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.buttonStyles} onPress={this.onPress}>
-            <Text style={styles.buttonText}>LESSONS</Text>
+            <Text style={styles.buttonText}>ATTENDANCE</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStyles}
@@ -21,7 +21,7 @@ export class Menu extends React.Component {
         </View>
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.buttonStyles} onPress={this.onPress}>
-            <Text style={styles.buttonText}>BLOG</Text>
+            <Text style={styles.buttonText}>PLACEHOLDER</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStyles}
@@ -31,7 +31,7 @@ export class Menu extends React.Component {
         </View>
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.buttonStyles} onPress={this.onPress}>
-            <Text style={styles.buttonText}>QUIZ</Text>
+            <Text style={styles.buttonText}>PLACEHOLDER</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStyles}
