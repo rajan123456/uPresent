@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -11,6 +12,7 @@ import com.upresent.user.entity.UserDetail;
 import com.upresent.user.exception.ExceptionResponseCode;
 import com.upresent.user.exception.UserException;
 import com.upresent.user.producer.KafkaMessageProducer;
+import com.upresent.user.producer.RestMessageProducer;
 import com.upresent.user.repository.UserRepository;
 import com.upresent.user.utils.CommonUtility;
 import com.upresent.user.utils.Constant;
@@ -25,6 +27,13 @@ public class UserServiceImpl implements UserService {
 	private KafkaMessageProducer kafkaMessageProducer;
 
 	Gson gson = new Gson();
+	
+	@Autowired
+	private RestMessageProducer restMessageProducer;
+
+	@Autowired
+	private Environment env;
+
 
 	@Override
 	public String registerUser(UserDetail userDetail) throws UserException {
@@ -65,14 +74,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void publishUserUpdates(UserDetail user, String eventType) {
-		kafkaMessageProducer.send(
-				CommonUtility.stringifyEventForPublish(
-						gson.toJson(user),
-						eventType,
-						Calendar.getInstance().getTime().toString(),
-						"",
-						Constant.USER_SOURCE_ID
-						)
+		String message = CommonUtility.stringifyEventForPublish(
+				gson.toJson(user),
+				eventType,
+				Calendar.getInstance().getTime().toString(),
+				"",
+				Constant.USER_SOURCE_ID
 				);
+		String useMessagePublisher = env.getProperty("message.publisher.switch");
+		if (null == useMessagePublisher || 1 == Integer.parseInt(useMessagePublisher)) {
+			kafkaMessageProducer.send(message);
+		} else {
+			restMessageProducer.send(message);
+		}
 	}
 }

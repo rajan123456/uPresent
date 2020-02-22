@@ -4,11 +4,13 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import com.google.gson.Gson;
 import com.upresent.management.entity.UserDetail;
 import com.upresent.management.exception.ManagementException;
 import com.upresent.management.producer.KafkaMessageProducer;
+import com.upresent.management.producer.RestMessageProducer;
 import com.upresent.management.repository.UserRepository;
 import com.upresent.management.utils.CommonUtility;
 import com.upresent.management.utils.Constant;
@@ -17,9 +19,15 @@ public class ManagementServiceImpl implements ManagementService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private KafkaMessageProducer kafkaMessageProducer;
+
+	@Autowired
+	private RestMessageProducer restMessageProducer;
+
+	@Autowired
+	private Environment env;
 
 	Gson gson = new Gson();
 
@@ -64,17 +72,21 @@ public class ManagementServiceImpl implements ManagementService {
 		userRepository.save(userDetail);
 		return "User data successfully deleted!";
 	}
-	
+
 	private void publishManagementUpdates(UserDetail user, String eventType) {
-		kafkaMessageProducer.send(
-				CommonUtility.stringifyEventForPublish(
-						gson.toJson(user),
-						eventType,
-						Calendar.getInstance().getTime().toString(),
-						"",
-						Constant.MANAGEMENT_SOURCE_ID
-						)
+		String message = CommonUtility.stringifyEventForPublish(
+				gson.toJson(user),
+				eventType,
+				Calendar.getInstance().getTime().toString(),
+				"",
+				Constant.MANAGEMENT_SOURCE_ID
 				);
+		String useMessagePublisher = env.getProperty("message.publisher.switch");
+		if (null == useMessagePublisher || 1 == Integer.parseInt(useMessagePublisher)) {
+			kafkaMessageProducer.send(message);
+		} else {
+			restMessageProducer.send(message);
+		}
 	}
 
 }
