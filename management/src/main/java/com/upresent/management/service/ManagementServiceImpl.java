@@ -62,7 +62,6 @@ public class ManagementServiceImpl implements ManagementService {
 		userDetail.setIsActive(0);
 		publishManagementUpdates(userDetail, Constant.USER_DELETED_EVENT);
 		userRepository.save(userDetail);
-		
 		return "User data successfully deleted!";
 	}
 	
