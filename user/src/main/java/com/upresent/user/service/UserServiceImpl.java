@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 				"",
 				Constant.USER_SOURCE_ID
 				);
-		String useMessagePublisher = env.getProperty("message.publisher.switch");
+		String useMessagePublisher = env.getProperty("sagaEnabled");
 		if (null == useMessagePublisher || 1 == Integer.parseInt(useMessagePublisher)) {
 			kafkaMessageProducer.send(message);
 		} else {
