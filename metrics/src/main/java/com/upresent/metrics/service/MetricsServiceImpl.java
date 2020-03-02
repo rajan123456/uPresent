@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.upresent.metrics.entity.MetricsData;
 import com.upresent.metrics.exception.MetricsException;
 import com.upresent.metrics.repository.MetricsRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MetricsServiceImpl implements MetricsService {
 
 	@Autowired
