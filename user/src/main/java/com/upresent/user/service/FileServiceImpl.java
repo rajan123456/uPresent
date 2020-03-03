@@ -26,7 +26,7 @@ public class FileServiceImpl implements FileService {
 		if (CommonUtility.isNullObject(file))
 			throw new UserException(ExceptionResponseCode.USER_DATA_NOT_FOUND_IN_REQUEST);
 		try {
-			String uniqueFileName = UUID.randomUUID().toString() + file.getOriginalFilename();
+			String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 			Path copyLocation = Paths
 					.get(env.getProperty("uploadDir") + uniqueFileName);
 			if (!Files.exists(copyLocation.getParent()))
