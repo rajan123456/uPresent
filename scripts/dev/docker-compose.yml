@@ -3,7 +3,7 @@ version: '3.1'
 services:
     user:
         image: rajagupt/user:latest
-        container_name: piggyback-dev-runner-user-1
+        container_name: user
         restart: always
         ports:
          - "8083:8080"
