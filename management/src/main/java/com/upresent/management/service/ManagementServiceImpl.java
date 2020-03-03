@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.upresent.management.entity.UserDetail;
@@ -15,6 +16,7 @@ import com.upresent.management.repository.UserRepository;
 import com.upresent.management.utils.CommonUtility;
 import com.upresent.management.utils.Constant;
 
+@Service
 public class ManagementServiceImpl implements ManagementService {
 
 	@Autowired
