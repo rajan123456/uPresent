@@ -15,6 +15,13 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {saveFile} from '../api/fileApi';
 import {saveUser, getUserByName} from '../api/userApi';
 import {userDataNotFound} from '../constants/userApiConstants';
+import {
+  shouldNotBeEmpty,
+  passwordsDoNotMatch,
+  accountAlreadyExists,
+  accountCreated,
+  registrationCancelled,
+} from '../constants/registerConstants';
 
 export class Register extends React.Component {
   constructor(props) {
@@ -83,16 +90,16 @@ export class Register extends React.Component {
       let value = this[name].value();
 
       if (!value) {
-        errors[name] = 'Should not be empty';
+        errors[name] = shouldNotBeEmpty;
       }
     });
 
     if (this.password.value() !== this.passwordConfirm.value()) {
-      errors.passwordConfirm = 'Passwords do not match';
+      errors.passwordConfirm = passwordsDoNotMatch;
     } else {
       getUserByName(this.username.value()).then(_resp => {
         if (_resp.message !== userDataNotFound) {
-          errors.username = 'An account with the same username alread exists.';
+          errors.username = accountAlreadyExists;
         }
       });
     }
@@ -109,7 +116,7 @@ export class Register extends React.Component {
       };
 
       saveUser(user).then(_resp => {
-        Alert.alert('Account created');
+        Alert.alert(accountCreated);
         this.props.navigation.navigate('HomeRT');
       });
     }
@@ -141,7 +148,7 @@ export class Register extends React.Component {
   }
 
   cancelRegister = () => {
-    Alert.alert('Registration cancelled');
+    Alert.alert(registrationCancelled);
     this.props.navigation.navigate('HomeRT');
   };
 
