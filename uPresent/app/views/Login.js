@@ -12,6 +12,14 @@ import {RaisedTextButton} from 'react-native-material-buttons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {loginUser} from '../api/authApi';
 import AsyncStorage from '@react-native-community/async-storage';
+import {unauthorizedAccess, ok} from '../constants/userApiConstants';
+import {
+  welcomeMessage,
+  passwordIsIncorrect,
+  accountDoesNotExist,
+  shouldNotBeEmpty,
+  loginCancelled,
+} from '../constants/loginConstants';
 
 let defaults = {
   username: '',
@@ -76,7 +84,7 @@ export class Login extends React.Component {
       let value = this[name].value();
 
       if (!value) {
-        errors[name] = 'Should not be empty';
+        errors[name] = shouldNotBeEmpty;
       }
     });
 
@@ -88,18 +96,15 @@ export class Login extends React.Component {
         username: this.state.username,
       };
       loginUser(auth).then(_resp => {
-        if (
-          _resp.message ===
-          'Unauthorised access. Please retry with correct credentials.'
-        ) {
-          Alert.alert('Password is incorrect');
-        } else if (_resp.message === 'ok') {
+        if (_resp.message === unauthorizedAccess) {
+          Alert.alert(passwordIsIncorrect);
+        } else if (_resp.message === ok) {
           AsyncStorage.setItem('userLoggedIn', this.state.username, () => {
-            Alert.alert('Welcome, you are logged in.');
+            Alert.alert(welcomeMessage);
             this.props.navigation.navigate('HomeRT');
           });
         } else {
-          Alert.alert('The account does not exist');
+          Alert.alert(accountDoesNotExist);
         }
       });
     }
@@ -131,7 +136,7 @@ export class Login extends React.Component {
   }
 
   cancelLogin = () => {
-    Alert.alert('Login cancelled');
+    Alert.alert(loginCancelled);
     this.props.navigation.navigate('HomeRT');
   };
 

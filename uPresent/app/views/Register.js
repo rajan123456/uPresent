@@ -14,6 +14,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-crop-picker';
 import {saveFile} from '../api/fileApi';
 import {saveUser, getUserByName} from '../api/userApi';
+import {userDataNotFound} from '../constants/userApiConstants';
 
 export class Register extends React.Component {
   constructor(props) {
@@ -90,7 +91,7 @@ export class Register extends React.Component {
       errors.passwordConfirm = 'Passwords do not match';
     } else {
       getUserByName(this.username.value()).then(_resp => {
-        if (_resp.message !== 'User data not found.') {
+        if (_resp.message !== userDataNotFound) {
           errors.username = 'An account with the same username alread exists.';
         }
       });
