@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Alert,
-  AsyncStorage,
   Image,
   Platform,
   SafeAreaView,
@@ -13,6 +12,8 @@ import {TextField} from 'react-native-material-textfield';
 import {RaisedTextButton} from 'react-native-material-buttons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-crop-picker';
+import {saveFile} from '../api/fileApi';
+import {saveUser, getUserByName} from '../api/userApi';
 
 export class Register extends React.Component {
   constructor(props) {
@@ -38,6 +39,7 @@ export class Register extends React.Component {
       passwordConfirm: '',
       secureTextEntry: true,
       images: null,
+      imageIds: [],
     };
   }
 
@@ -64,16 +66,14 @@ export class Register extends React.Component {
   }
 
   onSubmitUsername() {
-    this.email.focus();
+    this.password.focus();
   }
 
   onSubmitPassword() {
-    this.msg.focus();
+    this.passwordConfirm.focus();
   }
 
-  onSubmitPasswordConfirm() {
-    this.msg.blue();
-  }
+  onSubmitPasswordConfirm() {}
 
   onSubmit() {
     let errors = {};
@@ -86,16 +86,12 @@ export class Register extends React.Component {
       }
     });
 
-    if (this['password'].value() !== this['passwordConfirm'].value()) {
-      errors['passwordConfirm'] = 'Passwords do not match';
+    if (this.password.value() !== this.passwordConfirm.value()) {
+      errors.passwordConfirm = 'Passwords do not match';
     } else {
-      AsyncStorage.getItem(this['username'].value(), (err, result) => {
-        if (err) {
-          console.log(err);
-        }
-        if (result !== null) {
-          errors['username'] =
-            'An account with the same username alread exists';
+      getUserByName(this.username.value()).then(_resp => {
+        if (_resp.message !== 'User data not found.') {
+          errors.username = 'An account with the same username alread exists.';
         }
       });
     }
@@ -103,14 +99,18 @@ export class Register extends React.Component {
     this.setState({errors});
 
     if (Object.entries(errors).length === 0 && errors.constructor === Object) {
-      AsyncStorage.setItem(
-        this['username'].value(),
-        this['password'].value(),
-        () => {
-          Alert.alert('Account created');
-          this.props.navigation.navigate('HomeRT');
-        },
-      );
+      let user = {
+        imageId: this.state.imageIds,
+        isActive: 1,
+        name: this.username.value(),
+        username: this.username.value(),
+        password: this.password.value(),
+      };
+
+      saveUser(user).then(_resp => {
+        Alert.alert('Account created');
+        this.props.navigation.navigate('HomeRT');
+      });
     }
   }
 
@@ -151,21 +151,34 @@ export class Register extends React.Component {
       height: 50,
       includeExif: true,
       mediaType,
-    })
-      .then(i => {
-        let imageHolder = {
-          uri: i.path,
-          width: i.width,
-          height: i.height,
-          mime: i.mime,
-        };
-        let imagesHolder = this.state.images ? this.state.images : [];
-        imagesHolder.push(imageHolder);
+    }).then(i => {
+      let imageHolder = {
+        uri: i.path,
+        width: i.width,
+        height: i.height,
+        mime: i.mime,
+      };
+      let imagesHolder = this.state.images ? this.state.images : [];
+      imagesHolder.push(imageHolder);
+      this.setState({
+        images: imagesHolder,
+      });
+
+      let photo = {uri: imageHolder.uri};
+      let formData = new FormData();
+      formData.append('file', {
+        uri: photo.uri,
+        name: 'image.jpg',
+        type: 'image/jpeg',
+      });
+      saveFile(formData).then(_resp => {
+        let imageIdsHolder = this.state.imageIds ? this.state.imageIds : [];
+        imageIdsHolder.push(_resp.data);
         this.setState({
-          images: imagesHolder,
+          imageIds: imageIdsHolder,
         });
-      })
-      .catch(e => console.log(e));
+      });
+    });
   }
 
   render() {
@@ -232,7 +245,13 @@ export class Register extends React.Component {
             <View style={styles.imageTileView}>
               {this.state.images
                 ? this.state.images.map(i => {
-                    return <Image source={i} style={styles.imageTileStyle} />;
+                    return (
+                      <Image
+                        source={i}
+                        style={styles.imageTileStyle}
+                        key={i.uri}
+                      />
+                    );
                   })
                 : null}
             </View>
