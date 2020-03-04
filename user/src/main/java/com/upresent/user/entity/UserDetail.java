@@ -1,6 +1,7 @@
 package com.upresent.user.entity;
 
 import java.security.Key;
+import java.util.Base64;
 import java.util.List;
 
 import javax.crypto.Cipher;
@@ -18,7 +19,6 @@ public class UserDetail {
 	@Id
 	private String userId;
 	private String name;
-	@JsonIgnore
 	private String password;
 	private String username;
 	private String userType="student";
@@ -43,8 +43,7 @@ public class UserDetail {
 			Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.DECRYPT_MODE, aesKey);
-			String decryptedPassword = new String(cipher.doFinal(password.getBytes()));
-			return decryptedPassword;
+			return new String(cipher.doFinal(Base64.getDecoder().decode(password)));
 		} catch (Exception e) {
 			return password;
 		}
@@ -55,8 +54,7 @@ public class UserDetail {
 			Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE, aesKey);
-			byte[] encrypted = cipher.doFinal(password.getBytes());
-			this.password = new String(encrypted);
+			this.password = Base64.getEncoder().encodeToString(cipher.doFinal(password.getBytes("UTF-8")));
 		} catch (Exception e) {
 			this.password = password;
 		}
@@ -88,8 +86,8 @@ public class UserDetail {
 	@Override
 	public String toString() {
 		return "UserDetail [userId=" + userId + ", name=" + name + ", username=" + username
-				+ ", userType=" + userType + ", imageId=" + imageId
-				+ ", isActive=" + isActive + "]";
+				+ ", userType=" + userType + ", imageId=" + imageId + ", isActive=" + isActive + "]";
 	}
+	
 
 }
