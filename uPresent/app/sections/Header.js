@@ -1,5 +1,6 @@
 import React from 'react';
-import {Alert, AsyncStorage, Image, Text, View} from 'react-native';
+import {Alert, Image, Text, View} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export class Header extends React.Component {
   constructor(props) {
