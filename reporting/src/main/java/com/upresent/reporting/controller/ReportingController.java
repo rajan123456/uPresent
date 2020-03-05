@@ -9,6 +9,10 @@ public class ReportingController {
 
     @RequestMapping("/")
     public String index() {
+        int a = Integer.MAX_VALUE;
+        int[] ab =null;
+        System.out.print(ab.length);
+        
         return "Hello World";
     }
 }
