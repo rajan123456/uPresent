@@ -12,7 +12,7 @@ import com.upresent.reporting.exception.ExceptionResponseCode;
 public class RestUtils {
 
 	public static <T> ResponseEntity<RestResponse<T>> successResponse(T data, String message, HttpStatus statusCode) {
-		RestResponse<T> response = new RestResponse<T>(message, Constant.SUCCESS_STATUS, data);
+		RestResponse<T> response = new RestResponse<T>(message, Constants.SUCCESS_STATUS, data);
 		return new ResponseEntity<RestResponse<T>>(response, statusCode);
 	}
 
@@ -26,7 +26,7 @@ public class RestUtils {
 
 	public static <T> ResponseEntity<RestResponse<?>> errorResponseEntity(String errorMessage,
 			HttpStatus statusCode) {
-		return new ResponseEntity<RestResponse<?>>(new RestResponse<T>(errorMessage, Constant.FAILURE_STATUS, null), statusCode);
+		return new ResponseEntity<RestResponse<?>>(new RestResponse<T>(errorMessage, Constants.FAILURE_STATUS, null), statusCode);
 	}
 
 	public static <T> ResponseEntity<String> errorForMB(String errorMessage,
@@ -41,7 +41,7 @@ public class RestUtils {
 	}
 
 	public static <T> RestResponse<?> errorResponseData(String errorMessage) {
-		return new RestResponse<T>(errorMessage, Constant.FAILURE_STATUS, null);
+		return new RestResponse<T>(errorMessage, Constants.FAILURE_STATUS, null);
 	}
 
 	public static <T> RestResponse<?> errorResponseEnum(ExceptionResponseCode routerResponseCode) {

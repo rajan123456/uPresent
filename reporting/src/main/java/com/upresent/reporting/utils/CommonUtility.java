@@ -4,7 +4,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class CommonUtility {
+public class CommonUtility {	
+
+	private CommonUtility() {
+	}
 
 	public static boolean isNullObject(Object obj) {
 		return (null == obj);
@@ -23,7 +26,7 @@ public class CommonUtility {
 	}
 
 	public static boolean isValidCollection(Collection<?> obj) {
-		return (obj != null && obj.size() > 0);
+		return (obj != null && !obj.isEmpty());
 	}
 
 	public static boolean isValidInteger(Integer value) {
@@ -43,7 +46,7 @@ public class CommonUtility {
 	}
 
 	public static boolean isValidList(List<?> list) {
-		return (list != null && list.size() != 0);
+		return (list != null && !list.isEmpty());
 	}
 
 	public static boolean isNotEmpty(String attrKey) {
