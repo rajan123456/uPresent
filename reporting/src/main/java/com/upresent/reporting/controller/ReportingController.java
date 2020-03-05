@@ -1,4 +1,4 @@
-package com.upresent.reporting.Controller;
+package com.upresent.reporting.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;

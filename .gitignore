@@ -10,3 +10,6 @@ order.iml
 .settings/
 target/
 .DS_Store
+/.metadata/
+.sonarlint/
+**/*.log
