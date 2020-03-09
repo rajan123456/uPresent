@@ -7,4 +7,5 @@ import com.upresent.reporting.entity.ReportingData;
 
 @Repository
 public interface ReportingRepository extends MongoRepository<ReportingData, String> {
+	
 }
