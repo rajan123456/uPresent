@@ -1,4 +1,4 @@
-package com.upresent.user.controller;
+package com.upresent.user.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,4 +48,5 @@ public class UserController {
 	public ResponseEntity<RestResponse<String>> deleteUser(String username) {
 		return RestUtils.successResponse(userService.deleteUser(username));
 	}
+	
 }
