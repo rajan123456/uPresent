@@ -1,18 +1,27 @@
 package com.upresent.reporting.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.upresent.reporting.entity.ReportingData;
+import com.upresent.reporting.service.ReportingService;
+import com.upresent.reporting.utils.RestResponse;
+import com.upresent.reporting.utils.RestUtils;
 
 @RestController
 @RequestMapping("/reporting")
 public class ReportingController {
+	
+	@Autowired
+	ReportingService reportingService;
 
-    @RequestMapping("/")
-    public String index() {
-        int a = Integer.MAX_VALUE;
-        int[] ab =null;
-        System.out.print(ab.length);
-        
-        return "Hello World";
-    }
+	@PostMapping
+	public ResponseEntity<RestResponse<String>> addMetricsData(
+			@RequestBody ReportingData metricsData) {
+		return RestUtils.successResponse(reportingService.addReportingData(metricsData));
+	}
 }
