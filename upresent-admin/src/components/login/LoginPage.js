@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from "react";
 import LoginForm from "./LoginForm";
 import * as userApi from "../../api/userApi";
+import * as authApi from "../../api/authApi";
 import { toast } from "react-toastify";
 
 const LoginPage = props => {
   const [errors, setErrors] = useState({});
 
   const [user, setUser] = useState({
-    email: "",
-    user_password: ""
+    username: "",
+    password: ""
   });
 
   useEffect(() => {
-    const user_id = props.match.params.user_id;
-    if (user_id) {
-      userApi.getUserById(user_id).then(_user => setUser(_user));
+    const username = props.match.params.username;
+    if (username) {
+      userApi.getUserByUsername(username).then(_user => setUser(_user));
     }
     localStorage.clear();
-  }, [props.match.params.user_id]);
+  }, [props.match.params.username]);
 
   function handleChange({ target }) {
     setUser({
@@ -29,8 +30,8 @@ const LoginPage = props => {
   function formIsValid() {
     const _errors = {};
 
-    if (!user.email) _errors.email = "Email is required";
-    if (!user.user_password) _errors.user_password = "Password is required";
+    if (!user.username) _errors.username = "Username is required";
+    if (!user.password) _errors.password = "Password is required";
 
     setErrors(_errors);
 
@@ -41,11 +42,13 @@ const LoginPage = props => {
     event.preventDefault();
     if (!formIsValid()) return;
 
-    userApi
-      .loginUser(user.email, user.user_password)
+    let authRequest = { password: user.password, username: user.username };
+    authApi
+      .loginUser(authRequest)
       .then(() => {
+        localStorage.setItem("user", user.username);
         props.history.push("/home");
-        toast.success("Welcome to Piggyback Portal!");
+        toast.success("Welcome to uPresent Admin Portal");
       })
       .catch(handleError);
   }
@@ -59,7 +62,7 @@ const LoginPage = props => {
       <div className="container">
         <div className="col-sm-8 col-sm-offset-2">
           <>
-            <h1>Piggyback Partners</h1>
+            <h1>uPresent Admin Portal</h1>
             <LoginForm
               errors={errors}
               user={user}

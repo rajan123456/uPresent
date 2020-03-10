@@ -8,20 +8,20 @@ function LoginForm(props) {
       <TextInput
         id="username"
         type="text"
-        label="Email"
+        label="Username"
         onChange={props.onChange}
-        name="email"
-        value={props.user.email}
-        error={props.errors.email}
+        name="username"
+        value={props.user.username}
+        error={props.errors.username}
       />
       <TextInput
         id="password"
         type="password"
         label="Password"
         onChange={props.onChange}
-        name="user_password"
-        value={props.user.user_password}
-        error={props.errors.user_password}
+        name="password"
+        value={props.user.password}
+        error={props.errors.password}
       />
 
       <input type="submit" value="Login" className="btn btn-primary" />

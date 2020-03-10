@@ -18,11 +18,11 @@ const ManageUsersPage = props => {
   });
 
   useEffect(() => {
-    const user_id = props.match.params.user_id;
-    if (user_id) {
-      userApi.getUserById(user_id).then(_user => setUser(_user));
+    const username = props.match.params.username;
+    if (username) {
+      userApi.getUserByUsername(username).then(_user => setUser(_user));
     }
-  }, [props.match.params.user_id]);
+  }, [props.match.params.username]);
 
   function handleChange({ target }) {
     setUser({

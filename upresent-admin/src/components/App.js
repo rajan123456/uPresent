@@ -22,7 +22,7 @@ function App() {
           <PrivateRoute path="/home" component={HomePage} />
           <PrivateRoute path="/users" component={UsersPage} />
           <PrivateRoute path="/user/add" exact component={CreateUsersPage} />
-          <PrivateRoute path="/user/:user_id" component={ManageUsersPage} />
+          <PrivateRoute path="/user/:username" component={ManageUsersPage} />
           <Route component={FileNotFoundPage} />
         </Switch>
       </div>
