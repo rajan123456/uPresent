@@ -48,5 +48,5 @@ public class UserController {
 	public ResponseEntity<RestResponse<String>> deleteUser(String username) {
 		return RestUtils.successResponse(userService.deleteUser(username));
 	}
-	
+
 }
