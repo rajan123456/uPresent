@@ -32,7 +32,11 @@ public class UserController {
 	public ResponseEntity<RestResponse<UserDetail>> fetchUser(String username) {
 		return RestUtils.successResponse(userService.fetchUser(username));
 	}
-	
+
+	@GetMapping("/all")
+	public ResponseEntity<RestResponse<Iterable<UserDetail>>> fetchAllUsers() {
+		return RestUtils.successResponse(userService.fetchAllUsers());
+	}
 
 	@PutMapping
 	public ResponseEntity<RestResponse<String>> updateUser(
