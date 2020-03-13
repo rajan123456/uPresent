@@ -8,19 +8,18 @@ const ManageUsersPage = props => {
   const [errors, setErrors] = useState({});
 
   const [user, setUser] = useState({
-    id: 0,
-    first_name: "",
-    last_name: "",
-    email: "",
-    mobile_number: "",
-    device_id: "",
-    user_role: ""
+    name: "",
+    password: "",
+    username: "",
+    userType: "admin",
+    imageId: [],
+    isActive: 1
   });
 
   useEffect(() => {
     const username = props.match.params.username;
     if (username) {
-      userApi.getUserByUsername(username).then(_user => setUser(_user));
+      userApi.getUserByUsername(username).then(_user => setUser(_user.data));
     }
   }, [props.match.params.username]);
 
@@ -34,13 +33,9 @@ const ManageUsersPage = props => {
   function formIsValid() {
     const _errors = {};
 
-    if (!user.first_name) _errors.first_name = "First Name is required";
-    if (!user.last_name) _errors.last_name = "Last Name is required";
-    if (!user.email) _errors.email = "Email is required";
-    if (!user.mobile_number)
-      _errors.mobile_number = "Mobile number is required";
-    if (!user.device_id) _errors.device_id = "Device ID is required";
-    if (!user.user_role) _errors.user_role = "Role is required";
+    if (!user.name) _errors.name = "Name is required";
+    if (!user.username) _errors.username = "Username is required";
+    if (!user.password) _errors.password = "Password is required.";
 
     setErrors(_errors);
 
@@ -50,7 +45,7 @@ const ManageUsersPage = props => {
   function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
-    userApi.saveUser(user).then(() => {
+    userApi.updateUser(user).then(() => {
       props.history.push("/users");
       toast.success("User saved");
     });

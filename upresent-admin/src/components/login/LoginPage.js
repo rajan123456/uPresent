@@ -45,10 +45,12 @@ const LoginPage = props => {
     let authRequest = { password: user.password, username: user.username };
     authApi
       .loginUser(authRequest)
-      .then(() => {
-        localStorage.setItem("user", user.username);
-        props.history.push("/home");
-        toast.success("Welcome to uPresent Admin Portal");
+      .then(_resp => {
+        if (_resp.data === "admin") {
+          localStorage.setItem("user", user.username);
+          props.history.push("/home");
+          toast.success("Welcome to uPresent Admin Portal");
+        } else handleError("You do not have sufficient privileges to login.");
       })
       .catch(handleError);
   }

@@ -26,25 +26,25 @@ export function getUserByUsername(username) {
 }
 
 export function saveUser(user) {
-  if (!user.id) {
-    return fetch(baseUrl, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify(user)
-    })
-      .then(handleResponse)
-      .catch(handleError);
-  } else {
-    return fetch(baseUrl, {
-      method: "PUT",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify(user)
-    })
-      .then(handleResponse)
-      .catch(handleError);
-  }
+  return fetch(baseUrl, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(user)
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function updateUser(user) {
+  return fetch(baseUrl, {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(user)
+  })
+    .then(handleResponse)
+    .catch(handleError);
 }

@@ -8,7 +8,7 @@ function UsersPage() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    getUsers().then(_users => setUsers(_users));
+    getUsers().then(_users => setUsers(_users.data));
   }, []);
 
   return (
@@ -16,7 +16,11 @@ function UsersPage() {
       <Header />
       <div className="body">
         <h2>Users</h2>
-        <Link className="btn btn-primary" style={{ margin: "5px" }} to="/user/add">
+        <Link
+          className="btn btn-primary"
+          style={{ margin: "5px" }}
+          to="/user/add"
+        >
           Add User
         </Link>
         <UserList users={users} />

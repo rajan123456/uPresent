@@ -1,63 +1,36 @@
 import React from "react";
 import TextInput from "../common/TextInput";
 import PropTypes from "prop-types";
-import DropDown from "../common/DropDown";
 
 function ManageUserForm(props) {
   return (
     <form onSubmit={props.onSubmit}>
       <TextInput
-        id="first_name"
+        id="name"
         type="text"
-        label="First Name"
+        label="Name"
         onChange={props.onChange}
-        name="first_name"
-        value={props.user.first_name}
-        error={props.errors.first_name}
+        name="name"
+        value={props.user.name}
+        error={props.errors.name}
       />
       <TextInput
-        id="last_name"
-        type="text"
-        label="Last Name"
+        id="password"
+        type="password"
+        label="Password"
         onChange={props.onChange}
-        name="last_name"
-        value={props.user.last_name}
-        error={props.errors.last_name}
+        name="password"
+        value={props.user.password}
+        error={props.errors.password}
       />
       <TextInput
-        id="email"
+        id="username"
         type="text"
-        label="Email"
+        label="Username"
         onChange={props.onChange}
-        name="email"
-        value={props.user.email}
-        error={props.errors.email}
-      />
-      <TextInput
-        id="mobile_number"
-        type="text"
-        label="Mobile Number"
-        onChange={props.onChange}
-        name="mobile_number"
-        value={props.user.mobile_number}
-        error={props.errors.mobile_number}
-      />
-      <TextInput
-        id="device_id"
-        type="text"
-        label="Device ID"
-        onChange={props.onChange}
-        name="device_id"
-        value={props.user.device_id}
-        error={props.errors.device_id}
-      />
-      <DropDown
-        id="user_role"
-        name="user_role"
-        label="Role"
-        onChange={props.onChange}
-        value={props.user.user_role}
-        error={props.errors.user_role}
+        name="username"
+        value={props.user.username}
+        error={props.errors.username}
       />
 
       <input type="submit" value="Save" className="btn btn-primary" />
