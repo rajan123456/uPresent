@@ -136,6 +136,10 @@ services:
         container_name: kibana
         ports:
             - "5601:5601"
+        depends_on:
+        - elasticsearch
+        - filebeat
+        - metricbeat
     filebeat:
         image: docker.elastic.co/beats/filebeat:7.4.2
         container_name: filebeat
@@ -144,6 +148,8 @@ services:
             - ./filebeat-data-vol/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
             - /var/lib/docker:/var/lib/docker:ro
             - /var/run/docker.sock:/var/run/docker.sock
+        depends_on:
+        - elasticsearch
     metricbeat:
         image: docker.elastic.co/beats/metricbeat:7.6.1
         container_name: metricbeat
@@ -154,6 +160,8 @@ services:
             - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
             - /proc:/hostfs/proc:ro
             - /:/hostfs:ro
+        depends_on:
+        - elasticsearch
 volumes:
     user-data-vol:
     mongo-data-vol:
