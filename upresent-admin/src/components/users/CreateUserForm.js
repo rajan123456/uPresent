@@ -13,6 +13,7 @@ function CreateUserForm(props) {
         name="name"
         value={props.user.name}
         error={props.errors.name}
+        readOnly={false}
       />
       <TextInput
         id="password"
@@ -22,6 +23,7 @@ function CreateUserForm(props) {
         name="password"
         value={props.user.password}
         error={props.errors.password}
+        readOnly={false}
       />
       <TextInput
         id="username"
@@ -31,6 +33,7 @@ function CreateUserForm(props) {
         name="username"
         value={props.user.username}
         error={props.errors.username}
+        readOnly={false}
       />
       <input type="submit" value="Save" className="btn btn-primary" />
     </form>

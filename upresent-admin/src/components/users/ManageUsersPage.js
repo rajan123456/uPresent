@@ -45,9 +45,11 @@ const ManageUsersPage = props => {
   function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
-    userApi.updateUser(user).then(() => {
-      props.history.push("/users");
-      toast.success("User saved");
+    userApi.updateUser(user).then(_resp => {
+      if (_resp.message === "ok") {
+        props.history.push("/users");
+        toast.success("User updated");
+      } else toast.warn("There was an error. Please try again later.");
     });
   }
 

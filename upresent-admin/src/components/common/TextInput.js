@@ -18,6 +18,7 @@ function TextInput(props) {
           name={props.name}
           className="form-control"
           value={props.value}
+          readOnly={props.readOnly}
         />
       </div>
       {props.error && props.error.length > 0 && (
