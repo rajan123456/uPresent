@@ -34,7 +34,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private Environment env;
 
-
 	@Override
 	public String registerUser(UserDetail userDetail) throws UserException {
 		UserDetail user = userRepository.save(userDetail);
@@ -50,6 +49,11 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new UserException(ExceptionResponseCode.USER_DATA_NOT_FOUND);
 		}
+	}
+
+	@Override
+	public Iterable<UserDetail> fetchAllUsers() throws UserException {
+		return userRepository.findAll();
 	}
 
 	@Override

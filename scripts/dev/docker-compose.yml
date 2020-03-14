@@ -1,6 +1,15 @@
 version: '3.1'
 
 services:
+    management:
+        image: rajagupt/management:latest
+        container_name: management
+        restart: always
+        ports:
+        - "8081:8080"
+        depends_on:
+        - mongo
+        - broker
     user:
         image: rajagupt/user:latest
         container_name: user
@@ -11,6 +20,33 @@ services:
         - ./user-data-vol:/app/resources/images
         depends_on:
         - mongo
+        - broker
+    reporting:
+        image: rajagupt/reporting:latest
+        container_name: reporting
+        restart: always
+        ports:
+        - "8084:8080"
+        depends_on:
+        - mongo
+        - broker
+    metrics:
+        image: rajagupt/metrics:latest
+        container_name: metrics
+        restart: always
+        ports:
+        - "8085:8080"
+        depends_on:
+        - mongo
+        - broker
+    admin:
+        image: rajagupt/upresent-admin:latest
+        container_name: admin
+        restart: always
+        ports:
+        - "4200:4200"
+        depends_on:
+        - user
     mongo:
         image: mongo:latest
         container_name: mongo
