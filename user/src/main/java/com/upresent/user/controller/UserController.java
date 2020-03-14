@@ -1,4 +1,4 @@
-package com.upresent.user.controller;
+package com.upresent.user.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,11 @@ public class UserController {
 	public ResponseEntity<RestResponse<UserDetail>> fetchUser(String username) {
 		return RestUtils.successResponse(userService.fetchUser(username));
 	}
-	
+
+	@GetMapping("/all")
+	public ResponseEntity<RestResponse<Iterable<UserDetail>>> fetchAllUsers() {
+		return RestUtils.successResponse(userService.fetchAllUsers());
+	}
 
 	@PutMapping
 	public ResponseEntity<RestResponse<String>> updateUser(
@@ -44,4 +48,5 @@ public class UserController {
 	public ResponseEntity<RestResponse<String>> deleteUser(String username) {
 		return RestUtils.successResponse(userService.deleteUser(username));
 	}
+
 }
