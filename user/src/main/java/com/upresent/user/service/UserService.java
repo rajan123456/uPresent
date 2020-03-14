@@ -9,6 +9,8 @@ public interface UserService {
 
 	public UserDetail fetchUser(String username) throws UserException;
 
+	public Iterable<UserDetail> fetchAllUsers() throws UserException;
+
 	public String updateUser(UserDetail userDetail) throws UserException;
 
 	public String deleteUser(String username) throws UserException;

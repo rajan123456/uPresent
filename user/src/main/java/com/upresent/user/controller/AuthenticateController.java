@@ -1,4 +1,4 @@
-package com.upresent.user.controller;
+package com.upresent.user.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
