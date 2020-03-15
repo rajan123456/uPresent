@@ -4,42 +4,50 @@ sudo: false
 
 cache:
   directories:
-  - "$HOME/.m2"
+    - "$HOME/.m2"
+
+before_install:
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256; fi
 
 services:
-- docker
+  - docker
 
 install: skip
 
 script:
-#Build Attendance Service
-#- cd attendance/
-#- mvn clean verify
-#- docker build -t rajagupt/attendance .
-#Build Management Service
-- cd management/
-- mvn clean verify
-- docker build -t rajagupt/management .
-#Build Metrics Service
-- cd ../metrics/
-- mvn clean verify
-- docker build -t rajagupt/metrics .
-#Build Reporting Service
-- cd ../reporting/
-- mvn clean verify
-- docker build -t rajagupt/reporting .
-#Build Admin UI
-- cd ../upresent-admin/
-- docker build -t rajagupt/upresent-admin .
-#Build User Service
-- cd ../user/
-- mvn clean verify
-- docker build -t rajagupt/user .
-#Push Images to Docker Hub
-- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-#- docker push rajagupt/attendance
-- docker push rajagupt/management
-- docker push rajagupt/metrics
-- docker push rajagupt/reporting
-- docker push rajagupt/upresent-admin
-- docker push rajagupt/user
+  #Build Attendance Service
+  #- cd attendance/
+  #- mvn clean verify
+  #- docker build -t rajagupt/attendance .
+  #Build Management Service
+  - cd management/
+  - mvn clean verify
+  - docker build -t rajagupt/management .
+  #Build Metrics Service
+  - cd ../metrics/
+  - mvn clean verify
+  - docker build -t rajagupt/metrics .
+  #Build Reporting Service
+  - cd ../reporting/
+  - mvn clean verify
+  - docker build -t rajagupt/reporting .
+  #Build Admin UI
+  - cd ../upresent-admin/
+  - docker build -t rajagupt/upresent-admin .
+  #Build User Service
+  - cd ../user/
+  - mvn clean verify
+  - docker build -t rajagupt/user .
+  #Push Images to Docker Hub
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  #- docker push rajagupt/attendance
+  - docker push rajagupt/management
+  - docker push rajagupt/metrics
+  - docker push rajagupt/reporting
+  - docker push rajagupt/upresent-admin
+  - docker push rajagupt/user
+  #Deploy on AWS EC2 from Master
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent && sudo git pull"; fi
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker-compose down"; fi
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker image prune -a -f"; fi
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker-compose up -d"; fi
