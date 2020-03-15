@@ -13,11 +13,10 @@ install: skip
 
 script:
   #Build Attendance Service
-  #- cd attendance/
-  #- mvn clean verify
-  #- docker build -t rajagupt/attendance .
+  - cd attendance/
+  - docker build -t rajagupt/attendance .
   #Build Management Service
-  - cd management/
+  - cd ../management/
   - mvn clean verify
   - docker build -t rajagupt/management .
   #Build Metrics Service
