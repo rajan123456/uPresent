@@ -47,7 +47,7 @@ public class RestMessageProducer {
 			metricsData.setTimeStamp(eventList.get(2));
 			return metricsData;
 		} catch (Exception e) {
-			throw new ManagementException(ExceptionResponseCode.USER_DATA_NOT_FOUND_IN_REQUEST);
+			throw new ManagementException(ExceptionResponseCode.INVALID_REQUEST);
 		}
 	}
 }

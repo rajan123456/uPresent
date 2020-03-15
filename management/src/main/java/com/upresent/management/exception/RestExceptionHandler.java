@@ -21,7 +21,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(value = {Exception.class})
 	protected ResponseEntity<?> handleUnknownException(Exception ex, WebRequest request) {
 		log.error(ex.getMessage(), ex);
-		return RestUtils.errorResponseEntity(ExceptionResponseCode.GENRAL_ERROR.getDescription(),
+		return RestUtils.errorResponseEntity(ExceptionResponseCode.GENERAL_ERROR.getDescription(),
 				ManagementException.DEFAULT_HTTP_STATUS);
 	}
 
@@ -33,13 +33,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 			log.error("General Exception:: Error Description {} ",ex.getMessage());
 		}
 		return RestUtils.errorResponseData((CommonUtility.isNullObject(ex.getResponseCode())?
-				ExceptionResponseCode.GENRAL_ERROR : ex.getResponseCode()), HttpStatus.OK,ex.getMessage());
+				ExceptionResponseCode.GENERAL_ERROR : ex.getResponseCode()), HttpStatus.OK,ex.getMessage());
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		return new ResponseEntity<>(ExceptionResponseCode.GENRAL_ERROR.getDescription(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(ExceptionResponseCode.GENERAL_ERROR.getDescription(), HttpStatus.BAD_REQUEST);
 	}
 
 }
