@@ -48,6 +48,6 @@ script:
   - docker push rajagupt/user
   #Deploy on AWS EC2 from Master
   - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent && sudo git pull"; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd LCA/scripts/dev && docker-compose down"; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd LCA/scripts/dev && docker image prune -a -f"; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd LCA/scripts/dev && docker-compose up -d"; fi
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker-compose down"; fi
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker image prune -a -f"; fi
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker-compose up -d"; fi
