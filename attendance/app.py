@@ -7,7 +7,8 @@ app = Flask(__name__)
 api = Api(app)
 
 app.config['MONGODB_SETTINGS'] = {
-    'host': 'mongodb://root:example@mongo:27017/admin'
+    # 'host': 'mongodb://root:example@mongo:27017/admin'
+    'host': 'mongodb://localhost:27017/admin'
 }
 
 initialize_db(app)
