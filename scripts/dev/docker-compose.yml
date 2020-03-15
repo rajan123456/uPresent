@@ -1,6 +1,14 @@
 version: "3.1"
 
 services:
+  attendance:
+    image: rajagupt/attendance:latest
+    container_name: attendance
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
   management:
     image: rajagupt/management:latest
     container_name: management
@@ -10,6 +18,7 @@ services:
     depends_on:
       - mongo
       - broker
+      - user
   user:
     image: rajagupt/user:latest
     container_name: user
