@@ -35,6 +35,7 @@ script:
   - cd ../user/
   - mvn clean verify
   - docker build -t rajagupt/user .
+  - cd ..
   #Push Images to Docker Hub
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   #- docker push rajagupt/attendance
