@@ -2,31 +2,30 @@ package com.upresent.management.service;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.upresent.management.entity.GeoFenceData;
-import com.upresent.management.entity.UserDetail;
 import com.upresent.management.exception.ExceptionResponseCode;
 import com.upresent.management.exception.ManagementException;
 import com.upresent.management.producer.KafkaMessageProducer;
 import com.upresent.management.producer.RestMessageProducer;
 import com.upresent.management.repository.GeoFenceRepository;
-import com.upresent.management.repository.UserRepository;
 import com.upresent.management.requestdto.GeoFenceReq;
+import com.upresent.management.responsedto.FetchUserResp;
 import com.upresent.management.utils.CommonUtility;
 import com.upresent.management.utils.Constant;
 import com.upresent.management.utils.UserType;
 
 @Service
 public class GeoFenceServiceImpl implements GeoFenceService {
-
-	@Autowired
-	private UserRepository userRepository;
 
 	@Autowired
 	private KafkaMessageProducer kafkaMessageProducer;
@@ -40,19 +39,27 @@ public class GeoFenceServiceImpl implements GeoFenceService {
 	@Autowired
 	private Environment env;
 
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Autowired
+	ObjectMapper objectMapper;
+
 	Gson gson = new Gson();
 
 	@Override
 	public String addGeoFence(GeoFenceReq geoFenceReq) throws ManagementException {
 		String username = geoFenceReq.getUsername();
 		if (CommonUtility.isValidString(username)) {
-			List<UserDetail> users = userRepository.findByUsername(username);
-			if (CommonUtility.isValidList(users)) {
-				UserDetail user = users.get(0);
-				if (user.getUserType().equalsIgnoreCase(UserType.ADMIN.toString())) {
+			final String baseUrl = Constant.USER_MS_HOSTNAME + ":" + Constant.USER_MS_PORT + Constant.FETCH_USER_API_URL
+					+ username;
+			Map<?, ?> response = restTemplate.getForObject(baseUrl, Map.class);
+			final FetchUserResp userInfo = objectMapper.convertValue(response.get("data"), FetchUserResp.class);
+			if (userInfo != null) {
+				if (userInfo.getUserType().equalsIgnoreCase(UserType.ADMIN.toString())) {
 					if (!(CommonUtility.isValidLatitude(geoFenceReq.getLatitude())
 							&& CommonUtility.isValidLongitude(geoFenceReq.getLongitude())
-							&& geoFenceReq.getRadiusInMeter() >= 0)) {
+							&& geoFenceReq.getRadiusInMeter() > 0)) {
 						throw new ManagementException(ExceptionResponseCode.INVALID_REQUEST);
 					}
 					GeoFenceData geoFenceInfo;

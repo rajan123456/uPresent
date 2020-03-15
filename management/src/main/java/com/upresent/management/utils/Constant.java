@@ -11,4 +11,7 @@ public interface Constant {
 	String USER_DELETED_EVENT = "userDeleted";
 	String GEO_FENCE_CREATED_OR_UPDATED_EVENT = "geoFenceCreatedOrUpdated";
 	String UNIVERSITY_NAME = "NUS";
+	String USER_MS_HOSTNAME = "http://localhost";
+	String USER_MS_PORT = "8083";
+	String FETCH_USER_API_URL = "/user?username=";
 }
