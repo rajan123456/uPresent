@@ -6,9 +6,6 @@ cache:
   directories:
     - "$HOME/.m2"
 
-before_install:
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256; fi
-
 services:
   - docker
 
@@ -47,6 +44,7 @@ script:
   - docker push rajagupt/upresent-admin
   - docker push rajagupt/user
   #Deploy on AWS EC2 from Master
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256; fi
   - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent && sudo git pull"; fi
   - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker-compose down"; fi
   - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-89-224-197.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker image prune -a -f"; fi
