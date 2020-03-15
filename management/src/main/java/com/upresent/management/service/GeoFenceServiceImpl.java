@@ -51,8 +51,8 @@ public class GeoFenceServiceImpl implements GeoFenceService {
 	public String addGeoFence(GeoFenceReq geoFenceReq) throws ManagementException {
 		String username = geoFenceReq.getUsername();
 		if (CommonUtility.isValidString(username)) {
-			final String baseUrl = Constant.USER_MS_HOSTNAME + ":" + Constant.USER_MS_PORT + Constant.FETCH_USER_API_URL
-					+ username;
+			final String baseUrl = env.getProperty("userms.hostname") + ":" + env.getProperty("userms.port")
+					+ Constant.FETCH_USER_API_URL + username;
 			Map<?, ?> response = restTemplate.getForObject(baseUrl, Map.class);
 			final FetchUserResp userInfo = objectMapper.convertValue(response.get("data"), FetchUserResp.class);
 			if (userInfo != null) {
