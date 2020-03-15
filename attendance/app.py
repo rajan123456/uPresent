@@ -13,5 +13,4 @@ app.config['MONGODB_SETTINGS'] = {
 
 initialize_db(app)
 initialize_routes(api)
-
-app.run()
+app.run(host='0.0.0.0')
