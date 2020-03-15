@@ -16,10 +16,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Document(collection = "userDetail")
 public class UserDetail {
 
-	@JsonIgnore
 	@Id
+	@JsonIgnore
 	private String userId;
 	private String name;
+	@JsonIgnore
 	private String password;
 	private String username;
 	private String userType="student";

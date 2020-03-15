@@ -1,173 +1,188 @@
-version: '3.1'
+version: "3.1"
 
 services:
-    management:
-        image: rajagupt/management:latest
-        container_name: management
-        restart: always
-        ports:
-        - "8081:8080"
-        depends_on:
-        - mongo
-        - broker
-    user:
-        image: rajagupt/user:latest
-        container_name: user
-        restart: always
-        ports:
-         - "8083:8080"
-        volumes:
-        - ./user-data-vol:/app/resources/images
-        depends_on:
-        - mongo
-        - broker
-    reporting:
-        image: rajagupt/reporting:latest
-        container_name: reporting
-        restart: always
-        ports:
-        - "8084:8080"
-        depends_on:
-        - mongo
-        - broker
-    metrics:
-        image: rajagupt/metrics:latest
-        container_name: metrics
-        restart: always
-        ports:
-        - "8085:8080"
-        depends_on:
-        - mongo
-        - broker
-    admin:
-        image: rajagupt/upresent-admin:latest
-        container_name: admin
-        restart: always
-        ports:
-        - "4200:4200"
-        depends_on:
-        - user
-    mongo:
-        image: mongo:latest
-        container_name: mongo
-        restart: always
-        volumes: 
-        - mongo-data-vol:/data/db
-        environment:
-          MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: example
-    mongo-express:
-        image: mongo-express:latest
-        container_name: mongo-express
-        restart: always
-        ports:
-        - "8001:8081"
-        environment:
-          ME_CONFIG_MONGODB_ADMINUSERNAME: root
-          ME_CONFIG_MONGODB_ADMINPASSWORD: example
-        depends_on:
-        - mongo
-    zookeeper:
-        image: confluentinc/cp-zookeeper:5.3.1
-        hostname: zookeeper
-        container_name: zookeeper
-        ports:
-          - "2181:2181"
-        environment:
-          ZOOKEEPER_CLIENT_PORT: 2181
-          ZOOKEEPER_TICK_TIME: 2000
-        volumes:
-          - ./zookeeper-logs-vol:/var/lib/zookeeper/log
-          - ./zookeeper-data-vol:/var/lib/zookeeper/data
-    broker:
-        image: confluentinc/cp-enterprise-kafka:5.3.1
-        hostname: broker
-        container_name: broker
-        depends_on:
-          - zookeeper
-        ports:
-          - "29092:29092"
-          - "9092:9092"
-        environment:
-          KAFKA_BROKER_ID: 1
-          KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
-          KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
-          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-          KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-          CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
-          CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
-          CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
-          CONFLUENT_METRICS_ENABLE: 'true'
-          CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
-        volumes:
-          - ./kafka-data-vol:/var/lib/kafka/data
-    control-center:
-        image: confluentinc/cp-enterprise-control-center:5.3.1
-        hostname: control-center
-        container_name: control-center
-        depends_on:
-          - zookeeper
-          - broker
-        ports:
-          - "9021:9021"
-        environment:
-          CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
-          CONTROL_CENTER_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-          CONTROL_CENTER_REPLICATION_FACTOR: 1
-          CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
-          CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
-          CONFLUENT_METRICS_TOPIC_REPLICATION: 1
-          PORT: 9021
-    elasticsearch:
-        image: elasticsearch:7.4.2
-        container_name: elasticsearch
-        user: root
-        environment:
-            - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-            - "discovery.type=single-node"
-        ports:
-            - "9200:9200"
-        volumes:
-            - ./elastic-data-vol:/usr/share/elasticsearch/data
-    kibana:
-        image: kibana:7.4.2
-        container_name: kibana
-        ports:
-            - "5601:5601"
-        depends_on:
-        - elasticsearch
-        - filebeat
-        - metricbeat
-    filebeat:
-        image: docker.elastic.co/beats/filebeat:7.4.2
-        container_name: filebeat
-        user: root
-        volumes:
-            - ./filebeat-data-vol/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-            - /var/lib/docker:/var/lib/docker:ro
-            - /var/run/docker.sock:/var/run/docker.sock
-        depends_on:
-        - elasticsearch
-    metricbeat:
-        image: docker.elastic.co/beats/metricbeat:7.6.1
-        container_name: metricbeat
-        user: root
-        volumes:
-            - ./metricbeat-data-vol/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
-            - /proc:/hostfs/proc:ro
-            - /:/hostfs:ro
-        depends_on:
-        - elasticsearch
+  attendance:
+    image: rajagupt/attendance:latest
+    container_name: attendance
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+  management:
+    image: rajagupt/management:latest
+    container_name: management
+    restart: always
+    ports:
+      - "8081:8080"
+    depends_on:
+      - mongo
+      - broker
+      - user
+  user:
+    image: rajagupt/user:latest
+    container_name: user
+    restart: always
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./user-data-vol:/app/resources/images
+    depends_on:
+      - mongo
+      - broker
+  reporting:
+    image: rajagupt/reporting:latest
+    container_name: reporting
+    restart: always
+    ports:
+      - "8084:8080"
+    depends_on:
+      - mongo
+      - broker
+  metrics:
+    image: rajagupt/metrics:latest
+    container_name: metrics
+    restart: always
+    ports:
+      - "8085:8080"
+    depends_on:
+      - mongo
+      - broker
+  admin:
+    image: rajagupt/upresent-admin:latest
+    container_name: admin
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - user
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    volumes:
+      - mongo-data-vol:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "8001:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    depends_on:
+      - mongo
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.3.1
+    hostname: zookeeper
+    container_name: zookeeper
+    restart: always
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - ./zookeeper-logs-vol:/var/lib/zookeeper/log
+      - ./zookeeper-data-vol:/var/lib/zookeeper/data
+  broker:
+    image: confluentinc/cp-enterprise-kafka:5.3.1
+    hostname: broker
+    container_name: broker
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
+      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
+      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+      CONFLUENT_METRICS_ENABLE: "true"
+      CONFLUENT_SUPPORT_CUSTOMER_ID: "anonymous"
+    volumes:
+      - ./kafka-data-vol:/var/lib/kafka/data
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:5.3.1
+    hostname: control-center
+    container_name: control-center
+    restart: always
+    depends_on:
+      - zookeeper
+      - broker
+    ports:
+      - "9021:9021"
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: "broker:29092"
+      CONTROL_CENTER_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
+      CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
+      CONFLUENT_METRICS_TOPIC_REPLICATION: 1
+      PORT: 9021
+  elasticsearch:
+    image: elasticsearch:7.4.2
+    container_name: elasticsearch
+    restart: always
+    user: root
+    environment:
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "discovery.type=single-node"
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./elastic-data-vol:/usr/share/elasticsearch/data
+  kibana:
+    image: kibana:7.4.2
+    container_name: kibana
+    restart: always
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+      - filebeat
+      - metricbeat
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.4.2
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./filebeat-data-vol/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - elasticsearch
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:7.6.1
+    container_name: metricbeat
+    restart: always
+    user: root
+    volumes:
+      - ./metricbeat-data-vol/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /proc:/hostfs/proc:ro
+      - /:/hostfs:ro
+    depends_on:
+      - elasticsearch
 volumes:
-    user-data-vol:
-    mongo-data-vol:
-    zookeeper-logs-vol:
-    zookeeper-data-vol:
-    kafka-data-vol:
-    elastic-data-vol:
-    filebeat-data-vol:
-    metricbeat-data-vol:
+  user-data-vol:
+  mongo-data-vol:
+  zookeeper-logs-vol:
+  zookeeper-data-vol:
+  kafka-data-vol:
+  elastic-data-vol:
+  filebeat-data-vol:
+  metricbeat-data-vol:

@@ -50,6 +50,14 @@ public class CommonUtility {
 		return !attrKey.isEmpty();
 	}
 	
+	public static boolean isValidLatitude(Float latitude) {
+		return (latitude >= -90 && latitude <= 90);
+	}
+	
+	public static boolean isValidLongitude(Float longitude) {
+		return (longitude >= -180 && longitude <= 180);
+	}
+	
 	public static String stringifyEventForPublish(String param1, String param2, String param3, String param4, String param5) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(param1).append(";").append(param2).append(";").append(param3).append(";").append(param4).append(";").append(param5);
