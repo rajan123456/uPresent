@@ -3,6 +3,7 @@ from database.models import Attendance
 from flask_restful import Resource
 from geopy.distance import geodesic
 import urllib.request
+import json
 
 class AllAttendanceApi(Resource):
     def get(self):
@@ -12,13 +13,15 @@ class AllAttendanceApi(Resource):
     def post(self):
         body = request.get_json()
         attendance = Attendance(**body)
-        contents = urllib.request.urlopen("http://example.com/foo/bar").read()
-        distance = geodesic(body.get("location"),[1.2916417, 103.7753452]).m
-        if distance < 1000 :
+        apiResponse = urllib.request.urlopen("http://management/manage/geo-fence?universityName="+attendance.school).read()
+        responseData = json.loads(apiResponse.decode('utf8')).get("data")
+        if responseData is None:
+            return {'error': "School does not exist in db"}, 500
+        distance = geodesic(body.get("location"),[responseData.get("latitude"), responseData.get("longitude")]).m
+        if distance < responseData.get("radiusInMeter") :
             attendance.save()
         else:
-            raise ValueError("Not in the premise area")
-            #return {'error': "Not in the premise area"}, 500
+            return {'error': "Not in the premise area"}, 500
         return {'id': str(attendance.id)}, 200
 
 
