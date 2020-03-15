@@ -7,7 +7,7 @@ cache:
     - "$HOME/.m2"
 
 before_install:
-  - openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256; fi
 
 services:
   - docker
