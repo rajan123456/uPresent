@@ -2,6 +2,7 @@ from flask import Response, request
 from database.models import Attendance
 from flask_restful import Resource
 from geopy.distance import geodesic
+from flask import current_app
 import urllib.request
 import json
 
@@ -13,7 +14,7 @@ class AllAttendanceApi(Resource):
     def post(self):
         body = request.get_json()
         attendance = Attendance(**body)
-        apiResponse = urllib.request.urlopen("http://management/manage/geo-fence?universityName="+attendance.school).read()
+        apiResponse = urllib.request.urlopen(current_app.config['MANAGEMENT_API_GEO_FENCE']+attendance.school).read()
         responseData = json.loads(apiResponse.decode('utf8')).get("data")
         if responseData is None:
             return {'error': "School does not exist in db"}, 500

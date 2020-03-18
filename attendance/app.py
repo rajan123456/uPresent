@@ -4,12 +4,8 @@ from flask_restful import Api
 from resources.routes import initialize_routes
 
 app = Flask(__name__)
+app.config.from_object("config.Config")
 api = Api(app)
-
-app.config['MONGODB_SETTINGS'] = {
-    'host': 'mongodb://root:example@mongo:27017/admin'
-    #'host': 'mongodb://localhost:27017/admin'
-}
 
 initialize_db(app)
 initialize_routes(api)
