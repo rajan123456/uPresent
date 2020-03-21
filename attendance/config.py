@@ -4,3 +4,6 @@ class Config(object):
         'host': "mongodb://root:example@mongo:27017/admin"
     }
     MANAGEMENT_API_GEO_FENCE = "http://management/manage/geo-fence?universityName="
+    USER_API_FETCH_USER = "http://user/user?username="
+    UPLOAD_DIR = "/app/resources/images/"
+    THRESHOLD_CONFIDENCE = 60

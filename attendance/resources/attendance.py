@@ -1,10 +1,9 @@
 from flask import Response, request
 from database.models import Attendance
 from flask_restful import Resource
-from geopy.distance import geodesic
-from flask import current_app
-import urllib.request
-import json
+from resources.rekognition import compare_faces
+from resources.geofence import validateVicinity
+from resources.user import fetchUser
 
 class AllAttendanceApi(Resource):
     def get(self):
@@ -14,15 +13,10 @@ class AllAttendanceApi(Resource):
     def post(self):
         body = request.get_json()
         attendance = Attendance(**body)
-        apiResponse = urllib.request.urlopen(current_app.config['MANAGEMENT_API_GEO_FENCE']+attendance.school).read()
-        responseData = json.loads(apiResponse.decode('utf8')).get("data")
-        if responseData is None:
-            return {'error': "School does not exist in db"}, 500
-        distance = geodesic(body.get("location"),[responseData.get("latitude"), responseData.get("longitude")]).m
-        if distance < responseData.get("radiusInMeter") :
-            attendance.save()
-        else:
-            return {'error': "Not in the premise area"}, 500
+        validateVicinity(body)
+        user = fetchUser(attendance.username)
+        compare_faces(attendance.capturedImageId, user.get('imageId').get(0))
+        attendance.save()
         return {'id': str(attendance.id)}, 200
 
 
