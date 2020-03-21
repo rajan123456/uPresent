@@ -11,12 +11,15 @@ class AllAttendanceApi(Resource):
         return Response(allAttendance, mimetype="application/json", status=200)
 
     def post(self):
-        body = request.get_json()
-        attendance = Attendance(**body)
-        validateVicinity(body)
-        user = fetchUser(attendance.username)
-        compare_faces(attendance.capturedImageId, user.get('imageId').get(0))
-        attendance.save()
+        try:
+            body = request.get_json()
+            attendance = Attendance(**body)
+            validateVicinity(body)
+            user = fetchUser(attendance.username)
+            compare_faces(attendance.capturedImageId, user.get('imageId')[0])
+            attendance.save()
+        except Exception as ex:
+            return {'message': str(ex)}, 500
         return {'id': str(attendance.id)}, 200
 
 
