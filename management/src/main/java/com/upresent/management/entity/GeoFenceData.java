@@ -23,5 +23,5 @@ public class GeoFenceData {
     private Float radiusInMeter;
 	@JsonIgnore
     @LastModifiedDate
-    private Date updatedDate;
+    private Date updatedOn;
 }
