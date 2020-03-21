@@ -10,7 +10,12 @@ public enum ExceptionResponseCode {
 	USER_DATA_NOT_FOUND(4011, "User data not found."),
 	INVALID_REQUEST(4012, "Data in the request is not valid."),
 	UPLOADING_FILE_FAILED(4013, "Your request could not be served by the system. Please try again."),
-	DATA_NOT_FOUND(4014, "Required data not found.");
+	DATA_NOT_FOUND(4014, "Required data not found."),
+	UNKNOWN_USER_TYPE_FOUND(4015, "'Unknown' type user found in request."),
+	MODULE_ALREADY_EXISTS(4016, "Module already exists."),
+	MODULE_DOES_NOT_EXIST(4017, "Module doesn't exist."),
+	USER_TYPES_NOT_FOUND(4018, "User types could not be fetched."),
+	ALL_USERS_NOT_STUDENTS(4019, "Check the provided student usernames. All the usernames do not map to a corresponding student.");
 
 	private int code;
 
