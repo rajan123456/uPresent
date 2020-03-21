@@ -20,10 +20,9 @@ public class UserDetail {
 	@JsonIgnore
 	private String userId;
 	private String name;
-	@JsonIgnore
 	private String password;
 	private String username;
-	private String userType="student";
+	private String userType="STUDENT";
 	private List<String> imageId;
 	private Integer isActive;
 

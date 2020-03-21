@@ -1,5 +1,8 @@
 package com.upresent.user.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,6 +50,12 @@ public class UserController {
 	@DeleteMapping
 	public ResponseEntity<RestResponse<String>> deleteUser(String username) {
 		return RestUtils.successResponse(userService.deleteUser(username));
+	}
+	
+	@PostMapping("/get-type")
+	public ResponseEntity<RestResponse<Map<String, Object>>> getUserType(
+			@RequestBody List<String> usernames) {
+		return RestUtils.successResponse(userService.getUserType(usernames));
 	}
 
 }
