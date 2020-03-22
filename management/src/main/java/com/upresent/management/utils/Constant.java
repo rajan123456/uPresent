@@ -10,6 +10,9 @@ public interface Constant {
 	String USER_UPDATED_EVENT = "userUpdated";
 	String USER_DELETED_EVENT = "userDeleted";
 	String GEO_FENCE_CREATED_OR_UPDATED_EVENT = "geoFenceCreatedOrUpdated";
+	String MODULE_CREATED_EVENT = "moduleCreated";
+	String MODULE_UPDATED_EVENT = "moduleUpdated";
 	String UNIVERSITY_NAME = "NUS";
 	String FETCH_USER_API_URL = "/user?username=";
+	String FETCH_USER_TYPES_API_URL = "/user/get-type";
 }
