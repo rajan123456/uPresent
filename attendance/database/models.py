@@ -3,6 +3,9 @@ import datetime
 
 
 class Attendance(db.Document):
-    userId = db.StringField(required=True, unique=True)
-    location = db.PointField(required=True)
+    username = db.StringField(required=True)
+    location = db.ListField(required=True)
+    school = db.StringField(required=True)
+    capturedImageId = db.StringField(required=True)
+    moduleId = db.StringField(required=True)
     date_captured = db.DateTimeField(default=datetime.datetime.utcnow)

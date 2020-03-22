@@ -7,6 +7,8 @@ services:
     restart: always
     ports:
       - "5000:5000"
+    volumes:
+      - ./user-data-vol:/app/resources/images:ro
     depends_on:
       - mongo
   management:

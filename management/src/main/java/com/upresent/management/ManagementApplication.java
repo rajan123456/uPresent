@@ -7,8 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.web.client.RestTemplate;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 @EnableMongoAuditing
 @SpringBootApplication
+@EnableSwagger2
 public class ManagementApplication {
 
 	public static void main(String[] args) {
