@@ -20,7 +20,7 @@ import com.upresent.management.utils.CommonUtility;
 import com.upresent.management.utils.Constant;
 import com.upresent.management.utils.UserModuleUtil;
 
-@Service	
+@Service
 @SuppressWarnings("unchecked")
 public class AdminModuleServiceImpl implements AdminModuleService {
 
@@ -44,14 +44,15 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 	@Override
 	public String createModule(ModuleData moduleData) throws ManagementException {
 		if (userModuleUtil.isAdmin(moduleData.getCreatedBy())) {
-			Optional<ModuleData> existingModule = moduleRepository.findById(moduleData.getModuleCode());
-			if (existingModule.isEmpty()){
+			Optional<ModuleData> optionalExistingModule = moduleRepository.findById(moduleData.getModuleCode());
+			if (optionalExistingModule.isEmpty()) {
 				int idealNumberOfStudents = moduleData.getStudentUsernames().size();
-				Map<String, Object> userTypes = userModuleUtil.getUserTypesFromUsernames(moduleData.getStudentUsernames());
+				Map<String, Object> userTypes = userModuleUtil
+						.getUserTypesFromUsernames(moduleData.getStudentUsernames());
 //				List<String> admins = (List<String>) userTypes.get("admin");
 				List<String> students = (List<String>) userTypes.get("student");
 //				List<String> unknown = (List<String>) userTypes.get("unknown");
-				if(students.size() == idealNumberOfStudents) {
+				if (students.size() == idealNumberOfStudents) {
 					ModuleData module = moduleRepository.save(moduleData);
 					publishAdminModuleUpdates(module, Constant.MODULE_CREATED_EVENT);
 				} else {
@@ -59,19 +60,20 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 				}
 			} else {
 				throw new ManagementException(ExceptionResponseCode.MODULE_ALREADY_EXISTS);
-			}	
+			}
 		} else {
 			throw new ManagementException(ExceptionResponseCode.UNAUTHORISED);
 		}
 		return "A new module has been successfully created.";
 	}
-	
+
 	@Override
 	public String updateModule(ModuleData moduleData) throws ManagementException {
 		if (userModuleUtil.isAdmin(moduleData.getCreatedBy())) {
-			Optional<ModuleData> existingModule = moduleRepository.findById(moduleData.getModuleCode());
-			if (existingModule.isPresent()){
-				Map<String, Object> userTypes = userModuleUtil.getUserTypesFromUsernames(moduleData.getStudentUsernames());
+			Optional<ModuleData> optionalExistingModule = moduleRepository.findById(moduleData.getModuleCode());
+			if (optionalExistingModule.isPresent()) {
+				Map<String, Object> userTypes = userModuleUtil
+						.getUserTypesFromUsernames(moduleData.getStudentUsernames());
 //				List<String> admins = (List<String>) userTypes.get("admin");
 				List<String> students = (List<String>) userTypes.get("student");
 //				List<String> unknown = (List<String>) userTypes.get("unknown");
@@ -80,14 +82,38 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 				publishAdminModuleUpdates(module, Constant.MODULE_UPDATED_EVENT);
 			} else {
 				throw new ManagementException(ExceptionResponseCode.MODULE_DOES_NOT_EXIST);
-			}	
+			}
 		} else {
 			throw new ManagementException(ExceptionResponseCode.UNAUTHORISED);
 		}
 		return "Module has been successfully updated.";
 	}
-	
-	private void publishAdminModuleUpdates(ModuleData module, String eventType) {	
+
+	@Override
+	public ModuleData getModule(String moduleCode) throws ManagementException {
+		Optional<ModuleData> optionalModuleInfo = moduleRepository.findById(moduleCode);
+		if (optionalModuleInfo.isEmpty()) {
+			throw new ManagementException(ExceptionResponseCode.MODULE_DOES_NOT_EXIST);
+		}
+		return optionalModuleInfo.get();
+	}
+
+	@Override
+	public List<ModuleData> getAllModules() throws ManagementException {
+		return moduleRepository.findAll();
+	}
+
+	@Override
+	public String deleteModule(String moduleCode) throws ManagementException {
+		Optional<ModuleData> optionalModuleInfo = moduleRepository.findById(moduleCode);
+		if (optionalModuleInfo.isEmpty()) {
+			throw new ManagementException(ExceptionResponseCode.MODULE_DOES_NOT_EXIST);
+		}
+		moduleRepository.deleteById(moduleCode);
+		return "Module successfully deleted.";
+	}
+
+	private void publishAdminModuleUpdates(ModuleData module, String eventType) {
 		String message = CommonUtility.stringifyEventForPublish(gson.toJson(module), eventType,
 				Calendar.getInstance().getTime().toString(), "", Constant.MANAGEMENT_SOURCE_ID);
 		String useMessagePublisher = env.getProperty("sagaEnabled");
@@ -98,5 +124,4 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 		}
 	}
 
-	
 }
