@@ -22,9 +22,6 @@ public class GeoFenceController {
 	@Autowired
 	private GeoFenceService geoFenceService;
 
-//	[7:26 PM, 3/10/2020] NUS Rajan: then create an event and push it to kafka / call 
-//	metrics and reporting api directly based on flag in config for kafkaEnabled=true/false
-	
 	@PostMapping
 	public ResponseEntity<RestResponse<String>> addGeoFence(
 			@RequestBody GeoFenceReq geoFenceReq) {

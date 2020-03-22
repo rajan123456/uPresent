@@ -7,8 +7,13 @@ services:
     restart: always
     ports:
       - "5000:5000"
+    volumes:
+      - ./user-data-vol:/app/resources/images:ro
     depends_on:
       - mongo
+      - apm-server
+      - management
+      - user
   management:
     image: rajagupt/management:latest
     container_name: management
@@ -19,6 +24,7 @@ services:
       - mongo
       - broker
       - user
+      - apm-server
   user:
     image: rajagupt/user:latest
     container_name: user
@@ -30,6 +36,7 @@ services:
     depends_on:
       - mongo
       - broker
+      - apm-server
   reporting:
     image: rajagupt/reporting:latest
     container_name: reporting
@@ -39,15 +46,16 @@ services:
     depends_on:
       - mongo
       - broker
-  metrics:
-    image: rajagupt/metrics:latest
-    container_name: metrics
-    restart: always
-    ports:
-      - "8085:8080"
-    depends_on:
-      - mongo
-      - broker
+      - apm-server
+  #  metrics:
+  #    image: rajagupt/metrics:latest
+  #    container_name: metrics
+  #    restart: always
+  #    ports:
+  #      - "8085:8080"
+  #    depends_on:
+  #      - mongo
+  #      - broker
   admin:
     image: rajagupt/upresent-admin:latest
     container_name: admin
@@ -133,7 +141,7 @@ services:
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
   elasticsearch:
-    image: elasticsearch:7.4.2
+    image: elasticsearch:7.6.1
     container_name: elasticsearch
     restart: always
     user: root
@@ -145,7 +153,7 @@ services:
     volumes:
       - ./elastic-data-vol:/usr/share/elasticsearch/data
   kibana:
-    image: kibana:7.4.2
+    image: kibana:7.6.1
     container_name: kibana
     restart: always
     ports:
@@ -154,8 +162,9 @@ services:
       - elasticsearch
       - filebeat
       - metricbeat
+      - apm-server
   filebeat:
-    image: docker.elastic.co/beats/filebeat:7.4.2
+    image: docker.elastic.co/beats/filebeat:7.6.1
     container_name: filebeat
     user: root
     volumes:
@@ -177,7 +186,18 @@ services:
       - /:/hostfs:ro
     depends_on:
       - elasticsearch
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:7.6.1
+    container_name: apm-server
+    restart: always
+    user: apm-server
+    command: --strict.perms=false -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    volumes:
+      - ./apm-data-vol/apm-server.docker.yaml:/usr/share/apm-server/apm-server.yml:ro
+    depends_on:
+      - elasticsearch
 volumes:
+  apm-data-vol:
   user-data-vol:
   mongo-data-vol:
   zookeeper-logs-vol:

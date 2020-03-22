@@ -1,10 +1,9 @@
 FROM openjdk:12-alpine
-VOLUME /tmp
 
-ARG DEPENDENCY=target/dependency
+ARG JAR_FILE=target/*.jar
+ARG ELASTIC_AGENT=lib/*.jar
 
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${DEPENDENCY}/META-INF /app/META-INF
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
+COPY ${JAR_FILE} app.jar
+COPY ${ELASTIC_AGENT} elastic-apm-agent-1.14.0.jar
 
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.upresent.reporting.ReportingApplication"]
+ENTRYPOINT ["java","-javaagent:elastic-apm-agent-1.14.0.jar", "-Delastic.apm.service_name=reporting-service", "-Delastic.apm.application_packages=com.upresent.reporting", "-Delastic.apm.server_urls=http://apm-server:8200", "-jar", "app.jar"]
