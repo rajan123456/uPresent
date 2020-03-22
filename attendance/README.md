@@ -22,3 +22,6 @@ Steps:
 1. Clone this git repository to your local machine.
 2. Run the command in the attendance folder "docker build -t attendance:latest ."
 3. After successful build, run command "docker run -d -p 5000:5000 attendance:latest"
+
+## Swagger
+http://{host}:{port}/api/spec.html
