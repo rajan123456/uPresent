@@ -11,6 +11,9 @@ services:
       - ./user-data-vol:/app/resources/images:ro
     depends_on:
       - mongo
+      - apm-server
+      - management
+      - user
   management:
     image: rajagupt/management:latest
     container_name: management
@@ -21,6 +24,7 @@ services:
       - mongo
       - broker
       - user
+      - apm-server
   user:
     image: rajagupt/user:latest
     container_name: user
@@ -32,6 +36,7 @@ services:
     depends_on:
       - mongo
       - broker
+      - apm-server
   reporting:
     image: rajagupt/reporting:latest
     container_name: reporting
@@ -41,15 +46,16 @@ services:
     depends_on:
       - mongo
       - broker
-  metrics:
-    image: rajagupt/metrics:latest
-    container_name: metrics
-    restart: always
-    ports:
-      - "8085:8080"
-    depends_on:
-      - mongo
-      - broker
+      - apm-server
+  #  metrics:
+  #    image: rajagupt/metrics:latest
+  #    container_name: metrics
+  #    restart: always
+  #    ports:
+  #      - "8085:8080"
+  #    depends_on:
+  #      - mongo
+  #      - broker
   admin:
     image: rajagupt/upresent-admin:latest
     container_name: admin
@@ -156,6 +162,7 @@ services:
       - elasticsearch
       - filebeat
       - metricbeat
+      - apm-server
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.6.1
     container_name: filebeat
