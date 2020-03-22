@@ -9,7 +9,8 @@ public enum ExceptionResponseCode {
 	TOKEN_REQUIRED(4009, "Token is missing or is incorrect"),
 	USER_DATA_NOT_FOUND(4011, "User data not found."),
 	USER_DATA_NOT_FOUND_IN_REQUEST(4012, "User data not found in request."),
-	UPLOADING_FILE_FAILED(4013, "Your request could not be served by the system. Please try again.");
+	UPLOADING_FILE_FAILED(4013, "Your request could not be served by the system. Please try again."),
+	USERNAME_ALREADY_TAKEN(4014, "Username already taken.");
 
 	private int code;
 
