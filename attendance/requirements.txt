@@ -3,3 +3,5 @@ flask_restful
 flask-mongoengine
 geopy
 boto3
+elastic-apm[flask]
+psutil
