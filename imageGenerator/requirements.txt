@@ -1,0 +1,8 @@
+###### Requirements without Version Specifiers ######`
+flask
+flask-restful
+flask_restful_swagger
+opencv-python
+
+
+###### Requirements with Version Specifiers ######`
