@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -104,13 +106,22 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 	}
 
 	@Override
-	public String deleteModule(String moduleCode) throws ManagementException {
-		Optional<ModuleData> optionalModuleInfo = moduleRepository.findById(moduleCode);
-		if (optionalModuleInfo.isEmpty()) {
-			throw new ManagementException(ExceptionResponseCode.MODULE_DOES_NOT_EXIST);
+	public String deleteModule(HttpServletRequest request, String moduleCode) throws ManagementException {
+		String username = request.getHeader("username");
+		if (username == null) {
+			throw new ManagementException(ExceptionResponseCode.MISSING_HEADER_KEY);
 		}
-		moduleRepository.deleteById(moduleCode);
-		return "Module successfully deleted.";
+		if (userModuleUtil.isAdmin(username)) {
+			Optional<ModuleData> optionalModuleInfo = moduleRepository.findById(moduleCode);
+			if (optionalModuleInfo.isEmpty()) {
+				throw new ManagementException(ExceptionResponseCode.MODULE_DOES_NOT_EXIST);
+			}
+			moduleRepository.deleteById(moduleCode);
+			publishAdminModuleUpdates(optionalModuleInfo.get(), Constant.MODULE_DELETED_EVENT);
+			return "Module successfully deleted.";
+		} else {
+			throw new ManagementException(ExceptionResponseCode.UNAUTHORISED);
+		}
 	}
 
 	private void publishAdminModuleUpdates(ModuleData module, String eventType) {
