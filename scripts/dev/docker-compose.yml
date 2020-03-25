@@ -196,6 +196,12 @@ services:
       - ./apm-data-vol/apm-server.docker.yaml:/usr/share/apm-server/apm-server.yml:ro
     depends_on:
       - elasticsearch
+  attendance:
+    image: rajagupt/videoprocessor:latest
+    container_name: videoprocessor
+    restart: always
+    ports:
+      - "6000:5000"
 volumes:
   apm-data-vol:
   user-data-vol:

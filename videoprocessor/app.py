@@ -12,4 +12,4 @@ api = Api(app)
 api = swagger.docs(Api(app), apiVersion='0.1')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
