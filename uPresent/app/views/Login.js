@@ -11,7 +11,7 @@ import {TextField} from 'react-native-material-textfield';
 import {RaisedTextButton} from 'react-native-material-buttons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {loginUser} from '../api/authApi';
-import AsyncStorage from '@react-native-community/async-storage';
+import * as Keychain from 'react-native-keychain';
 import {unauthorizedAccess, ok} from '../constants/userApiConstants';
 import {
   welcomeMessage,
@@ -95,14 +95,16 @@ export class Login extends React.Component {
         password: this.state.password,
         username: this.state.username,
       };
-      loginUser(auth).then(_resp => {
+      loginUser(auth).then(async _resp => {
         if (_resp.message === unauthorizedAccess) {
           Alert.alert(passwordIsIncorrect);
         } else if (_resp.message === ok) {
-          AsyncStorage.setItem('userLoggedIn', this.state.username, () => {
-            Alert.alert(welcomeMessage);
-            this.props.navigation.navigate('HomeRT');
-          });
+          await Keychain.setGenericPassword(
+            this.state.username,
+            this.state.password,
+          );
+          Alert.alert(welcomeMessage);
+          this.props.navigation.push('HomeRT');
         } else {
           Alert.alert(accountDoesNotExist);
         }
@@ -176,7 +178,7 @@ export class Login extends React.Component {
               returnKeyType="next"
               label="Password"
               error={errors.password}
-              maxLength={15}
+              maxLength={30}
               renderRightAccessory={this.renderPasswordAccessory}
             />
           </View>
