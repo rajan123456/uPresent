@@ -64,6 +64,12 @@ services:
       - "80:80"
     depends_on:
       - user
+  videoprocessor:
+    image: rajagupt/videoprocessor:latest
+    container_name: videoprocessor
+    restart: always
+    ports:
+      - "6000:5000"
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -196,12 +202,38 @@ services:
       - ./apm-data-vol/apm-server.docker.yaml:/usr/share/apm-server/apm-server.yml:ro
     depends_on:
       - elasticsearch
-  videoprocessor:
-    image: rajagupt/videoprocessor:latest
-    container_name: videoprocessor
-    restart: always
+  spark:
+    image: bitnami/spark:2
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
     ports:
-      - "6000:5000"
+      - "8080:8080"
+  spark-worker-1:
+    image: bitnami/spark:2
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+  spark-worker-2:
+    image: bitnami/spark:2
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
 volumes:
   apm-data-vol:
   user-data-vol:

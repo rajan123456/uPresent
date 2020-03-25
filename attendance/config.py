@@ -1,10 +1,12 @@
 class Config(object):
     MONGODB_SETTINGS = {
-        # 'host': "mongodb://localhost:27017/admin"
+        #'host': "mongodb://localhost:27017/admin"
         'host': "mongodb://root:example@mongo:27017/admin"
     }
     MANAGEMENT_API_GEO_FENCE = "http://management/manage/geo-fence?universityName="
     USER_API_FETCH_USER = "http://user/user?username="
+    # MANAGEMENT_API_GEO_FENCE = "http://localhost:8081/manage/geo-fence?universityName="
+    # USER_API_FETCH_USER = "http://localhost:8083/user?username="
     UPLOAD_DIR = "/app/resources/images/"
     THRESHOLD_CONFIDENCE = 60
     ELASTIC_APM = {
