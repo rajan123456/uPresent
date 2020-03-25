@@ -1,45 +1,53 @@
 import React from 'react';
 import {Alert, Image, Text, View} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import * as Keychain from 'react-native-keychain';
 
 export class Header extends React.Component {
   constructor(props) {
     super(props);
+    this.toggleUser = this.toggleUser.bind(this);
+    this.fetchCredentials = this.fetchCredentials.bind(this);
+
     this.state = {isLoggedIn: false, loggedUser: false};
   }
 
-  toggleUser = () => {
-    if (this.state.isLoggedIn) {
-      AsyncStorage.setItem('userLoggedIn', 'none', (err, result) => {
-        this.setState({
-          isLoggedIn: false,
-          loggedUser: false,
-        });
-        Alert.alert('User Logged Out');
+  updateRef(name, ref) {
+    this[name] = ref;
+  }
+
+  async toggleUser() {
+    const credentials = await Keychain.getGenericPassword();
+    if (credentials) {
+      await Keychain.resetGenericPassword();
+      this.setState({
+        isLoggedIn: false,
+        loggedUser: false,
       });
+      Alert.alert('User Logged Out');
     } else {
       this.props.navigate('LoginRT');
     }
-  };
+  }
+
+  async fetchCredentials() {
+    const credentials = await Keychain.getGenericPassword();
+    console.log(credentials);
+    if (!credentials) {
+      console.log('No credentials stored');
+    } else {
+      this.setState({
+        isLoggedIn: true,
+        loggedUser: credentials.username,
+      });
+    }
+  }
 
   componentDidMount() {
-    AsyncStorage.getItem('userLoggedIn', (err, result) => {
-      if (result === 'none') {
-        console.log('NONE');
-      } else if (result === null) {
-        AsyncStorage.setItem('userLoggedIn', 'none', (err, result) => {
-          console.log('Set user to NONE');
-        });
-      } else {
-        this.setState({
-          isLoggedIn: true,
-          loggedUser: result,
-        });
-      }
-    });
+    this.fetchCredentials();
   }
 
   render() {
+    this.fetchCredentials();
     let display = this.state.isLoggedIn
       ? this.state.loggedUser
       : this.props.message;

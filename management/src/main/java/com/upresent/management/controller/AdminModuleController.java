@@ -2,6 +2,8 @@ package com.upresent.management.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,8 +41,8 @@ public class AdminModuleController {
 	
 	@DeleteMapping
 	public ResponseEntity<RestResponse<String>> deleteModule(
-			@RequestParam String moduleCode) {
-		return RestUtils.successResponse(adminModuleService.deleteModule(moduleCode));
+			@RequestParam String moduleCode, HttpServletRequest request) {
+		return RestUtils.successResponse(adminModuleService.deleteModule(request, moduleCode));
 	}
 	
 	@GetMapping

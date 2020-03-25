@@ -1,7 +1,6 @@
 package com.upresent.user.entity;
 
 import java.security.Key;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -40,13 +39,7 @@ public class UserDetail {
 	}
 	public String getPassword() {
 		try {
-			List<List<Integer>> tt = new ArrayList<List<Integer>>();
-		       Integer[][] gridArray = new Integer[1][1];
-		       Integer[] t =new Integer[0];
-		        for (int i=0;i<1;i++) {
-		            gridArray[i] = tt.get(i).toArray(t);
-		        }
-		        String key = "Bar12345Bar12345";
+			String key = "Bar12345Bar12345";
 			Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.DECRYPT_MODE, aesKey);
@@ -95,6 +88,6 @@ public class UserDetail {
 		return "UserDetail [userId=" + userId + ", name=" + name + ", username=" + username
 				+ ", userType=" + userType + ", imageId=" + imageId + ", isActive=" + isActive + "]";
 	}
-	
+
 
 }
