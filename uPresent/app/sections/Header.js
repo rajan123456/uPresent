@@ -19,8 +19,10 @@ export class Header extends React.Component {
     const credentials = await Keychain.getGenericPassword();
     if (credentials) {
       await Keychain.resetGenericPassword();
-      this.state.isLoggedIn = false;
-      this.state.loggedUser = false;
+      this.setState({
+        isLoggedIn: false,
+        loggedUser: false,
+      });
       Alert.alert('User Logged Out');
     } else {
       this.props.navigate('LoginRT');
@@ -33,8 +35,10 @@ export class Header extends React.Component {
     if (!credentials) {
       console.log('No credentials stored');
     } else {
-      this.state.isLoggedIn = true;
-      this.state.loggedUser = credentials.username;
+      this.setState({
+        isLoggedIn: true,
+        loggedUser: credentials.username,
+      });
     }
   }
 
@@ -43,6 +47,7 @@ export class Header extends React.Component {
   }
 
   render() {
+    this.fetchCredentials();
     let display = this.state.isLoggedIn
       ? this.state.loggedUser
       : this.props.message;
