@@ -72,6 +72,12 @@ services:
       - 1935:1935
       - 1985:1985
       - 8079:8080
+  videoprocessor:
+    image: rajagupt/videoprocessor:latest
+    container_name: videoprocessor
+    restart: always
+    ports:
+      - "6000:5000"
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -213,7 +219,7 @@ services:
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
     ports:
-      - '8080:8080'
+      - "8080:8080"
   spark-worker-1:
     image: bitnami/spark:2
     environment:

@@ -20,9 +20,9 @@ script:
   - mvn clean verify
   - docker build -t rajagupt/management .
   #Build Metrics Service
-  - cd ../metrics/
-  - mvn clean verify
-  - docker build -t rajagupt/metrics .
+  #  - cd ../metrics/
+  # - mvn clean verify
+  #- docker build -t rajagupt/metrics .
   #Build Reporting Service
   - cd ../reporting/
   - mvn clean verify
@@ -34,19 +34,23 @@ script:
   - cd ../user/
   - mvn clean verify
   - docker build -t rajagupt/user .
+  #Build Video Processor Service
+  - cd ../videoprocessor/
+  - docker build -t rajagupt/videoprocessor .
   - cd ..
   #Push Images to Docker Hub
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   #- docker push rajagupt/attendance
   - docker push rajagupt/management
-  - docker push rajagupt/metrics
+  #  - docker push rajagupt/metrics
   - docker push rajagupt/reporting
   - docker push rajagupt/upresent-admin
   - docker push rajagupt/user
+  - docker push rajagupt/videoprocessor
   #Deploy on AWS EC2 from Master
   - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256; fi
   - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then chmod 400 iss-dev-upresent.pem; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-54-243-21-93.compute-1.amazonaws.com "cd uPresent && sudo git pull"; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-54-243-21-93.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker-compose down"; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-54-243-21-93.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker image prune -a -f"; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-54-243-21-93.compute-1.amazonaws.com "cd uPresent/scripts/dev && docker-compose up -d"; fi
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-15-151-129.us-east-2.compute.amazonaws.com "cd uPresent && sudo git pull"; fi
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-15-151-129.us-east-2.compute.amazonaws.com "cd uPresent/scripts/dev && docker-compose down"; fi
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-15-151-129.us-east-2.compute.amazonaws.com "cd uPresent/scripts/dev && docker image prune -a -f"; fi
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem ubuntu@ec2-3-15-151-129.us-east-2.compute.amazonaws.com "cd uPresent/scripts/dev && docker-compose up -d"; fi
