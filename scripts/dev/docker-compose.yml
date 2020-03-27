@@ -64,6 +64,14 @@ services:
       - "80:80"
     depends_on:
       - user
+  srs:
+    image: ossrs/srs:3
+    container_name: srs
+    restart: always
+    ports:
+      - 1935:1935
+      - 1985:1985
+      - 8079:8080
   mongo:
     image: mongo:latest
     container_name: mongo
