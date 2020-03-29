@@ -25,7 +25,8 @@ def obtain_token():
 
 def obtain_data():
     secrets = obtain_token()
-    url = current_app.config['VAULT_DATA_URL']
+    url = "https://" + current_app.config['VAULT_HOSTNAME'] + ":" + \
+        current_app.config['VAULT_PORT'] + current_app.config['VAULT_DATA_URL']
     hdr = {'X-Vault-Token': secrets}
     gcontext = ssl.SSLContext()
     req = urllib.request.Request(

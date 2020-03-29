@@ -18,4 +18,4 @@ class Config(object):
     VAULT_HOSTNAME = "vault"
     VAULT_PORT = 8200
     VAULT_LOGIN_URL = "/v1/auth/cert/login"
-    VAULT_DATA_URL = "https://vault:8200/v1/aws/data"
+    VAULT_DATA_URL = "/v1/aws/data"
