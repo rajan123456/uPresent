@@ -10,10 +10,11 @@ services:
     volumes:
       - ./user-data-vol:/app/resources/images:ro
     depends_on:
-      - mongo
       - apm-server
       - management
+      - mongo
       - user
+      - vault
   management:
     image: rajagupt/management:latest
     container_name: management
@@ -234,6 +235,20 @@ services:
       - SPARK_RPC_ENCRYPTION_ENABLED=no
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
+  vault:
+    image: vault:1.3.4
+    container_name: vault
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_ADDR=https://0.0.0.0:8200
+      - VAULT_SKIP_VERIFY=true
+    volumes:
+      - ./vault-data-vol/certs:/vault/certs:ro
+      - ./vault-data-vol/policies:/vault/policies:ro
+      - ./vault-data-vol/config:/vault/config:ro
+      - ./vault-data-vol/data:/vault/data:rw
+    entrypoint: vault server -config=/vault/config/vault.json
 volumes:
   apm-data-vol:
   user-data-vol:
@@ -244,3 +259,4 @@ volumes:
   elastic-data-vol:
   filebeat-data-vol:
   metricbeat-data-vol:
+  vault-data-vol:

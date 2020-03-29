@@ -1,12 +1,15 @@
 import boto3
 from flask import current_app
+from resources.vault import obtain_data
 
 
 def compare_faces(targetId, sourceId):
+    secrets = obtain_data()
     client = boto3.client('rekognition',
-                          aws_access_key_id="test",
-                          aws_secret_access_key="test",
+                          aws_access_key_id=secrets['aws_access_key_id'],
+                          aws_secret_access_key=secrets['aws_secret_access_key'],
                           region_name='us-west-2')
+
     imageSource = open(current_app.config['UPLOAD_DIR']+sourceId, 'rb')
     imageTarget = open(current_app.config['UPLOAD_DIR']+targetId, 'rb')
     response = client.compare_faces(SimilarityThreshold=current_app.config['THRESHOLD_CONFIDENCE'],
