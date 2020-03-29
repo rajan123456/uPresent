@@ -1,7 +1,5 @@
 language: java
 
-sudo: false
-
 cache:
   directories:
     - "$HOME/.m2"
@@ -14,6 +12,8 @@ install: skip
 script:
   #Build Attendance Service
   - cd attendance/
+  - openssl aes-256-cbc -k "$ATTENDANCE_KEY" -in attendance.pem.enc -out attendance.pem -d -md sha256
+  - openssl aes-256-cbc -k "$ATTENDANCE_KEY" -in key.pem.enc -out key.pem -d -md sha256
   - docker build -t rajagupt/attendance .
   #Build Management Service
   - cd ../management/
@@ -40,7 +40,7 @@ script:
   - cd ..
   #Push Images to Docker Hub
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  #- docker push rajagupt/attendance
+  - docker push rajagupt/attendance
   - docker push rajagupt/management
   #  - docker push rajagupt/metrics
   - docker push rajagupt/reporting
