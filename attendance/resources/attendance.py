@@ -1,11 +1,12 @@
 from flask import Response, request
+from flask_restful import Resource
 from flask_restful_swagger import swagger
 
 from database.models import Attendance
-from flask_restful import Resource
 from resources.rekognition import compare_faces
 from resources.geofence import validateVicinity
 from resources.user import fetchUser
+
 
 class AllAttendanceApi(Resource):
 

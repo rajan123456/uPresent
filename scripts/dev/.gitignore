@@ -1,0 +1,5 @@
+elastic-data-vol/*
+vault-data-vol/data/*
+vault-data-vol/policies/*
+vault-data-vol/certs/*
+user-data-vol/*
