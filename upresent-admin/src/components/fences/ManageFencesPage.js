@@ -19,7 +19,7 @@ const ManageFencesPage = (props) => {
     if (universityName) {
       fenceApi
         .getFenceByUniversityName(universityName)
-        .then((_fence) => setUser(_fence.data));
+        .then((_fence) => setFence(_fence.data));
     }
   }, [props.match.params.universityName]);
 
@@ -62,7 +62,7 @@ const ManageFencesPage = (props) => {
         <h2>Manage Geo-Fence</h2>
         <ManageFenceForm
           errors={errors}
-          user={user}
+          fence={fence}
           onChange={handleChange}
           onSubmit={handleSubmit}
         />
