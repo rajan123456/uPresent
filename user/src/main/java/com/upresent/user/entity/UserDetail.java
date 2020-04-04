@@ -23,7 +23,7 @@ public class UserDetail {
 	private String username;
 	private String userType="STUDENT";
 	private List<String> imageId;
-	private Integer isActive;
+	private Integer isActive = 1;
 
 	public String getUserId() {
 		return userId;

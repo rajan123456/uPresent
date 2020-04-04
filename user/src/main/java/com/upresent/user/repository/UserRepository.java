@@ -9,7 +9,7 @@ import com.upresent.user.entity.UserDetail;
 
 @Repository
 public interface UserRepository extends MongoRepository<UserDetail, String> {
-	UserDetail findByUsername(String username);
+	UserDetail findByUsernameAndIsActive(String username, Integer isActive);
 	List<UserDetail> findAll();
 	List<UserDetail> findByUsernameIn(List<String> username);
 }

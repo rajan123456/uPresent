@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 	public String registerUser(UserDetail userDetail) throws UserException {
 		userDetail.setUsername(userDetail.getUsername().toLowerCase());
 		String username = userDetail.getUsername();
-		UserDetail user = userRepository.findByUsername(username);
+		UserDetail user = userRepository.findByUsernameAndIsActive(username, Constant.ACTIVE_STATUS);
 		if (user != null) {
 			throw new UserException(ExceptionResponseCode.USERNAME_ALREADY_TAKEN);
 		}
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDetail fetchUser(String username) throws UserException {
-		UserDetail userDetails = userRepository.findByUsername(username.toLowerCase());
+		UserDetail userDetails = userRepository.findByUsernameAndIsActive(username.toLowerCase(), Constant.ACTIVE_STATUS);
 		if (userDetails != null) {
 			return userDetails;
 		} else {
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String deleteUser(String username) throws UserException {
 		UserDetail userDetail = fetchUser(username);
-		userDetail.setIsActive(0);
+		userDetail.setIsActive(Constant.INACTIVE_STATUS);
 		userRepository.save(userDetail);
 		publishUserUpdates(userDetail, Constant.USER_DELETED_EVENT);
 		return "User data successfully deleted!";
