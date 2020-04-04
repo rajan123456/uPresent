@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { logout } from "../../helper/LoginHelper";
+
+function logout() {
+  localStorage.clear();
+}
 
 const rightStyle = {
-  float: "right"
+  float: "right",
 };
 
 function Header() {
