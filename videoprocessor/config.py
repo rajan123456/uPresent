@@ -5,5 +5,7 @@ class Config(object):
     }
     VIDEO_INPUT_PATH = 'D:/PythonWorkspace/inputData/example.mp4'
     FRAMES_PATH = 'D:/PythonWorkspace/data'
-    KAFKA_SERVER_IP = 'localhost:9092'
+    KAFKA_SERVER_IP = 'broker:29092'
     KAFKA_TOPIC = 'videoCollector'
+    KAFKA_BATCH_SIZE = 176580  # this value should be as per the size of image frames
+    KAFKA_LINGER_MS = 10
