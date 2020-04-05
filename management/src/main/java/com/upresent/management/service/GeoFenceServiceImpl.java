@@ -75,6 +75,11 @@ public class GeoFenceServiceImpl implements GeoFenceService {
 		return geoFenceInfo;
 	}
 
+	@Override
+	public Iterable<GeoFenceData> fetchAllGeoFences() {
+		return geoFenceRepository.findAll();
+	}
+
 	private void publishGeoUpdates(GeoFenceData geo, String eventType) {
 		String message = CommonUtility.stringifyEventForPublish(gson.toJson(geo), eventType,
 				Calendar.getInstance().getTime().toString(), "", Constant.MANAGEMENT_SOURCE_ID);

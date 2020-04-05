@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 function ManageUserForm(props) {
   return (
-    <form onSubmit={props.onSubmit}>
+    <form onSubmit={props.onSubmit} onReset={props.onReset}>
       <TextInput
         id="name"
         type="text"
@@ -26,6 +26,16 @@ function ManageUserForm(props) {
         readOnly={false}
       />
       <TextInput
+        id="isActive"
+        type="text"
+        label="Status"
+        onChange={props.onChange}
+        name="isActive"
+        value={`${props.user.isActive}`}
+        error={props.errors.isActive}
+        readOnly={false}
+      />
+      <TextInput
         id="username"
         type="text"
         label="Username"
@@ -36,7 +46,8 @@ function ManageUserForm(props) {
         readOnly={true}
       />
 
-      <input type="submit" value="Save" className="btn btn-primary" />
+      <input type="submit" value="Save" className="btn btn-primary mr-1" />
+      <input type="reset" value="Delete" className="btn btn-primary" />
     </form>
   );
 }
@@ -45,7 +56,8 @@ ManageUserForm.propTypes = {
   user: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  errors: PropTypes.object.isRequired
+  onReset: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
 };
 
 export default ManageUserForm;

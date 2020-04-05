@@ -47,21 +47,19 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 	public String createModule(ModuleData moduleData) throws ManagementException {
 		if (userModuleUtil.isAdmin(moduleData.getCreatedBy())) {
 			Optional<ModuleData> optionalExistingModule = moduleRepository.findById(moduleData.getModuleCode());
-			if (optionalExistingModule.isEmpty()) {
+			if (optionalExistingModule.isPresent()) {
+				throw new ManagementException(ExceptionResponseCode.MODULE_ALREADY_EXISTS);
+			} else {
 				int idealNumberOfStudents = moduleData.getStudentUsernames().size();
 				Map<String, Object> userTypes = userModuleUtil
 						.getUserTypesFromUsernames(moduleData.getStudentUsernames());
-//				List<String> admins = (List<String>) userTypes.get("admin");
 				List<String> students = (List<String>) userTypes.get("student");
-//				List<String> unknown = (List<String>) userTypes.get("unknown");
 				if (students.size() == idealNumberOfStudents) {
 					ModuleData module = moduleRepository.save(moduleData);
 					publishAdminModuleUpdates(module, Constant.MODULE_CREATED_EVENT);
 				} else {
 					throw new ManagementException(ExceptionResponseCode.ALL_USERS_NOT_STUDENTS);
 				}
-			} else {
-				throw new ManagementException(ExceptionResponseCode.MODULE_ALREADY_EXISTS);
 			}
 		} else {
 			throw new ManagementException(ExceptionResponseCode.UNAUTHORISED);
@@ -76,9 +74,7 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 			if (optionalExistingModule.isPresent()) {
 				Map<String, Object> userTypes = userModuleUtil
 						.getUserTypesFromUsernames(moduleData.getStudentUsernames());
-//				List<String> admins = (List<String>) userTypes.get("admin");
 				List<String> students = (List<String>) userTypes.get("student");
-//				List<String> unknown = (List<String>) userTypes.get("unknown");
 				moduleData.setStudentUsernames(students);
 				ModuleData module = moduleRepository.save(moduleData);
 				publishAdminModuleUpdates(module, Constant.MODULE_UPDATED_EVENT);
@@ -94,10 +90,10 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 	@Override
 	public ModuleData getModule(String moduleCode) throws ManagementException {
 		Optional<ModuleData> optionalModuleInfo = moduleRepository.findById(moduleCode);
-		if (optionalModuleInfo.isEmpty()) {
-			throw new ManagementException(ExceptionResponseCode.MODULE_DOES_NOT_EXIST);
+		if (optionalModuleInfo.isPresent()) {
+			return optionalModuleInfo.get();
 		}
-		return optionalModuleInfo.get();
+		throw new ManagementException(ExceptionResponseCode.MODULE_DOES_NOT_EXIST);
 	}
 
 	@Override
@@ -113,12 +109,13 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 		}
 		if (userModuleUtil.isAdmin(username)) {
 			Optional<ModuleData> optionalModuleInfo = moduleRepository.findById(moduleCode);
-			if (optionalModuleInfo.isEmpty()) {
+			if (optionalModuleInfo.isPresent()) {
+				moduleRepository.deleteById(moduleCode);
+				publishAdminModuleUpdates(optionalModuleInfo.get(), Constant.MODULE_DELETED_EVENT);
+				return "Module successfully deleted.";
+			} else {
 				throw new ManagementException(ExceptionResponseCode.MODULE_DOES_NOT_EXIST);
 			}
-			moduleRepository.deleteById(moduleCode);
-			publishAdminModuleUpdates(optionalModuleInfo.get(), Constant.MODULE_DELETED_EVENT);
-			return "Module successfully deleted.";
 		} else {
 			throw new ManagementException(ExceptionResponseCode.UNAUTHORISED);
 		}
