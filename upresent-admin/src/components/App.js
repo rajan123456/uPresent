@@ -1,15 +1,18 @@
 import React from "react";
-import { PrivateRoute } from "./common/PrivateRoute";
-import LoginPage from "./login/LoginPage";
-import UsersPage from "./users/UsersPage";
 import { Route, Switch, Redirect } from "react-router-dom";
+import { PrivateRoute } from "./common/PrivateRoute";
+import HomePage from "./home/HomePage";
 import FileNotFoundPage from "./NotFoundPage";
-import ManageUsersPage from "./users/ManageUsersPage";
+import LoginPage from "./login/LoginPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toastDuration } from "../config/config";
-import HomePage from "./home/HomePage";
+import UsersPage from "./users/UsersPage";
 import CreateUsersPage from "./users/CreateUsersPage";
+import ManageUsersPage from "./users/ManageUsersPage";
+import FencesPage from "./fences/FencesPage";
+import CreateFencesPage from "./fences/CreateFencesPage";
+import ManageFencesPage from "./fences/ManageFencesPage";
 
 function App() {
   return (
@@ -23,6 +26,12 @@ function App() {
           <PrivateRoute path="/users" component={UsersPage} />
           <PrivateRoute path="/user/add" exact component={CreateUsersPage} />
           <PrivateRoute path="/user/:username" component={ManageUsersPage} />
+          <PrivateRoute path="/fences" component={FencesPage} />
+          <PrivateRoute path="/fence/add" exact component={CreateFencesPage} />
+          <PrivateRoute
+            path="/fence/:universityName"
+            component={ManageFencesPage}
+          />
           <Route component={FileNotFoundPage} />
         </Switch>
       </div>

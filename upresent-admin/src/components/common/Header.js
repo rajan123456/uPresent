@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { logout } from "../../helper/LoginHelper";
+
+function logout() {
+  localStorage.clear();
+}
 
 const rightStyle = {
-  float: "right"
+  float: "right",
 };
 
 function Header() {
@@ -15,6 +18,9 @@ function Header() {
         </li>
         <li>
           <Link to="/users">Users</Link>
+        </li>
+        <li>
+          <Link to="/fences">Fences</Link>
         </li>
         <li style={rightStyle}>
           <Link to="/" onClick={logout}>
