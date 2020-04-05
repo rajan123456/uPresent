@@ -11,7 +11,7 @@ const CreateFencesPage = (props) => {
     universityName: "",
     longitude: "",
     latitude: "",
-    radius: "",
+    radiusInMeter: "",
   });
 
   function handleChange({ target }) {
@@ -28,7 +28,7 @@ const CreateFencesPage = (props) => {
       _errors.universityName = "University name is required.";
     if (!fence.longitude) _errors.longitude = "Longitude is required";
     if (!fence.latitude) _errors.latitude = "Latitude is required.";
-    if (!fence.radius) _errors.radius = "Radius is required.";
+    if (!fence.radiusInMeter) _errors.radiusInMeter = "Radius is required.";
 
     setErrors(_errors);
 

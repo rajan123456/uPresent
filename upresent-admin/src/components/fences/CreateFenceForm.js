@@ -36,13 +36,13 @@ function CreateFenceForm(props) {
         readOnly={false}
       />
       <TextInput
-        id="radius"
+        id="radiusInMeter"
         type="text"
         label="Radius (m)"
         onChange={props.onChange}
-        name="radius"
-        value={props.fence.radius}
-        error={props.errors.radius}
+        name="radiusInMeter"
+        value={props.fence.radiusInMeter}
+        error={props.errors.radiusInMeter}
         readOnly={false}
       />
       <input type="submit" value="Save" className="btn btn-primary" />
