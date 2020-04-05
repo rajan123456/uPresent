@@ -12,5 +12,5 @@ class VideoProcessorApi(Resource):
             videosplitter()
         except Exception as ex:
             return {'message': str(ex)}, 500
-        return Response({'started video splitter...'}, status=200)
+        return Response({'Video pushed to Kafka successfully...'}, status=200)
 
