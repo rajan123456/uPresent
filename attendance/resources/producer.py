@@ -27,7 +27,7 @@ def publish_message_kafka(data):
     try:
         producer_instance = connect_kafka_producer()
         body = json.dumps(data) + ';' + str(current_app.config['ATTENDANCE_RECORDED']) + ';' + \
-               datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + ';' + \
+               datetime.now().strftime("%m/%d/%Y, %H:%M:%S") + '; ;' + \
                str(current_app.config['ATTENDANCE_SOURCE_ID'])
         key_bytes = bytes('message', encoding='utf-8')
         value_bytes = bytes(body, encoding='utf-8')
