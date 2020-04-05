@@ -24,7 +24,7 @@ def connect_kafka_producer():
     _producer = None
     try:
         _producer = KafkaProducer(value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-                                  bootstrap_servers=config.Config.KAFKA_SERVER_IP, linger_ms=10)
+                                  bootstrap_servers=config.Config.KAFKA_SERVER_IP, linger_ms=10, batch_size=176580)
     except Exception as ex:
         print('Exception while connecting Kafka')
         print(str(ex))
