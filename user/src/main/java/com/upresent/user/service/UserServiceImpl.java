@@ -69,11 +69,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String updateUser(UserDetail userDetail) throws UserException {
-		UserDetail existingDetails = fetchUser(userDetail.getUsername());
+		UserDetail existingDetails = userRepository.findByUsername(userDetail.getUsername());
 		existingDetails.setName(
 				CommonUtility.isValidString(userDetail.getName()) ? userDetail.getName() : existingDetails.getName());
 		existingDetails.setPassword(CommonUtility.isValidString(userDetail.getPassword()) ? userDetail.getPassword()
 				: existingDetails.getPassword());
+		existingDetails.setIsActive((null != userDetail.getIsActive()) ? userDetail.getIsActive() : existingDetails.getIsActive());
 		userRepository.save(existingDetails);
 		publishUserUpdates(existingDetails, Constant.USER_UPDATED_EVENT);
 		return "User data successfully updated!";

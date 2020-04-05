@@ -10,6 +10,7 @@ import com.upresent.user.entity.UserDetail;
 @Repository
 public interface UserRepository extends MongoRepository<UserDetail, String> {
 	UserDetail findByUsernameAndIsActive(String username, Integer isActive);
+	UserDetail findByUsername(String username);
 	List<UserDetail> findAll();
 	List<UserDetail> findByUsernameIn(List<String> username);
 }
