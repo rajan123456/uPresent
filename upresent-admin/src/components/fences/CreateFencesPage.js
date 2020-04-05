@@ -12,6 +12,7 @@ const CreateFencesPage = (props) => {
     longitude: "",
     latitude: "",
     radiusInMeter: "",
+    username: "",
   });
 
   function handleChange({ target }) {
@@ -38,6 +39,12 @@ const CreateFencesPage = (props) => {
   function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
+
+    fence.longitude = parseFloat(fence.longitude);
+    fence.latitude = parseFloat(fence.latitude);
+    fence.radiusInMeter = parseFloat(fence.radiusInMeter);
+    fence.username = localStorage.getItem("user");
+
     fenceApi.saveFence(fence).then(() => {
       props.history.push("/fences");
       toast.success("Fence saved");

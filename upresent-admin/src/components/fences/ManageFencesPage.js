@@ -12,6 +12,7 @@ const ManageFencesPage = (props) => {
     longitude: "",
     latitude: "",
     radiusInMeter: "",
+    username: "",
   });
 
   useEffect(() => {
@@ -47,6 +48,12 @@ const ManageFencesPage = (props) => {
   function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
+
+    fence.longitude = parseFloat(fence.longitude);
+    fence.latitude = parseFloat(fence.latitude);
+    fence.radiusInMeter = parseFloat(fence.radiusInMeter);
+    fence.username = localStorage.getItem("user");
+
     fenceApi.saveFence(fence).then((_resp) => {
       if (_resp.message === "ok") {
         props.history.push("/fences");
