@@ -6,3 +6,4 @@ boto3
 elastic-apm[flask]
 psutil
 flask-restful-swagger
+kafka-python

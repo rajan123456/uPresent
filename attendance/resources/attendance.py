@@ -6,6 +6,7 @@ from database.models import Attendance
 from resources.rekognition import compare_faces
 from resources.geofence import validateVicinity
 from resources.user import fetchUser
+from resources.producer import publish_message
 
 
 class AllAttendanceApi(Resource):
@@ -24,6 +25,7 @@ class AllAttendanceApi(Resource):
             user = fetchUser(attendance.username)
             compare_faces(attendance.capturedImageId, user.get('imageId')[0])
             attendance.save()
+            publish_message(body)
         except Exception as ex:
             return {'message': str(ex)}, 500
         return {'id': str(attendance.id)}, 200
