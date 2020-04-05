@@ -23,14 +23,19 @@ public class GeoFenceController {
 	private GeoFenceService geoFenceService;
 
 	@PostMapping
-	public ResponseEntity<RestResponse<String>> addGeoFence(
-			@RequestBody GeoFenceReq geoFenceReq) {
+	public ResponseEntity<RestResponse<String>> addGeoFence(@RequestBody GeoFenceReq geoFenceReq) {
 		return RestUtils.successResponse(geoFenceService.addGeoFence(geoFenceReq));
 	}
-	
+
 	@GetMapping
-	public ResponseEntity<RestResponse<GeoFenceData>> fetchGeoFence(@RequestParam("universityName") String universityName) {
+	public ResponseEntity<RestResponse<GeoFenceData>> fetchGeoFence(
+			@RequestParam("universityName") String universityName) {
 		return RestUtils.successResponse(geoFenceService.fetchGeoFence(universityName));
+	}
+
+	@GetMapping("/all")
+	public ResponseEntity<RestResponse<Iterable<GeoFenceData>>> fetchAllGeoFences() {
+		return RestUtils.successResponse(geoFenceService.fetchAllGeoFences());
 	}
 
 }

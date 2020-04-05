@@ -7,6 +7,8 @@ import com.upresent.management.requestdto.GeoFenceReq;
 public interface GeoFenceService {
 
 	String addGeoFence(GeoFenceReq geoFence) throws ManagementException;
-	
+
 	GeoFenceData fetchGeoFence(String universityName) throws ManagementException;
+
+	Iterable<GeoFenceData> fetchAllGeoFences() throws ManagementException;
 }
