@@ -21,7 +21,8 @@ class Config(object):
     VAULT_DATA_URL = "/v1/aws/data"
     KAFKA_ADDRESS = "broker:29092"
     KAFKA_PUBLISH_TOPIC = "attendanceEvents"
-    SAGA_ENABLED = 0
+    SAGA_ENABLED = 1
+    DATABASE_ENABLED = 0
     ATTENDANCE_RECORDED='attendanceRecorded'
     ATTENDANCE_SOURCE_ID = 4
     REPORT_PUBLISH_API = 'http://reporting:8080/reporting'
