@@ -26,7 +26,7 @@ function FenceList(props) {
                 </td>
                 <td>{fence.longitude}</td>
                 <td>{fence.latitude}</td>
-                <td>{fence.radius}</td>
+                <td>{fence.radiusInMeter}</td>
               </tr>
             );
           })}
