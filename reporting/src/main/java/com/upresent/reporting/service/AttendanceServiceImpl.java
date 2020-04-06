@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -44,7 +45,8 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public Map<String, Object> getStudentAttendanceRecords(String startDate, String endDate, String moduleCode)
 			throws ReportingException {
-		if (CommonUtility.isValidDate(startDate) && CommonUtility.isValidDate(endDate) && CommonUtility.isValidStartAndEndDate(startDate, endDate)) {
+		if (CommonUtility.isValidDate(startDate) && CommonUtility.isValidDate(endDate)
+				&& CommonUtility.isValidStartAndEndDate(startDate, endDate)) {
 			final String baseUrl = env.getProperty("managementms.hostname") + ":" + env.getProperty("managementms.port")
 					+ Constants.FETCH_MODULE_DETAILS_API_URL + moduleCode;
 			Map<?, ?> response = restTemplate.getForObject(baseUrl, Map.class);
@@ -84,7 +86,26 @@ public class AttendanceServiceImpl implements AttendanceService {
 						throw new ReportingException(ExceptionResponseCode.DATE_PARSE_ERROR);
 					}
 				});
+				List<String> allEnrolledStudentUsernames = (List<String>) moduleDetails.get("studentUsernames");
 				responseObj.put("dates", dates);
+				dates.forEach(date -> {
+					List<StudentAttendanceRecord> attendanceInfo = attendanceInfoByDate.get(date);
+					List<String> presentStudentUsernames = new ArrayList<>();
+					attendanceInfo.forEach(studentAttendance -> {
+						presentStudentUsernames.add(studentAttendance.getStudentUsername());
+					});
+					List<String> absentStudentUsernames = allEnrolledStudentUsernames.stream()
+							.filter(e -> !presentStudentUsernames.contains(e)).collect(Collectors.toList());
+					List<StudentAttendanceRecord> existingRecords = attendanceInfoByDate.get(date);
+					absentStudentUsernames.forEach(absentStudent -> {
+						StudentAttendanceRecord absentyRecord = new StudentAttendanceRecord();
+						absentyRecord.setAttendance("ABSENT");
+						absentyRecord.setStudentUsername(absentStudent);
+						absentyRecord.setTimestamp("");
+						existingRecords.add(absentyRecord);
+					});
+					attendanceInfoByDate.put(date, existingRecords);
+				});
 				responseObj.put("attendanceInfo", attendanceInfoByDate);
 				return responseObj;
 			} else {
