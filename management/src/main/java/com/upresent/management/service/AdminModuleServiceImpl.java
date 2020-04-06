@@ -51,15 +51,16 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 				throw new ManagementException(ExceptionResponseCode.MODULE_ALREADY_EXISTS);
 			} else {
 				int idealNumberOfStudents = moduleData.getStudentUsernames().size();
-				Map<String, Object> userTypes = userModuleUtil
-						.getUserTypesFromUsernames(moduleData.getStudentUsernames());
-				List<String> students = (List<String>) userTypes.get("student");
-				if (students.size() == idealNumberOfStudents) {
-					ModuleData module = moduleRepository.save(moduleData);
-					publishAdminModuleUpdates(module, Constant.MODULE_CREATED_EVENT);
-				} else {
-					throw new ManagementException(ExceptionResponseCode.ALL_USERS_NOT_STUDENTS);
+				if (idealNumberOfStudents > 0) {
+					Map<String, Object> userTypes = userModuleUtil
+							.getUserTypesFromUsernames(moduleData.getStudentUsernames());
+					List<String> students = (List<String>) userTypes.get("student");
+					if (students.size() != idealNumberOfStudents) {
+						throw new ManagementException(ExceptionResponseCode.ALL_USERS_NOT_STUDENTS);
+					}
 				}
+				ModuleData module = moduleRepository.save(moduleData);
+				publishAdminModuleUpdates(module, Constant.MODULE_CREATED_EVENT);
 			}
 		} else {
 			throw new ManagementException(ExceptionResponseCode.UNAUTHORISED);
@@ -72,10 +73,15 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 		if (userModuleUtil.isAdmin(moduleData.getCreatedBy())) {
 			Optional<ModuleData> optionalExistingModule = moduleRepository.findById(moduleData.getModuleCode());
 			if (optionalExistingModule.isPresent()) {
-				Map<String, Object> userTypes = userModuleUtil
-						.getUserTypesFromUsernames(moduleData.getStudentUsernames());
-				List<String> students = (List<String>) userTypes.get("student");
-				moduleData.setStudentUsernames(students);
+				int idealNumberOfStudents = moduleData.getStudentUsernames().size();
+				if (idealNumberOfStudents > 0) {
+					Map<String, Object> userTypes = userModuleUtil
+							.getUserTypesFromUsernames(moduleData.getStudentUsernames());
+					List<String> students = (List<String>) userTypes.get("student");
+					if (students.size() != idealNumberOfStudents) {
+						throw new ManagementException(ExceptionResponseCode.ALL_USERS_NOT_STUDENTS);
+					}
+				}
 				ModuleData module = moduleRepository.save(moduleData);
 				publishAdminModuleUpdates(module, Constant.MODULE_UPDATED_EVENT);
 			} else {
