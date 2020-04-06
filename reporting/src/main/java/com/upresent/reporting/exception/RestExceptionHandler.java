@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.upresent.reporting.utils.CommonUtility;
 import com.upresent.reporting.utils.RestUtils;
-import com.upresent.reporting.exception.ExceptionResponseCode;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
