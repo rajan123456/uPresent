@@ -2,7 +2,6 @@ package com.upresent.reporting.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
-import com.upresent.reporting.exception.ExceptionResponseCode;
 
 public class ReportingException extends RuntimeException {
 
