@@ -73,6 +73,9 @@ services:
       - 1935:1935
       - 1985:1985
       - 8079:8080
+    volumes:
+      - ./srs-conf-vol/srs.conf:/usr/local/srs/conf/srs.conf
+      - ./srs-log-vol/srs.log:/usr/local/srs/objs/srs.log
   videoprocessor:
     image: rajagupt/videoprocessor:latest
     container_name: videoprocessor
@@ -268,3 +271,5 @@ volumes:
   filebeat-data-vol:
   metricbeat-data-vol:
   vault-data-vol:
+  srs-conf-vol:
+  srs-log-vol:
