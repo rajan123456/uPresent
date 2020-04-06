@@ -15,13 +15,12 @@ import com.upresent.reporting.utils.RestUtils;
 @RestController
 @RequestMapping("/reporting")
 public class ReportingController {
-	
+
 	@Autowired
 	ReportingService reportingService;
 
 	@PostMapping
-	public ResponseEntity<RestResponse<String>> addMetricsData(
-			@RequestBody ReportingData metricsData) {
-		return RestUtils.successResponse(reportingService.addReportingData(metricsData));
+	public ResponseEntity<RestResponse<String>> getAttendanceReport(@RequestBody ReportingData reportingData) {
+		return RestUtils.successResponse(reportingService.addReportingData(reportingData));
 	}
 }
