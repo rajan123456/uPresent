@@ -52,8 +52,7 @@ public class AdminModuleController {
 	}
 	
 	@GetMapping(path="/all")
-	public ResponseEntity<RestResponse<List<ModuleData>>> getAllModules(
-			@RequestBody ModuleData moduleInfo) {
+	public ResponseEntity<RestResponse<List<ModuleData>>> getAllModules() {
 		return RestUtils.successResponse(adminModuleService.getAllModules());
 	}
 

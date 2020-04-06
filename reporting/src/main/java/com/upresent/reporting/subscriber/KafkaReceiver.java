@@ -23,7 +23,7 @@ public class KafkaReceiver {
 
 	private static final Logger LOG = LoggerFactory.getLogger(KafkaReceiver.class);
 
-	@KafkaListener(topics = {"managementEvents" , "userEvents"})
+	@KafkaListener(topics = {"managementEvents" , "userEvents", "attendanceEvents"})
 	public void listen(@Payload String message) {
 		LOG.info("received message='{}'", message);
 		reportingService.addReportingData(constructReportingData(message));

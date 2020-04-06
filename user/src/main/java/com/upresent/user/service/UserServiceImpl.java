@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDetail fetchUser(String username) throws UserException {
-		UserDetail userDetails = userRepository.findByUsernameAndIsActive(username.toLowerCase(), Constant.ACTIVE_STATUS);
+		UserDetail userDetails = userRepository.findByUsername(username.toLowerCase());
 		if (userDetails != null) {
 			return userDetails;
 		} else {
