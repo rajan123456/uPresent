@@ -15,7 +15,7 @@ public enum ExceptionResponseCode {
 	MODULE_ALREADY_EXISTS(4016, "Module already exists."),
 	MODULE_DOES_NOT_EXIST(4017, "Module doesn't exist."),
 	USER_TYPES_NOT_FOUND(4018, "User types could not be fetched."),
-	ALL_USERS_NOT_STUDENTS(4019, "Check the provided student usernames. All the usernames do not map to a corresponding student.");
+	ALL_USERS_NOT_STUDENTS(4019, "Check the provided users. Either users do not exist or they do not have correct permissions.");
 
 	private int code;
 
