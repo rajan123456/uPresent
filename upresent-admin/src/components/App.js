@@ -5,14 +5,17 @@ import HomePage from "./home/HomePage";
 import FileNotFoundPage from "./NotFoundPage";
 import LoginPage from "./login/LoginPage";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { toastDuration } from "../config/config";
+import "react-toastify/dist/ReactToastify.css";
 import UsersPage from "./users/UsersPage";
 import CreateUsersPage from "./users/CreateUsersPage";
 import ManageUsersPage from "./users/ManageUsersPage";
 import FencesPage from "./fences/FencesPage";
 import CreateFencesPage from "./fences/CreateFencesPage";
 import ManageFencesPage from "./fences/ManageFencesPage";
+import ModulesPage from "./modules/ModulesPage";
+import CreateModulesPage from "./modules/CreateModulesPage";
+import ManageModulesPage from "./modules/ManageModulesPage";
 
 function App() {
   return (
@@ -31,6 +34,16 @@ function App() {
           <PrivateRoute
             path="/fence/:universityName"
             component={ManageFencesPage}
+          />
+          <PrivateRoute path="/modules" component={ModulesPage} />
+          <PrivateRoute
+            path="/module/add"
+            exact
+            component={CreateModulesPage}
+          />
+          <PrivateRoute
+            path="/module/:moduleCode"
+            component={ManageModulesPage}
           />
           <Route component={FileNotFoundPage} />
         </Switch>
