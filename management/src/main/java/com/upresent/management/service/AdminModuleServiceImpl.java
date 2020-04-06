@@ -109,7 +109,7 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 
 	@Override
 	public String deleteModule(HttpServletRequest request, String moduleCode) throws ManagementException {
-		String username = request.getHeader("username");
+		String username = request.getHeader("Username");
 		if (username == null) {
 			throw new ManagementException(ExceptionResponseCode.MISSING_HEADER_KEY);
 		}
