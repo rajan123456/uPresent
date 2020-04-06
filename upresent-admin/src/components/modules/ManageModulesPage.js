@@ -4,14 +4,15 @@ import Header from "../common/Header";
 import * as moduleApi from "../../api/moduleApi";
 import { toast } from "react-toastify";
 import { daysOfWeek } from "../../utils/constants";
+import moment from "moment";
 
 const ManageModulesPage = (props) => {
   const [errors, setErrors] = useState({});
 
   const [module, setModule] = useState({
     createdBy: "",
-    startDate: "",
-    endDate: "",
+    startDate: moment(new Date()).format("MM/DD/YYYY"),
+    endDate: moment(new Date()).format("MM/DD/YYYY"),
     moduleCode: "",
     moduleName: "",
     scheduledDays: [],
@@ -48,11 +49,25 @@ const ManageModulesPage = (props) => {
     });
   }
 
+  function handleDateChangeStartDate(date) {
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["startDate"]: moment(date).format("MM/DD/YYYY"),
+    });
+  }
+
+  function handleDateChangeEndDate(date) {
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["endDate"]: moment(date).format("MM/DD/YYYY"),
+    });
+  }
+
   function formIsValid() {
     const _errors = {};
 
-    if (!module.startDate) _errors.startDate = "Start Date is required";
-    if (!module.endDate) _errors.endDate = "End Date is required";
     if (!module.moduleCode) _errors.moduleCode = "Code is required.";
     if (module.scheduledDays.length === 0)
       _errors.scheduledDays = "Schedule cannot be empty.";
@@ -95,6 +110,8 @@ const ManageModulesPage = (props) => {
           daysOfWeek={daysOfWeek}
           onChange={handleChange}
           onChangeSelector={handleChangeSelector}
+          onStartDateChange={handleDateChangeStartDate}
+          onEndDateChange={handleDateChangeEndDate}
           onSubmit={handleSubmit}
           onReset={handleDelete}
         />
