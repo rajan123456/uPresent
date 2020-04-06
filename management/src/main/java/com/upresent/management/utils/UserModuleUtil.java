@@ -21,7 +21,7 @@ public class UserModuleUtil {
 	private Environment env;
 
 	@Autowired
-	private RestTemplate restTemplate;
+	RestTemplate restTemplate;
 
 	@Autowired
 	ObjectMapper objectMapper;
