@@ -24,5 +24,5 @@ class Config(object):
     SAGA_ENABLED = 1
     DATABASE_ENABLED = 0
     ATTENDANCE_RECORDED = 'attendanceRecorded'
-    ATTENDANCE_SOURCE_ID = 4
+    ATTENDANCE_SOURCE_ID = 3
     REPORT_PUBLISH_API = 'http://reporting:8080/reporting'
