@@ -11,12 +11,6 @@ def videosplitter(key):
         cap.open(config.Config.VIDEO_INPUT_PATH + key)
         print('cap is opened', cap.isOpened())
 
-        try:
-            if not os.path.exists(config.Config.FRAMES_PATH):
-                os.makedirs(config.Config.FRAMES_PATH)
-        except OSError:
-            print('Error: Creating directory of data')
-
         currentFrame = 0
         while cap.isOpened():
             # Capture frame-by-frame
@@ -31,9 +25,8 @@ def videosplitter(key):
             publish_message(kafka_producer, config.Config.KAFKA_TOPIC, 'frame', key, imageData)
 
             # Saves image of the current frame in jpg file
-            name = config.Config.FRAMES_PATH + '/frame' + str(currentFrame) + '.jpg'
+            name = '/frame' + str(currentFrame) + '.jpg'
             print('Creating...' + name)
-            cv2.imwrite(name, frame)
 
             # To stop duplicate images
             currentFrame += 1
