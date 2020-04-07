@@ -5,10 +5,10 @@ import config
 from resources.producer import connect_kafka_producer, publish_message
 
 
-def videosplitter():
+def videosplitter(key):
     try:
-        cap = cv2.VideoCapture(config.Config.VIDEO_INPUT_PATH)
-        cap.open(config.Config.VIDEO_INPUT_PATH)
+        cap = cv2.VideoCapture(config.Config.VIDEO_INPUT_PATH + key)
+        cap.open(config.Config.VIDEO_INPUT_PATH + key)
         print('cap is opened', cap.isOpened())
 
         try:
@@ -28,7 +28,7 @@ def videosplitter():
 
             # Publishing frames to kafka topic
             kafka_producer = connect_kafka_producer()
-            publish_message(kafka_producer, config.Config.KAFKA_TOPIC, 'frame', imageData)
+            publish_message(kafka_producer, config.Config.KAFKA_TOPIC, 'frame', key, imageData)
 
             # Saves image of the current frame in jpg file
             name = config.Config.FRAMES_PATH + '/frame' + str(currentFrame) + '.jpg'
