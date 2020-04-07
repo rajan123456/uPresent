@@ -3,6 +3,7 @@ from flask_restful import Api
 from elasticapm.contrib.flask import ElasticAPM
 from flask_restful_swagger import swagger
 
+from resources.videoProcessor import VideoProcessorApi
 
 app = Flask(__name__)
 app.config.from_object("config.Config")

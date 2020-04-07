@@ -1,4 +1,5 @@
-###### Requirements without Version Specifiers ######`
+bson
+kafka-python
 flask
 flask-restful
 flask_restful_swagger
@@ -6,4 +7,3 @@ opencv-python
 elastic-apm[flask]
 psutil
 
-###### Requirements with Version Specifiers ######`
