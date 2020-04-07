@@ -1,32 +1,41 @@
 import cv2
 import os
-import ffmpeg
+import base64
+import config
+from resources.producer import connect_kafka_producer, publish_message
 
 
-def videosplitter():
-    cap = cv2.VideoCapture('./inputData/example.mp4')
-    cap.open('./inputData/example.mp4')
-    print('cap is opened', cap.isOpened())
-
+def videosplitter(key):
     try:
-        if not os.path.exists('data'):
-            os.makedirs('data')
-    except OSError:
-        print('Error: Creating directory of data')
+        cap = cv2.VideoCapture(config.Config.VIDEO_INPUT_PATH + key)
+        cap.open(config.Config.VIDEO_INPUT_PATH + key)
+        print('cap is opened', cap.isOpened())
 
-    currentFrame = 0
-    while cap.isOpened():
-        # Capture frame-by-frame
-        ret, frame = cap.read()
+        currentFrame = 0
+        while cap.isOpened():
+            # Capture frame-by-frame
+            ret, frame = cap.read()
 
-        # Saves image of the current frame in jpg file
-        name = './data/frame' + str(currentFrame) + '.jpg'
-        print('Creating...' + name)
-        cv2.imwrite(name, frame)
+            # Convert frames into base64 encoded string
+            ret, buffer = cv2.imencode('.jpg', frame)
+            imageData = base64.b64encode(buffer)
 
-        # To stop duplicate images
-        currentFrame += 1
+            # Publishing frames to kafka topic
+            kafka_producer = connect_kafka_producer()
+            publish_message(kafka_producer, config.Config.KAFKA_TOPIC, 'frame', key, imageData)
 
-    # When everything done, release the capture
-    cap.release()
-    cv2.destroyAllWindows()
+            # Saves image of the current frame in jpg file
+            name = '/frame' + str(currentFrame) + '.jpg'
+            print('Creating...' + name)
+
+            # To stop duplicate images
+            currentFrame += 1
+
+    except Exception as ex:
+        print('Exception while splitting video')
+        print(str(ex))
+
+    finally:
+        # When everything done, release the capture
+        cap.release()
+        cv2.destroyAllWindows()
