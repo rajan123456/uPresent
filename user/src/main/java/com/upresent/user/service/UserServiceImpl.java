@@ -130,4 +130,9 @@ public class UserServiceImpl implements UserService {
 		resultMap.put("unknown", unknown);
 		return resultMap;
 	}
+
+	@Override
+	public Iterable<UserDetail> fetchAllUsersOfType(String userType) {
+		return userRepository.findByUserTypeIn(userType);
+	}
 }

@@ -41,6 +41,11 @@ public class UserController {
 		return RestUtils.successResponse(userService.fetchAllUsers());
 	}
 
+	@GetMapping("/type")
+	public ResponseEntity<RestResponse<Iterable<UserDetail>>> fetchAllUsersOfType(String userType) {
+		return RestUtils.successResponse(userService.fetchAllUsersOfType(userType));
+	}
+
 	@PutMapping
 	public ResponseEntity<RestResponse<String>> updateUser(
 			@RequestBody UserDetail userDetail) {
