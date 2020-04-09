@@ -69,6 +69,17 @@ function ManageModuleForm(props) {
             options={props.daysOfWeek}
           />
         </Grid>
+        <Grid item xs={12}>
+          <MultiDropDown
+            id="studentUsernames"
+            name="studentUsernames"
+            label="Students Enrolled"
+            onChange={props.onChangeSelector}
+            values={props.module.studentUsernames}
+            error={props.errors.studentUsernames}
+            options={props.availableStudents}
+          />
+        </Grid>
         <input type="submit" value="Save" className="btn btn-primary mr-1" />
         <input type="reset" value="Delete" className="btn btn-primary" />
       </Grid>
@@ -79,6 +90,7 @@ function ManageModuleForm(props) {
 ManageModuleForm.propTypes = {
   module: PropTypes.object.isRequired,
   daysOfWeek: PropTypes.array.isRequired,
+  availableStudents: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
   onChangeSelector: PropTypes.func.isRequired,
   onStartDateChange: PropTypes.func.isRequired,

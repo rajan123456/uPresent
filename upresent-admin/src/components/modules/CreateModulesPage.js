@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CreateModuleForm from "./CreateModuleForm";
 import Header from "../common/Header";
 import * as moduleApi from "../../api/moduleApi";
+import { getUsersOfType } from "../../api/userApi";
 import { toast } from "react-toastify";
 import { daysOfWeek } from "../../utils/constants";
 import moment from "moment";
@@ -18,6 +19,14 @@ const CreateModulesPage = (props) => {
     scheduledDays: [],
     studentUsernames: [],
   });
+
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    getUsersOfType("student").then((_students) =>
+      setStudents(_students.data.map((a) => a.username).sort())
+    );
+  }, []);
 
   function handleChange({ target }) {
     setModule({
@@ -94,6 +103,7 @@ const CreateModulesPage = (props) => {
           onEndDateChange={handleDateChangeEndDate}
           onSubmit={handleSubmit}
           daysOfWeek={daysOfWeek}
+          availableStudents={students}
         />
       </div>
     </div>

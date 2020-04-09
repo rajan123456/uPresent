@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ManageModuleForm from "./ManageModuleForm";
 import Header from "../common/Header";
 import * as moduleApi from "../../api/moduleApi";
+import { getUsersOfType } from "../../api/userApi";
 import { toast } from "react-toastify";
 import { daysOfWeek } from "../../utils/constants";
 import moment from "moment";
@@ -19,6 +20,8 @@ const ManageModulesPage = (props) => {
     studentUsernames: [],
   });
 
+  const [students, setStudents] = useState([]);
+
   useEffect(() => {
     const moduleCode = props.match.params.moduleCode;
     if (moduleCode) {
@@ -26,6 +29,9 @@ const ManageModulesPage = (props) => {
         setModule(_module.data);
       });
     }
+    getUsersOfType("student").then((_students) =>
+      setStudents(_students.data.map((a) => a.username).sort())
+    );
   }, [props.match.params.moduleCode]);
 
   function handleChange({ target }) {
@@ -108,6 +114,7 @@ const ManageModulesPage = (props) => {
           errors={errors}
           module={module}
           daysOfWeek={daysOfWeek}
+          availableStudents={students}
           onChange={handleChange}
           onChangeSelector={handleChangeSelector}
           onStartDateChange={handleDateChangeStartDate}

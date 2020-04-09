@@ -14,6 +14,17 @@ export function getUsers() {
     .catch(handleError);
 }
 
+export function getUsersOfType(type) {
+  return fetch(baseUrl + "/type?userType=" + type, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+    },
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
 export function getUserByUsername(username) {
   return fetch(baseUrl + "?username=" + username, {
     method: "GET",
