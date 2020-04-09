@@ -19,5 +19,6 @@ public interface UserService {
 	public String deleteUser(String username) throws UserException;
 
 	public Map<String, Object> getUserType(List<String> usernames);
-	
+
+    public Iterable<UserDetail> fetchAllUsersOfType(String userType);
 }

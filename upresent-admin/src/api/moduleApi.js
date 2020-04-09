@@ -1,9 +1,9 @@
 import { handleResponse, handleError } from "./apiUtils";
-import { baseUrlUserApi } from "../config/config";
+import { baseUrlModuleApi } from "../config/config";
 
-const baseUrl = baseUrlUserApi;
+const baseUrl = baseUrlModuleApi;
 
-export function getUsers() {
+export function getModules() {
   return fetch(baseUrl + "/all", {
     method: "GET",
     headers: {
@@ -14,8 +14,8 @@ export function getUsers() {
     .catch(handleError);
 }
 
-export function getUsersOfType(type) {
-  return fetch(baseUrl + "/type?userType=" + type, {
+export function getModuleByModuleCode(moduleCode) {
+  return fetch(baseUrl + "?moduleCode=" + moduleCode, {
     method: "GET",
     headers: {
       "content-type": "application/json",
@@ -25,46 +25,37 @@ export function getUsersOfType(type) {
     .catch(handleError);
 }
 
-export function getUserByUsername(username) {
-  return fetch(baseUrl + "?username=" + username, {
-    method: "GET",
-    headers: {
-      "content-type": "application/json",
-    },
-  })
-    .then(handleResponse)
-    .catch(handleError);
-}
-
-export function saveUser(user) {
+export function saveModule(module) {
   return fetch(baseUrl, {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(module),
   })
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function updateUser(user) {
+export function updateModule(module) {
   return fetch(baseUrl, {
     method: "PUT",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(module),
   })
     .then(handleResponse)
     .catch(handleError);
 }
 
-export function deleteUser(username) {
-  return fetch(baseUrl + "?username=" + username, {
+export function deleteModule(moduleCode) {
+  return fetch(baseUrl + "?moduleCode=" + moduleCode, {
     method: "DELETE",
     headers: {
       "content-type": "application-json",
+      // prettier-ignore
+      "Username": localStorage.getItem("user")
     },
   })
     .then(handleResponse)
