@@ -178,8 +178,6 @@ services:
       - "5601:5601"
     depends_on:
       - elasticsearch
-      - filebeat
-      - metricbeat
       - apm-server
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.6.1
@@ -191,6 +189,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - elasticsearch
+      - kibana
   metricbeat:
     image: docker.elastic.co/beats/metricbeat:7.6.1
     container_name: metricbeat
@@ -204,6 +203,7 @@ services:
       - /:/hostfs:ro
     depends_on:
       - elasticsearch
+      - kibana
   apm-server:
     image: docker.elastic.co/apm/apm-server:7.6.1
     container_name: apm-server
@@ -260,6 +260,26 @@ services:
       - ./vault-data-vol/config:/vault/config:ro
       - ./vault-data-vol/data:/vault/data:rw
     entrypoint: vault server -config=/vault/config/vault.json
+  nginx:
+    image: nginx:1.17
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./proxy-data-nginx/nginx:/etc/nginx/conf.d
+      - ./proxy-data-nginx/certbot/conf:/etc/letsencrypt
+      - ./proxy-data-nginx/certbot/www:/var/www/certbot
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: always
+    volumes:
+      - ./proxy-data-nginx/certbot/conf:/etc/letsencrypt
+      - ./proxy-data-nginx/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 volumes:
   apm-data-vol:
   user-data-vol:
@@ -273,3 +293,4 @@ volumes:
   vault-data-vol:
   srs-conf-vol:
   srs-log-vol:
+  proxy-data-nginx:
