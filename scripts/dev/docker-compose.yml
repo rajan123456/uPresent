@@ -253,9 +253,10 @@ services:
       - "8200:8200"
     environment:
       - VAULT_ADDR=https://0.0.0.0:8200
-      - VAULT_SKIP_VERIFY=true
+#      - VAULT_SKIP_VERIFY=true
     volumes:
-      - ./vault-data-vol/certs:/vault/certs:ro
+#      - ./vault-data-vol/certs:/vault/certs:ro
+      - ./proxy-data-nginx/certbot/conf:/etc/letsencrypt:ro
       - ./vault-data-vol/policies:/vault/policies:ro
       - ./vault-data-vol/config:/vault/config:ro
       - ./vault-data-vol/data:/vault/data:rw
@@ -267,6 +268,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "5600:5600"
     volumes:
       - ./proxy-data-nginx/nginx:/etc/nginx/conf.d
       - ./proxy-data-nginx/certbot/conf:/etc/letsencrypt

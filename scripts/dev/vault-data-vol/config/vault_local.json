@@ -3,9 +3,9 @@
     "tcp":  {                        
       "address":  "0.0.0.0:8200",
 	  "cluster_address": "0.0.0.0:8201",
-      "tls_cert_file": "/etc/letsencrypt/live/dev.upresent.ga/fullchain.pem",
-	  "tls_key_file": "/etc/letsencrypt/live/dev.upresent.ga/privkey.pem",
-	  "disable_tls": "false"
+      "tls_cert_file": "/vault/certs/vault-certificate.pem",
+	  "tls_key_file": "/vault/certs/vault-key.pem",
+	  "disable_tls": "true"
     }                                
   },                                 
   "backend": {                       
