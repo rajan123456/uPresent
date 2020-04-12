@@ -21,15 +21,7 @@ export class Menu extends React.Component {
         </View>
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.buttonStyles} onPress={this.onPress}>
-            <Text style={styles.buttonText}>PLACEHOLDER</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonStyles} onPress={this.onPress}>
-            <Text style={styles.buttonText}>PLACEHOLDER</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.buttonStyles} onPress={this.onPress}>
-            <Text style={styles.buttonText}>PLACEHOLDER</Text>
+            <Text style={styles.buttonText}>SETTINGS</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonStyles}
@@ -48,7 +40,7 @@ const styles = {
     backgroundColor: '#ffffff',
   },
   buttonRow: {
-    flex: 2,
+    flex: 3,
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: '#000000',

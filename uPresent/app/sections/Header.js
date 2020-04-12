@@ -31,7 +31,6 @@ export class Header extends React.Component {
 
   async fetchCredentials() {
     const credentials = await Keychain.getGenericPassword();
-    console.log(credentials);
     if (!credentials) {
       console.log('No credentials stored');
     } else {
@@ -67,23 +66,24 @@ export class Header extends React.Component {
 
 const styles = {
   headText: {
-    paddingTop: 10,
+    paddingTop: 15,
     textAlign: 'right',
     color: '#000000',
-    fontSize: 20,
-    flex: 1,
+    fontSize: 30,
+    flex: 1.5,
   },
   headStyle: {
     paddingTop: 10,
+    paddingBottom: 10,
     paddingRight: 10,
     backgroundColor: '#ffffff',
-    flex: 1,
+    flex: 1.5,
     flexDirection: 'row',
     borderBottomWidth: 2,
     borderColor: '#ffffff',
   },
   logoStyle: {
-    flex: 1,
+    flex: 1.5,
     width: undefined,
     height: undefined,
   },
