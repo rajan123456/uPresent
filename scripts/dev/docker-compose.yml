@@ -26,6 +26,16 @@ services:
       - broker
       - user
       - apm-server
+  reporting:
+    image: rajagupt/reporting:latest
+    container_name: reporting
+    restart: always
+    ports:
+      - "8082:8080"
+    depends_on:
+      - mongo
+      - broker
+      - apm-server
   user:
     image: rajagupt/user:latest
     container_name: user
@@ -38,25 +48,6 @@ services:
       - mongo
       - broker
       - apm-server
-  reporting:
-    image: rajagupt/reporting:latest
-    container_name: reporting
-    restart: always
-    ports:
-      - "8084:8080"
-    depends_on:
-      - mongo
-      - broker
-      - apm-server
-  #  metrics:
-  #    image: rajagupt/metrics:latest
-  #    container_name: metrics
-  #    restart: always
-  #    ports:
-  #      - "8085:8080"
-  #    depends_on:
-  #      - mongo
-  #      - broker
   admin:
     image: rajagupt/upresent-admin:latest
     container_name: admin
@@ -253,14 +244,15 @@ services:
       - "8200:8200"
     environment:
       - VAULT_ADDR=https://0.0.0.0:8200
-#      - VAULT_SKIP_VERIFY=true
+      #- VAULT_SKIP_VERIFY=true
     volumes:
-#      - ./vault-data-vol/certs:/vault/certs:ro
+      #- ./vault-data-vol/certs:/vault/certs:ro
       - ./proxy-data-nginx/certbot/conf:/etc/letsencrypt:ro
       - ./vault-data-vol/policies:/vault/policies:ro
       - ./vault-data-vol/config:/vault/config:ro
       - ./vault-data-vol/data:/vault/data:rw
     entrypoint: vault server -config=/vault/config/vault.json
+    # entrypoint: vault server -config=/vault/config/vault_local.json
   nginx:
     image: nginx:1.17
     container_name: nginx
