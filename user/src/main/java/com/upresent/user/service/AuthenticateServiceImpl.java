@@ -19,6 +19,6 @@ public class AuthenticateServiceImpl implements AuthenticateService {
 		UserDetail user = userService.fetchUser(loginRequest.getUsername());
 		if (!user.getPassword().equals(loginRequest.getPassword()))
 			throw new UserException(ExceptionResponseCode.UNAUTHORISED);
-		return user.getUserType();
+		return user.getUserType() + ";" + user.getSchool();
 	}
 }
