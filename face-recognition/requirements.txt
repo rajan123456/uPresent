@@ -1,0 +1,10 @@
+flask
+flask_restful
+boto3
+elastic-apm[flask]
+psutil
+flask-restful-swagger
+numpy
+imutils
+opencv-python
+sklearn
