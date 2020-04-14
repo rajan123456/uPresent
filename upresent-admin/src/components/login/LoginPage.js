@@ -46,7 +46,7 @@ const LoginPage = (props) => {
     authApi
       .loginUser(authRequest)
       .then((_resp) => {
-        if (_resp.data.split(";")[0] === "ADMIN") {
+        if (_resp.data === "ADMIN") {
           localStorage.setItem("user", user.username);
           props.history.push("/home");
           toast.success("Welcome to uPresent Admin Portal");
