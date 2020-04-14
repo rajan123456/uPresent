@@ -22,6 +22,7 @@ public class UserDetail {
 	private String password;
 	private String username;
 	private String userType="STUDENT";
+	private String school;
 	private List<String> imageId;
 	private Integer isActive = 1;
 
@@ -71,6 +72,8 @@ public class UserDetail {
 	public void setUserType(String userType) {
 		this.userType = userType;
 	}
+	public String getSchool() { return school; };
+	public void setSchool(String school) { this.school = school; }
 	public List<String> getImageId() {
 		return imageId;
 	}

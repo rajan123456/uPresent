@@ -12,6 +12,7 @@ const ManageUsersPage = (props) => {
     password: "",
     username: "",
     userType: "admin",
+    school: null,
     imageId: [],
     isActive: 1,
   });
