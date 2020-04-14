@@ -1,9 +1,11 @@
 import watchdog.events
 import watchdog.observers
 import os
-from flask import current_app
+from embeddings import extract_embeddings
+from training import train_model
+import constants
 
-# dict of the type String: Integer (username: imageCount)
+# dict of the type <String, Integer> (username: imageCount)
 students_image_count = {}
 
 class Handler(watchdog.events.PatternMatchingEventHandler):
@@ -27,7 +29,7 @@ def update_training_metadata(path):
             students_image_count[username] += 1
         else:
             students_image_count[username] = 1
-        print(students_image_count)
+        # print(students_image_count)
     else:
         print("Image was not added at the expected path (./dataset/<username>/). Image path: " + path)
     check_and_begin_training()
@@ -35,28 +37,30 @@ def update_training_metadata(path):
 def check_and_begin_training():
     start_training = True
     for username in students_image_count.keys():
-        if students_image_count[username] != 2:
-        # if students_image_count[username] != current_app.config['USER_TRAINING_IMAGE_COUNT']:
+        if students_image_count[username] != constants.USER_TRAINING_IMAGE_COUNT:
             start_training = False
             break
+    print("Training started => " + str(start_training))
+    print(students_image_count)
     if start_training:
         initialise_training()
 
 def check_validity_and_get_details(path):
-    split_path = path.split("/")
-    if(len(split_path) == 4):
-        return True, split_path[2], split_path[3]
+    image_details = path.split("dataset")
+    split_details = image_details[1].split("/")
+    if(len(split_details) == 3):
+        return True, split_details[1], split_details[2]
     return False, "", ""
 
 def initialise_training():
-    print("training started")
+    extract_embeddings()
+    train_model()
 
 def initialise_metadata_on_startup():
-    dataset_path = current_app.config['DATASET_PATH']
-    # print(dataset_path)
-    # dataset_path = "./dataset"
+    dataset_path = constants.DATASET_PATH
     for username in os.listdir(dataset_path):
         concatenated_dir = dataset_path + '/' + username
         if os.path.isdir(concatenated_dir):
             students_image_count[username] = len([file for file in os.listdir(concatenated_dir) if (os.path.isfile(concatenated_dir + "/" + file) and os.path.splitext(file)[1].lower() == ".png")])
-    print(students_image_count)
+    check_and_begin_training()
+    # print(students_image_count)

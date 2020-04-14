@@ -1,18 +1,13 @@
-# USAGE
-# python train_model.py --embeddings output/embeddings.pickle \
-#	--recognizer output/recognizer.pickle --le output/le.pickle
-
-# import the necessary packages
 from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
 from flask import current_app
 import pickle
+import constants
 
-
-def training():
-    recog = current_app.config['BASE_PACKAGE'] + 'output/recognizer.pickle'
-    l = current_app.config['BASE_PACKAGE'] + 'output/le.pickle'
-    embeddings = current_app.config['BASE_PACKAGE'] + 'output/embeddings.pickle'
+def train_model():
+    recog = constants.BASE_PACKAGE + 'output/recognizer.pickle'
+    l = constants.BASE_PACKAGE + 'output/le.pickle'
+    embeddings = constants.BASE_PACKAGE + 'output/embeddings.pickle'
 
     # load the face embeddings
     print("[INFO] loading face embeddings...")
@@ -41,4 +36,4 @@ def training():
         f.close()
     except Exception as ex:
         print(str(ex))
-        return {'message': str(ex)}, 500
+        return {"Exception occurred. Exception msg: ": str(ex)}, 500

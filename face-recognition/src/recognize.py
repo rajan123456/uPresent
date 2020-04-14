@@ -1,33 +1,26 @@
-# USAGE
-# python recognize.py --detector face_detection_model \
-#	--embedding-model openface_nn4.small2.v1.t7 \
-#	--recognizer output/recognizer.pickle \
-#	--le output/le.pickle --image images/adrian.jpg
-
-# import the necessary packages
 import numpy as np
 import imutils
 import pickle
 import cv2
 import os
-from flask import current_app
+import constants
 
 def recog(image):
-    detector = current_app.config['BASE_PACKAGE'] + 'face_detection_model/'
-    embeddingModel = current_app.config['BASE_PACKAGE'] + 'openface_nn4.small2.v1.t7'
+    detector = constants.BASE_PACKAGE + 'face_detection_model/'
+    embedding_model = constants.BASE_PACKAGE + 'openface_nn4.small2.v1.t7'
     conf = 0.5
-    recognizer = current_app.config['BASE_PACKAGE'] + 'output/recognizer.pickle'
-    l = current_app.config['BASE_PACKAGE'] + 'output/le.pickle'
+    recognizer = constants.BASE_PACKAGE + 'output/recognizer.pickle'
+    l = constants.BASE_PACKAGE + 'output/le.pickle'
     print("[INFO] loading face detector...")
     try:
-        protoPath = os.path.sep.join([detector, "deploy.prototxt"])
-        modelPath = os.path.sep.join([detector,
+        proto_path = os.path.sep.join([detector, "deploy.prototxt"])
+        model_path = os.path.sep.join([detector,
                                       "res10_300x300_ssd_iter_140000.caffemodel"])
-        detector = cv2.dnn.readNetFromCaffe(protoPath, modelPath)
+        detector = cv2.dnn.readNetFromCaffe(proto_path, model_path)
 
         # load our serialized face embedding model from disk
         print("[INFO] loading face recognizer...")
-        embedder = cv2.dnn.readNetFromTorch(embeddingModel)
+        embedder = cv2.dnn.readNetFromTorch(embedding_model)
 
         # load the actual face recognition model along with the label encoder
         recognizer = pickle.loads(open(recognizer, "rb").read())
@@ -40,18 +33,18 @@ def recog(image):
         (h, w) = image.shape[:2]
 
         # construct a blob from the image
-        imageBlob = cv2.dnn.blobFromImage(
+        image_blob = cv2.dnn.blobFromImage(
             cv2.resize(image, (300, 300)), 1.0, (300, 300),
             (104.0, 177.0, 123.0), swapRB=False, crop=False)
 
         # apply OpenCV's deep learning-based face detector to localize
         # faces in the input image
-        detector.setInput(imageBlob)
+        detector.setInput(image_blob)
         detections = detector.forward()
 
         # loop over the detections
         for i in range(0, detections.shape[2]):
-            # extract the confidence (i.e., probability) associated with the
+            # extract_embeddings the confidence (i.e., probability) associated with the
             # prediction
             confidence = detections[0, 0, i, 2]
 
@@ -62,7 +55,7 @@ def recog(image):
                 box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
                 (startX, startY, endX, endY) = box.astype("int")
 
-                # extract the face ROI
+                # extract_embeddings the face ROI
                 face = image[startY:endY, startX:endX]
                 (fH, fW) = face.shape[:2]
 
@@ -73,23 +66,23 @@ def recog(image):
                 # construct a blob for the face ROI, then pass the blob
                 # through our face embedding model to obtain the 128-d
                 # quantification of the face
-                faceBlob = cv2.dnn.blobFromImage(face, 1.0 / 255, (96, 96),
+                face_blob = cv2.dnn.blobFromImage(face, 1.0 / 255, (96, 96),
                                                  (0, 0, 0), swapRB=True, crop=False)
-                embedder.setInput(faceBlob)
+                embedder.setInput(face_blob)
                 vec = embedder.forward()
 
                 # perform classification to recognize the face
                 preds = recognizer.predict_proba(vec)[0]
                 j = np.argmax(preds)
-                proba = preds[j]
+                probability = preds[j]
                 name = le.classes_[j]
 
                 # draw the bounding box of the face along with the associated
                 # probability
-                text = "{}: {:.2f}%".format(name, proba * 100)
+                text = "{}: {:.2f}%".format(name, probability * 100)
 
         # show the output image
         return text
     except Exception as ex:
         print(str(ex))
-        return {'message': str(ex)}, 500
+        return {"Exception occurred. Exception msg: ": str(ex)}, 500

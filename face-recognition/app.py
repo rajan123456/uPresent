@@ -6,7 +6,6 @@ from src.routes import initialize_routes
 import os
 
 app = Flask(__name__)
-app.config.from_object("config.Config")
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 #apm = ElasticAPM(app)
 api = Api(app)
