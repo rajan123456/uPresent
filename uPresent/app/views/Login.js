@@ -98,7 +98,10 @@ export class Login extends React.Component {
       loginUser(auth).then(async _resp => {
         if (_resp.message === unauthorizedAccess) {
           Alert.alert(passwordIsIncorrect);
-        } else if (_resp.message === ok) {
+        } else if (
+          _resp.message === ok &&
+          _resp.data.split(';')[0] === 'STUDENT'
+        ) {
           await Keychain.setGenericPassword(
             this.state.username,
             this.state.password,

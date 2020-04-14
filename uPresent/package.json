@@ -15,6 +15,7 @@
     "@react-navigation/stack": "^5.0.1",
     "react": "16.9.0",
     "react-native": "0.61.5",
+    "react-native-geolocation-service": "^4.0.0",
     "react-native-gesture-handler": "^1.5.6",
     "react-native-image-crop-picker": "^0.28.0",
     "react-native-keychain": "^5.0.1",
