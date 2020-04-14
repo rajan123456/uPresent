@@ -8,7 +8,13 @@ function UsersPage() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    getUsers().then(_users => setUsers(_users.data));
+    getUsers().then((_users) => {
+      let activeUsers = [];
+      _users.data.forEach((element) => {
+        if (element.isActive === 1) activeUsers.push(element);
+      });
+      setUsers(activeUsers);
+    });
   }, []);
 
   return (
