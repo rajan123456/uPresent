@@ -17,3 +17,4 @@ target/
 **/*.pyc
 **/test_images
 **/dataset
+**/venv/**
