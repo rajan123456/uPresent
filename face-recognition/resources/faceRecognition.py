@@ -12,5 +12,6 @@ class FaceApi(Resource):
     def get(self):
         extract()
         training()
-        data = recog('/Users/ashishgupta/git/uPresent/face-recognition/resources/images/adrian.jpg')
+        data = recog('/Users/anchitseth/Documents/sts-workspace/uPresent/face-recognition/test_images/adrian.jpg')
+        # data = recog('/Users/ashishgupta/git/uPresent/face-recognition/resources/images/adrian.jpg')
         return Response(data, mimetype="application/json", status=200)
