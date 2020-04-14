@@ -22,9 +22,9 @@ htmlcov/
 .coverage
 .coverage.*
 *,cover
-
+*.pickle
 resources/__pycache__/*
 database/__pycache__/*
-
+resources/dataset/*
 attendance.pem
 key.pem

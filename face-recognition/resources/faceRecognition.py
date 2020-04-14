@@ -1,4 +1,4 @@
-from flask import Response, request
+from flask import Response
 from flask_restful import Resource
 from flask_restful_swagger import swagger
 from resources.embeddings import extract
@@ -12,5 +12,5 @@ class FaceApi(Resource):
     def get(self):
         extract()
         training()
-        recog('/Users/ashishgupta/git/uPresent/face-recognition/resources/images/adrian.jpg')
-        return Response('success', mimetype="application/json", status=200)
+        data = recog('/Users/ashishgupta/git/uPresent/face-recognition/resources/images/adrian.jpg')
+        return Response(data, mimetype="application/json", status=200)

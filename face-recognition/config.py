@@ -4,3 +4,4 @@ class Config(object):
         'SERVER_URL': 'http://apm-server:8200'
     }
     SAGA_ENABLED = 1
+    BASE_PACKAGE = '/Users/ashishgupta/git/uPresent/face-recognition/resources/'

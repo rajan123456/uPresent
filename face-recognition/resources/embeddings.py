@@ -5,20 +5,21 @@ import imutils
 import pickle
 import cv2
 import os
+from flask import current_app
 
 
 def extract():
-    dataset = '/Users/ashishgupta/git/uPresent/face-recognition/resources/dataset'
-    embeddings = '/Users/ashishgupta/git/uPresent/face-recognition/resources/output/embeddings.pickle'
-    detector = '/Users/ashishgupta/git/uPresent/face-recognition/resources/face_detection_model'
-    embeddingModel = '/Users/ashishgupta/git/uPresent/face-recognition/resources/openface_nn4.small2.v1.t7'
+    dataset = current_app.config['BASE_PACKAGE'] + 'dataset'
+    embeddings = current_app.config['BASE_PACKAGE'] + 'output/embeddings.pickle'
+    detector = current_app.config['BASE_PACKAGE'] + 'face_detection_model'
+    embeddingModel = current_app.config['BASE_PACKAGE'] + 'openface_nn4.small2.v1.t7'
     conf = 0.5
     # load our serialized face detector from disk
     print("[INFO] loading face detector...")
     try:
         protoPath = os.path.sep.join([detector, "deploy.prototxt"])
         modelPath = os.path.sep.join([detector,
-            "res10_300x300_ssd_iter_140000.caffemodel"])
+                                      "res10_300x300_ssd_iter_140000.caffemodel"])
         detector = cv2.dnn.readNetFromCaffe(protoPath, modelPath)
 
         # load our serialized face embedding model from disk
@@ -41,7 +42,7 @@ def extract():
         for (i, imagePath) in enumerate(imagePaths):
             # extract the person name from the image path
             print("[INFO] processing image {}/{}".format(i + 1,
-                len(imagePaths)))
+                                                         len(imagePaths)))
             name = imagePath.split(os.path.sep)[-2]
 
             # load the image, resize it to have a width of 600 pixels (while
@@ -89,7 +90,7 @@ def extract():
                     # through our face embedding model to obtain the 128-d
                     # quantification of the face
                     faceBlob = cv2.dnn.blobFromImage(face, 1.0 / 255,
-                        (96, 96), (0, 0, 0), swapRB=True, crop=False)
+                                                     (96, 96), (0, 0, 0), swapRB=True, crop=False)
                     embedder.setInput(faceBlob)
                     vec = embedder.forward()
 

@@ -10,15 +10,14 @@ import imutils
 import pickle
 import cv2
 import os
-
+from flask import current_app
 
 def recog(image):
-    detector = '/Users/ashishgupta/git/uPresent/face-recognition/resources/face_detection_model/'
-    embeddingModel = '/Users/ashishgupta/git/uPresent/face-recognition/resources/openface_nn4.small2.v1.t7'
+    detector = current_app.config['BASE_PACKAGE'] + 'face_detection_model/'
+    embeddingModel = current_app.config['BASE_PACKAGE'] + 'openface_nn4.small2.v1.t7'
     conf = 0.5
-    recognizer = 'output/recognizer.pickle'
-    l = 'output/le.pickle'
-    # load our serialized face detector from disk
+    recognizer = current_app.config['BASE_PACKAGE'] + 'output/recognizer.pickle'
+    l = current_app.config['BASE_PACKAGE'] + 'output/le.pickle'
     print("[INFO] loading face detector...")
     try:
         protoPath = os.path.sep.join([detector, "deploy.prototxt"])
@@ -88,15 +87,9 @@ def recog(image):
                 # draw the bounding box of the face along with the associated
                 # probability
                 text = "{}: {:.2f}%".format(name, proba * 100)
-                y = startY - 10 if startY - 10 > 10 else startY + 10
-                cv2.rectangle(image, (startX, startY), (endX, endY),
-                              (0, 0, 255), 2)
-                cv2.putText(image, text, (startX, y),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 
         # show the output image
-        cv2.imshow("Image", image)
-        cv2.waitKey(0)
+        return text
     except Exception as ex:
         print(str(ex))
         return {'message': str(ex)}, 500
