@@ -7,3 +7,4 @@ elastic-apm[flask]
 psutil
 flask-restful-swagger
 kafka-python
+flask_cors
