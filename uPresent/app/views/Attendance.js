@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-  Button,
   PermissionsAndroid,
   Platform,
   ScrollView,
   Text,
   View,
 } from 'react-native';
+import {TextField} from 'react-native-material-textfield';
+import {RaisedTextButton} from 'react-native-material-buttons';
 import Geolocation from 'react-native-geolocation-service';
 
 export class Attendance extends React.Component {
@@ -88,9 +89,11 @@ export class Attendance extends React.Component {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.container}>
-          <Button
+          <RaisedTextButton
             title="Get Location"
             onPress={this.getLocation}
+            color={TextField.defaultProps.tintColor}
+            titleColor="white"
             disabled={this.state.loading || this.state.updatesEnabled}
           />
           <View style={styles.result}>
