@@ -9,7 +9,7 @@ from flask import current_app
 
 
 def extract():
-    dataset = current_app.config['BASE_PACKAGE'] + 'dataset'
+    dataset = current_app.config['DATASET_PATH']
     embeddings = current_app.config['BASE_PACKAGE'] + 'output/embeddings.pickle'
     detector = current_app.config['BASE_PACKAGE'] + 'face_detection_model'
     embeddingModel = current_app.config['BASE_PACKAGE'] + 'openface_nn4.small2.v1.t7'
@@ -103,7 +103,7 @@ def extract():
         # dump the facial embeddings + names to disk
         print("[INFO] serializing {} encodings...".format(total))
         data = {"embeddings": knownEmbeddings, "names": knownNames}
-        f = open(embeddings, "ab")
+        f = open(embeddings, "wb")
         f.write(pickle.dumps(data))
         f.close()
     except Exception as ex:

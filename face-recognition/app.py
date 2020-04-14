@@ -2,7 +2,7 @@
 from flask import Flask
 from flask_restful import Api
 from flask_restful_swagger import swagger
-from resources.routes import initialize_routes
+from src.routes import initialize_routes
 import os
 
 app = Flask(__name__)
