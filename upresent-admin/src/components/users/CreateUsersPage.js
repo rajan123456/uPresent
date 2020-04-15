@@ -4,7 +4,7 @@ import Header from "../common/Header";
 import * as userApi from "../../api/userApi";
 import { toast } from "react-toastify";
 
-const CreateUsersPage = props => {
+const CreateUsersPage = (props) => {
   const [errors, setErrors] = useState({});
 
   const [user, setUser] = useState({
@@ -12,14 +12,15 @@ const CreateUsersPage = props => {
     password: "",
     username: "",
     userType: "admin",
+    school: null,
     imageId: [],
-    isActive: 1
+    isActive: 1,
   });
 
   function handleChange({ target }) {
     setUser({
       ...user,
-      [target.name]: target.value
+      [target.name]: target.value,
     });
   }
 

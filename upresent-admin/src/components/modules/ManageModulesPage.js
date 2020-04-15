@@ -29,7 +29,7 @@ const ManageModulesPage = (props) => {
         setModule(_module.data);
       });
     }
-    getUsersOfType("student").then((_students) =>
+    getUsersOfType("STUDENT").then((_students) =>
       setStudents(_students.data.map((a) => a.username).sort())
     );
   }, [props.match.params.moduleCode]);

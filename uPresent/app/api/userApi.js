@@ -14,7 +14,7 @@ export function saveUser(user) {
 }
 
 export function getUserByName(username) {
-  return fetch(baseUrlUserApi, {
+  return fetch(baseUrlUserApi + '?username=' + username, {
     method: 'GET',
     headers: {
       'content-type': 'application/json',

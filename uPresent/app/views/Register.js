@@ -33,11 +33,13 @@ export class Register extends React.Component {
     this.onSubmitUsername = this.onSubmitUsername.bind(this);
     this.onSubmitPassword = this.onSubmitPassword.bind(this);
     this.onSubmitPasswordConfirm = this.onSubmitPasswordConfirm.bind(this);
+    this.onSubmitSchool = this.onSubmitSchool.bind(this);
     this.onAccessoryPress = this.onAccessoryPress.bind(this);
 
     this.usernameRef = this.updateRef.bind(this, 'username');
     this.passwordRef = this.updateRef.bind(this, 'password');
     this.passwordConfirmRef = this.updateRef.bind(this, 'passwordConfirm');
+    this.schoolRef = this.updateRef.bind(this, 'school');
 
     this.renderPasswordAccessory = this.renderPasswordAccessory.bind(this);
 
@@ -45,6 +47,7 @@ export class Register extends React.Component {
       username: '',
       password: '',
       passwordConfirm: '',
+      school: '',
       secureTextEntry: true,
       images: null,
       imageIds: [],
@@ -81,12 +84,16 @@ export class Register extends React.Component {
     this.passwordConfirm.focus();
   }
 
-  onSubmitPasswordConfirm() {}
+  onSubmitPasswordConfirm() {
+    this.school.focus();
+  }
+
+  onSubmitSchool() {}
 
   onSubmit() {
     let errors = {};
 
-    ['username', 'password', 'passwordConfirm'].forEach(name => {
+    ['username', 'password', 'passwordConfirm', 'school'].forEach(name => {
       let value = this[name].value();
 
       if (!value) {
@@ -113,6 +120,7 @@ export class Register extends React.Component {
         name: this.username.value(),
         username: this.username.value(),
         password: this.password.value(),
+        school: this.school.value(),
       };
 
       saveUser(user).then(_resp => {
@@ -243,6 +251,17 @@ export class Register extends React.Component {
               error={errors.passwordConfirm}
               maxLength={15}
               renderRightAccessory={this.renderPasswordAccessory}
+            />
+            <TextField
+              ref={this.schoolRef}
+              autoCorrect={false}
+              enablesReturnKeyAutomatically={true}
+              onFocus={this.onFocus}
+              onChangeText={this.onChangeText}
+              onSubmitEditing={this.onSubmitSchool}
+              returnKeyType="next"
+              label="School"
+              error={errors.school}
             />
             <RaisedTextButton
               onPress={() => this.pickFromCamera(true)}

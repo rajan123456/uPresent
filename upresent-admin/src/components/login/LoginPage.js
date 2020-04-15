@@ -4,18 +4,18 @@ import * as userApi from "../../api/userApi";
 import * as authApi from "../../api/authApi";
 import { toast } from "react-toastify";
 
-const LoginPage = props => {
+const LoginPage = (props) => {
   const [errors, setErrors] = useState({});
 
   const [user, setUser] = useState({
     username: "",
-    password: ""
+    password: "",
   });
 
   useEffect(() => {
     const username = props.match.params.username;
     if (username) {
-      userApi.getUserByUsername(username).then(_user => setUser(_user));
+      userApi.getUserByUsername(username).then((_user) => setUser(_user));
     }
     localStorage.clear();
   }, [props.match.params.username]);
@@ -23,7 +23,7 @@ const LoginPage = props => {
   function handleChange({ target }) {
     setUser({
       ...user,
-      [target.name]: target.value
+      [target.name]: target.value,
     });
   }
 
@@ -45,8 +45,8 @@ const LoginPage = props => {
     let authRequest = { password: user.password, username: user.username };
     authApi
       .loginUser(authRequest)
-      .then(_resp => {
-        if (_resp.data === "admin") {
+      .then((_resp) => {
+        if (_resp.data === "ADMIN") {
           localStorage.setItem("user", user.username);
           props.history.push("/home");
           toast.success("Welcome to uPresent Admin Portal");
