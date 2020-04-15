@@ -1,6 +1,5 @@
 import os
 import json
-import config
 import base64
 
 from pyspark import SparkContext
@@ -8,14 +7,21 @@ from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
 from pyspark.sql import SparkSession
 
+# Constants
+BATCH_DURATION = 3
+TOPIC = "videoCollector"
+BROKER_INFO = "broker:29092"
+IMAGE_FOLDER_PATH = "/training-data/images/"
+#IMAGE_FOLDER_PATH = "D:/PythonWorkspace/"
+
 # Set environment variables
-os.environ['PYTHONPATH'] = config.Config.PYTHONPATH
-os.environ['SPARK_HOME'] = config.Config.SPARK_HOME
+#os.environ['PYTHONPATH'] = "D:/ApacheSpark/spark-2.4.5-bin-hadoop2.7/python"
+#os.environ['SPARK_HOME'] = "D:/ApacheSpark/spark-2.4.5-bin-hadoop2.7"
 
 
 def init_spark():
     sc = SparkContext(appName="videoStreamCollector")
-    ssc = StreamingContext(sc, config.Config.BATCH_DURATION)
+    ssc = StreamingContext(sc, BATCH_DURATION)
     sc.setLogLevel("WARN")
     return sc, ssc
 
@@ -34,7 +40,7 @@ def process(rdd, sc):
         # Getting imageBase64 from SQL and storing them into filesystem
         image_no = 1
         for imageInfo in imageDataFrame.collect():
-            image_folder = config.Config.IMAGE_FOLDER_PATH + imageInfo.username
+            image_folder = IMAGE_FOLDER_PATH + imageInfo.username
 
             # Creating image folder based on userNames
             if not os.path.exists(image_folder):
@@ -52,11 +58,12 @@ def process(rdd, sc):
 
 def main():
     sc, ssc = init_spark()
-    topic = config.Config.TOPIC
-    brokers = config.Config.BROKER_INFO
+    topic = TOPIC
+    brokers = BROKER_INFO
 
     # Creating spark DStreams
-    stream = KafkaUtils.createDirectStream(ssc, [topic], {"metadata.broker.list": brokers})
+    stream = KafkaUtils.createDirectStream(
+        ssc, [topic], {"metadata.broker.list": brokers})
     lines = stream.map(lambda x: json.loads(x[1]))
     lines.pprint()
     lines.foreachRDD(lambda rdd: process(rdd, sc))
