@@ -16,7 +16,7 @@ export class Header extends React.Component {
   }
 
   async toggleUser() {
-    const credentials = await Keychain.getGenericPassword();
+    const credentials = await Keychain.getGenericPassword({rules: 'none'});
     if (credentials) {
       await Keychain.resetGenericPassword();
       this.setState({
@@ -30,7 +30,7 @@ export class Header extends React.Component {
   }
 
   async fetchCredentials() {
-    const credentials = await Keychain.getGenericPassword();
+    const credentials = await Keychain.getGenericPassword({rules: 'none'});
     if (!credentials) {
       console.log('No credentials stored');
     } else {
