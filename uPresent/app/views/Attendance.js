@@ -186,10 +186,13 @@ export class Attendance extends React.Component {
         school: _resp.data.school,
       };
       saveAttendance(attendance).then(_resp => {
-        //Notify if not in right vicinity
-        //https://github.com/rajan123456/uPresent/issues/102
-        Alert.alert('Attendance submitted.');
-        this.props.navigation.push('HomeRT');
+        if (_resp.message === 'Not in the right vicinity') {
+          Alert.alert('Geofence check failed. Try again later.');
+          this.props.navigation.push('HomeRT');
+        } else {
+          Alert.alert('Attendance submitted.');
+          this.props.navigation.push('HomeRT');
+        }
       });
     });
   }
