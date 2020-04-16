@@ -9,5 +9,9 @@ class FaceApi(Resource):
 
     @swagger.operation()
     def get(self, id):
-        data = recog(constants.UPLOAD_DIR + id)
-        return Response(data, mimetype="application/json", status=200)
+        username, confidence = recog(constants.UPLOAD_DIR + id)
+        response = {
+            "username": username,
+            "confidence": confidence
+        }
+        return Response(response, mimetype="application/json", status=200)

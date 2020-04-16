@@ -77,12 +77,8 @@ def recog(image):
                 probability = preds[j]
                 name = le.classes_[j]
 
-                # draw the bounding box of the face along with the associated
-                # probability
-                text = "{}: {:.2f}%".format(name, probability * 100)
-
         # show the output image
-        return text
+        return name, probability * 100
     except Exception as ex:
         print(str(ex))
         return {"Exception occurred. Exception msg: ": str(ex)}, 500

@@ -3,11 +3,11 @@ from flask_restful import Resource
 from flask_restful_swagger import swagger
 from flask import current_app
 from database.models import Attendance
-from resources.rekognition import compare_faces
+from resources.rekognition import compare_faces_rekognition
 from resources.geofence import validateVicinity
 from resources.user import fetchUser
 from resources.producer import publish_message
-
+from resources.facenet import compare_faces_facenet
 
 class AllAttendanceApi(Resource):
 
@@ -23,7 +23,10 @@ class AllAttendanceApi(Resource):
             attendance = Attendance(**body)
             validateVicinity(body)
             user = fetchUser(attendance.username)
-            compare_faces(attendance.capturedImageId, user.get('imageId')[0])
+            if user.get('imageId') is None:
+                compare_faces_facenet(attendance.capturedImageId, attendance.username)
+            else:
+                compare_faces_rekognition(attendance.capturedImageId, user.get('imageId')[0])
             if current_app.config['DATABASE_ENABLED'] == 1:
                 attendance.save()
             publish_message(body)

@@ -3,7 +3,7 @@ from flask import current_app
 from resources.vault import obtain_data
 
 
-def compare_faces(targetId, sourceId):
+def compare_faces_rekognition(targetId, sourceId):
     secrets = obtain_data()
     client = boto3.client('rekognition',
                           aws_access_key_id=secrets['aws_access_key_id'],
