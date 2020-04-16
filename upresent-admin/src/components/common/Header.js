@@ -25,6 +25,9 @@ function Header() {
         <li>
           <Link to="/modules">Modules</Link>
         </li>
+        <li>
+          <Link to="/reports">Reports</Link>
+        </li>
         <li style={rightStyle}>
           <Link to="/" onClick={logout}>
             Log Out
