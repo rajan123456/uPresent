@@ -16,15 +16,22 @@ function ReportsPage() {
   });
 
   useEffect(() => {
-    getModules().then((_modules) =>
-      setModules(_modules.data.map((a) => a.moduleCode))
-    );
+    getModules().then((_modules) => {
+      setModules(_modules.data.map((a) => a.moduleCode));
+      setReport({
+        ...report,
+        // eslint-disable-next-line
+        ["moduleCode"]: _modules.data.map((a) => a.moduleCode)[0],
+      });
+    });
+    // eslint-disable-next-line
   }, []);
 
   function handleChange({ target }) {
     setReport({
       ...report,
-      [target.name]: target.value,
+      // eslint-disable-next-line
+      ["moduleCode"]: target.value,
     });
   }
 
