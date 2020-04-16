@@ -18,21 +18,18 @@ function DropDown(props) {
           onChange={props.onChange}
           className="form-control"
         >
-          {
-            //console.log(props.options) &&
-            props.options &&
-              props.options.map((_option) => {
-                return props.value === _option ? (
-                  <option key={_option} value={_option} selected>
-                    {_option}
-                  </option>
-                ) : (
-                  <option key={_option} value={_option}>
-                    {_option}
-                  </option>
-                );
-              })
-          }
+          {props.options &&
+            props.options.map((_option) => {
+              return props.value === _option ? (
+                <option key={_option} value={_option} selected>
+                  {_option}
+                </option>
+              ) : (
+                <option key={_option} value={_option}>
+                  {_option}
+                </option>
+              );
+            })}
         </select>
       </div>
       {props.error && props.error.length > 0 && (

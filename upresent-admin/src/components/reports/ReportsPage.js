@@ -7,7 +7,6 @@ import { getAttendanceReport } from "../../api/reportingApi";
 import { toast } from "react-toastify";
 
 function ReportsPage() {
-  //  const [errors, setErrors] = useState({});
   const [errors] = useState({});
   const [modules, setModules] = useState([]);
   const [report, setReport] = useState({
@@ -45,18 +44,8 @@ function ReportsPage() {
     });
   }
 
-  //   function formIsValid() {
-  //     const _errors = {};
-  //     debugger;
-  //     if (report.moduleCode === "")
-  //       _errors.moduleCode = "Module Code is required.";
-  //     setErrors(_errors);
-  //     return Object.keys(_errors).length === 0;
-  //   }
-
   function handleSubmit(event) {
     event.preventDefault();
-    //if (!formIsValid()) return;
     getAttendanceReport(
       report.startDate,
       report.endDate,
