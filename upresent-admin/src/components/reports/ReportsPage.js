@@ -3,9 +3,12 @@ import Header from "../common/Header";
 import ReportsForm from "./ReportsForm";
 import moment from "moment";
 import { getModules } from "../../api/moduleApi";
+import { getAttendanceReport } from "../../api/reportingApi";
+import { toast } from "react-toastify";
 
 function ReportsPage() {
-  const [errors, setErrors] = useState({});
+  //  const [errors, setErrors] = useState({});
+  const [errors] = useState({});
   const [modules, setModules] = useState([]);
   const [report, setReport] = useState({
     moduleCode: "",
@@ -42,20 +45,27 @@ function ReportsPage() {
     });
   }
 
-  function formIsValid() {
-    const _errors = {};
+  //   function formIsValid() {
+  //     const _errors = {};
+  //     debugger;
+  //     if (report.moduleCode === "")
+  //       _errors.moduleCode = "Module Code is required.";
+  //     setErrors(_errors);
+  //     return Object.keys(_errors).length === 0;
+  //   }
 
-    // if (!module.moduleCode) _errors.moduleCode = "Code is required.";
-    // if (module.scheduledDays.length === 0)
-    //   _errors.scheduledDays = "Schedule cannot be empty.";
-
-    setErrors(_errors);
-
-    return Object.keys(_errors).length === 0;
-  }
-
-  function handleSubmit() {
-    formIsValid();
+  function handleSubmit(event) {
+    event.preventDefault();
+    //if (!formIsValid()) return;
+    getAttendanceReport(
+      report.startDate,
+      report.endDate,
+      report.moduleCode
+    ).then((_resp) => {
+      if (_resp.message === "ok") {
+        toast.success("I got the data!");
+      } else toast.warn("Something went wrong, please try again later.");
+    });
   }
 
   return (
