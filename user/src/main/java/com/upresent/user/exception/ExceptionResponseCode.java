@@ -10,8 +10,8 @@ public enum ExceptionResponseCode {
 	USER_DATA_NOT_FOUND(4011, "User data not found."),
 	USER_DATA_NOT_FOUND_IN_REQUEST(4012, "User data not found in request."),
 	UPLOADING_FILE_FAILED(4013, "Your request could not be served by the system. Please try again."),
-	USERNAME_ALREADY_TAKEN(4014, "Username already taken.");
-
+	USERNAME_ALREADY_TAKEN(4014, "Username already taken."),
+	USER_SCHOOL_MISSING(4015, "The user must be mapped to a school");
 	private int code;
 
 	private String description;

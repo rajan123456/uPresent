@@ -28,7 +28,7 @@ class AllAttendanceApi(Resource):
                 attendance.save()
             publish_message(body)
         except Exception as ex:
-            return {'message': str(ex)}, 500
+            return {'message': str(ex)}, 400
         return {'id': str(attendance.id)}, 200
 
 

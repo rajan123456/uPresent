@@ -42,11 +42,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String registerUser(UserDetail userDetail) throws UserException {
 		userDetail.setUsername(userDetail.getUsername().toLowerCase());
+		userDetail.setUserType(userDetail.getUserType().toUpperCase());
 		String username = userDetail.getUsername();
 		UserDetail user = userRepository.findByUsernameAndIsActive(username, Constant.ACTIVE_STATUS);
-		if (user != null) {
+		if (user != null)
 			throw new UserException(ExceptionResponseCode.USERNAME_ALREADY_TAKEN);
-		}
+		if (userDetail.getUserType().equals("STUDENT") && userDetail.getSchool() == null)
+			throw new UserException(ExceptionResponseCode.USER_SCHOOL_MISSING);
+
 		user = userRepository.save(userDetail);
 		publishUserUpdates(user, Constant.USER_CREATED_EVENT);
 		return "User registered successfully!";
@@ -74,7 +77,10 @@ public class UserServiceImpl implements UserService {
 				CommonUtility.isValidString(userDetail.getName()) ? userDetail.getName() : existingDetails.getName());
 		existingDetails.setPassword(CommonUtility.isValidString(userDetail.getPassword()) ? userDetail.getPassword()
 				: existingDetails.getPassword());
-		existingDetails.setIsActive((null != userDetail.getIsActive()) ? userDetail.getIsActive() : existingDetails.getIsActive());
+		existingDetails.setIsActive(
+				(null != userDetail.getIsActive()) ? userDetail.getIsActive() : existingDetails.getIsActive());
+		if (existingDetails.getUserType().equals("STUDENT"))
+			existingDetails.setSchool(userDetail.getSchool().toUpperCase());
 		userRepository.save(existingDetails);
 		publishUserUpdates(existingDetails, Constant.USER_UPDATED_EVENT);
 		return "User data successfully updated!";

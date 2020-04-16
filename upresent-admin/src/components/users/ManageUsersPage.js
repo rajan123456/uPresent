@@ -12,6 +12,7 @@ const ManageUsersPage = (props) => {
     password: "",
     username: "",
     userType: "admin",
+    school: null,
     imageId: [],
     isActive: 1,
   });
@@ -37,8 +38,8 @@ const ManageUsersPage = (props) => {
     if (!user.username) _errors.username = "Username is required";
     if (!user.password) _errors.password = "Password is required.";
 
-    if (user.isActive === "0") user.isActive = 0;
-    else if (user.isActive === "1") user.isActive = 1;
+    if (user.isActive === "0" || user.isActive === 0) user.isActive = 0;
+    else if (user.isActive === "1" || user.isActive === 1) user.isActive = 1;
     else _errors.isActive = "Status can only be binary";
 
     setErrors(_errors);
