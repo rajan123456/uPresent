@@ -2,7 +2,8 @@ export async function handleResponse(response) {
   if (response.ok && response.status === 200) {
     return response.json();
   } else if (response.status === 400) {
-    console.log('Resource may already exist');
+    console.log('Bad response: ' + response);
+    return response.json();
   } else {
     console.log(response);
   }
