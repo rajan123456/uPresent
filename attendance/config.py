@@ -26,3 +26,4 @@ class Config(object):
     ATTENDANCE_RECORDED = 'attendanceRecorded'
     ATTENDANCE_SOURCE_ID = 3
     REPORT_PUBLISH_API = 'http://reporting:8080/reporting'
+    FACENET_RECOGNITION_API = 'http://facerecognition:8087/api/face/'

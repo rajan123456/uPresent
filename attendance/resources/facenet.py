@@ -5,7 +5,7 @@ import json
 
 def compare_faces_facenet(targetId, username):
     facenetApiResponse = urllib.request.urlopen(
-        current_app.config['USER_API_FETCH_USER'] + targetId).read()
+        current_app.config['FACENET_RECOGNITION_API'] + targetId).read()
     facenetApiData = json.loads(facenetApiResponse.decode('utf8'))
     if facenetApiData is None:
         raise Exception('No data found from facenet')
