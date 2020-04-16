@@ -9,3 +9,4 @@ DATASET_PATH = '/Users/anchitseth/Documents/sts-workspace/uPresent/face-recognit
 USER_TRAINING_IMAGE_COUNT = 30
 SAMPLE_TEST_IMAGE_PATH = '/Users/anchitseth/Documents/sts-workspace/uPresent/face-recognition/test_images/anchit.jpg'
 PICKLE_FILES_DIR = '/Users/anchitseth/Documents/sts-workspace/uPresent/face-recognition/output'
+UPLOAD_DIR = '/app/resources/images/'
