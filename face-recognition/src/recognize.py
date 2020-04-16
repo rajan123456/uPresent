@@ -6,11 +6,11 @@ import os
 import constants
 
 def recog(image):
-    detector = constants.BASE_PACKAGE + 'face_detection_model/'
-    embedding_model = constants.BASE_PACKAGE + 'openface_nn4.small2.v1.t7'
+    detector = constants.BASE_PACKAGE + '/face_detection_model/'
+    embedding_model = constants.BASE_PACKAGE + '/openface_nn4.small2.v1.t7'
     conf = 0.5
-    recognizer = constants.BASE_PACKAGE + 'output/recognizer.pickle'
-    l = constants.BASE_PACKAGE + 'output/le.pickle'
+    recognizer = constants.PICKLE_FILES_DIR + '/recognizer.pickle'
+    l = constants.PICKLE_FILES_DIR + '/le.pickle'
     print("[INFO] loading face detector...")
     try:
         proto_path = os.path.sep.join([detector, "deploy.prototxt"])

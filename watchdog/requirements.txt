@@ -1,0 +1,6 @@
+watchdog
+handler
+numpy
+imutils
+sklearn
+opencv-python
