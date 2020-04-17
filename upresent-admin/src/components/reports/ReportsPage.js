@@ -77,9 +77,8 @@ function ReportsPage() {
       if (_resp.message === "ok") {
         setReportData(_resp.data);
         await getModuleByModuleCode(report.moduleCode).then((_respMod) => {
-          setStudents(_resp.data.studentUsernames);
+          setStudents(_respMod.data.studentUsernames);
         });
-        console.log(students);
       } else toast.warn("Something went wrong, please try again later.");
     });
   }
@@ -109,7 +108,11 @@ function ReportsPage() {
           >
             <TableHead>
               <TableRow key="header">
-                <TableCell>Student</TableCell>
+                {reportData.dates ? (
+                  <TableCell>Student\Date</TableCell>
+                ) : (
+                  <TableCell />
+                )}
                 {reportData.dates &&
                   reportData.dates.map((date) => (
                     <TableCell align="right">{date}</TableCell>
@@ -117,13 +120,16 @@ function ReportsPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {reportData.dates &&
-                reportData.dates.map((date) => (
-                  <TableRow key={date}>
+              {students &&
+                students.map((student) => (
+                  <TableRow key={student}>
                     <TableCell component="th" scope="row">
-                      {date}
+                      {student}
                     </TableCell>
-                    <TableCell align="right">{date}</TableCell>
+                    {reportData.dates &&
+                      reportData.dates.map((date) => (
+                        <TableCell align="right">HARDCODE</TableCell>
+                      ))}
                   </TableRow>
                 ))}
             </TableBody>
