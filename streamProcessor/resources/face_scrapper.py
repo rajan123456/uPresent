@@ -1,5 +1,6 @@
 import io
 import logging
+import config
 
 import cv2
 import numpy as np
@@ -13,9 +14,9 @@ def face_detection(image):
         faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
         faces = faceCascade.detectMultiScale(
             gray,
-            scaleFactor=1.3,
-            minNeighbors=3,
-            minSize=(30, 30)
+            scaleFactor=config.Config.RGB_SCALE_FACTOR,
+            minNeighbors=config.Config.MIN_NEIGHBORS,
+            minSize=(config.Config.MIN_HEIGHT, config.Config.MIN_WIDTH)
         )
         logging.warning("Found {0} Faces!".format(len(faces)))
         return len(faces)
