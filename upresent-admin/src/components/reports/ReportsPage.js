@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../common/Header";
 import ReportsForm from "./ReportsForm";
 import moment from "moment";
-import { getModules } from "../../api/moduleApi";
+import { getModules, getModuleByModuleCode } from "../../api/moduleApi";
 import { getAttendanceReport } from "../../api/reportingApi";
 import { toast } from "react-toastify";
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,6 +24,7 @@ function ReportsPage() {
   const [errors] = useState({});
   const [modules, setModules] = useState([]);
   const [reportData, setReportData] = useState({});
+  const [students, setStudents] = useState([]);
   const [report, setReport] = useState({
     moduleCode: "",
     startDate: moment(new Date()).format("MM/DD/YYYY"),
@@ -72,9 +73,13 @@ function ReportsPage() {
       report.startDate,
       report.endDate,
       report.moduleCode
-    ).then((_resp) => {
+    ).then(async (_resp) => {
       if (_resp.message === "ok") {
         setReportData(_resp.data);
+        await getModuleByModuleCode(report.moduleCode).then((_respMod) => {
+          setStudents(_resp.data.studentUsernames);
+        });
+        console.log(students);
       } else toast.warn("Something went wrong, please try again later.");
     });
   }
@@ -103,13 +108,13 @@ function ReportsPage() {
             aria-label="Attendance Report"
           >
             <TableHead>
-              {reportData.dates &&
-                reportData.dates.map((date) => (
-                  <TableRow>
-                    <TableCell>Student</TableCell>
+              <TableRow key="header">
+                <TableCell>Student</TableCell>
+                {reportData.dates &&
+                  reportData.dates.map((date) => (
                     <TableCell align="right">{date}</TableCell>
-                  </TableRow>
-                ))}
+                  ))}
+              </TableRow>
             </TableHead>
             <TableBody>
               {reportData.dates &&
