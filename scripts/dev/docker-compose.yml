@@ -278,6 +278,21 @@ services:
       - ./proxy-data-nginx/certbot/conf:/etc/letsencrypt
       - ./proxy-data-nginx/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  facenet:
+    image: anchitseth/facenet:latest
+    container_name: facenet
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./ml-data-vol:/app/resources:ro
+  training:
+    image: anchitseth/training:latest
+    container_name: training
+    restart: always
+    volumes:
+      - ./ml-data-vol:/app/resources
+
 volumes:
   apm-data-vol:
   elastic-data-vol:
@@ -293,3 +308,4 @@ volumes:
   vault-data-vol:
   zookeeper-data-vol:
   zookeeper-logs-vol:
+  ml-data-vol:

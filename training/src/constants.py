@@ -4,7 +4,7 @@ ELASTIC_APM = {
 }
 SAGA_ENABLED = 1
 # to be confirmed
-DATASET_PATH = '/Users/anchitseth/Documents/sts-workspace/uPresent/face-recognition/dataset'
+DATASET_PATH = '/app/resources/dataset'
 USER_TRAINING_IMAGE_COUNT = 30
 PICKLE_FILES_DIR = '/app/resources/output'
 MODEL_FILES_DIR = '/app/resources/model'
