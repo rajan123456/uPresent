@@ -24,12 +24,12 @@ function ReportsPage() {
   const [errors] = useState({});
   const [modules, setModules] = useState([]);
   const [reportData, setReportData] = useState({});
-  const [students, setStudents] = useState([]);
   const [report, setReport] = useState({
     moduleCode: "",
     startDate: moment(new Date()).format("MM/DD/YYYY"),
     endDate: moment(new Date()).format("MM/DD/YYYY"),
   });
+  const [attendance, setAttendance] = useState([]);
 
   useEffect(() => {
     getModules().then((_modules) => {
@@ -67,9 +67,32 @@ function ReportsPage() {
     });
   }
 
-  function handleSubmit(event) {
+  function transformReportDataToAttendance(data, studentNames) {
+    if (!data.attendanceInfo) return;
+    let studentDetails = [];
+    studentNames.forEach((element) => {
+      let rec = { key: element, status: [] };
+      studentDetails.push(rec);
+    });
+    data.dates.forEach((date) => {
+      Object.keys(data.attendanceInfo).forEach(function (keyIden) {
+        if (date === keyIden) {
+          studentDetails.forEach((student) => {
+            data.attendanceInfo[keyIden].forEach((studRec) => {
+              if (student.key === studRec.studentUsername) {
+                student.status.push(studRec.attendance);
+              }
+            });
+          });
+        }
+      });
+    });
+    setAttendance(studentDetails);
+  }
+
+  async function handleSubmit(event) {
     event.preventDefault();
-    getAttendanceReport(
+    await getAttendanceReport(
       report.startDate,
       report.endDate,
       report.moduleCode
@@ -77,7 +100,10 @@ function ReportsPage() {
       if (_resp.message === "ok") {
         setReportData(_resp.data);
         await getModuleByModuleCode(report.moduleCode).then((_respMod) => {
-          setStudents(_respMod.data.studentUsernames);
+          transformReportDataToAttendance(
+            _resp.data,
+            _respMod.data.studentUsernames
+          );
         });
       } else toast.warn("Something went wrong, please try again later.");
     });
@@ -120,15 +146,15 @@ function ReportsPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {students &&
-                students.map((student) => (
-                  <TableRow key={student}>
+              {attendance &&
+                attendance.map((record) => (
+                  <TableRow key={record.key}>
                     <TableCell component="th" scope="row">
-                      {student}
+                      {record.key}
                     </TableCell>
-                    {reportData.dates &&
-                      reportData.dates.map((date) => (
-                        <TableCell align="right">HARDCODE</TableCell>
+                    {record.status &&
+                      record.status.map((stat) => (
+                        <TableCell align="right">{stat}</TableCell>
                       ))}
                   </TableRow>
                 ))}
