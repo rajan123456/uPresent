@@ -8,17 +8,14 @@ import os
 import constants
 
 def extract_embeddings():
-    dataset = constants.DATASET_PATH
     embeddings = constants.PICKLE_FILES_DIR + '/embeddings.pickle'
-    detector = constants.BASE_PACKAGE + 'face_detection_model'
-    embedding_model = constants.BASE_PACKAGE + 'openface_nn4.small2.v1.t7'
+    embedding_model = constants.MODEL_FILES_DIR + '/openface_nn4.small2.v1.t7'
     conf = 0.5
     # load our serialized face detector from disk
     print("[INFO] loading face detector...")
     try:
-        proto_path = os.path.sep.join([detector, "deploy.prototxt"])
-        model_path = os.path.sep.join([detector,
-                                      "res10_300x300_ssd_iter_140000.caffemodel"])
+        proto_path = constants.MODEL_FILES_DIR + "/deploy.prototxt"
+        model_path = constants.MODEL_FILES_DIR + "/res10_300x300_ssd_iter_140000.caffemodel"
         detector = cv2.dnn.readNetFromCaffe(proto_path, model_path)
 
         # load our serialized face embedding model from disk
@@ -27,7 +24,7 @@ def extract_embeddings():
 
         # grab the paths to the input images in our dataset
         print("[INFO] quantifying faces...")
-        image_paths = list(paths.list_images(dataset))
+        image_paths = list(paths.list_images(constants.DATASET_PATH))
 
         # initialize our lists of extracted facial embeddings and
         # corresponding people names

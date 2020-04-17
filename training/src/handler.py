@@ -57,9 +57,8 @@ def initialise_training():
     train_model()
 
 def initialise_metadata_on_startup():
-    dataset_path = constants.DATASET_PATH
-    for username in os.listdir(dataset_path):
-        concatenated_dir = dataset_path + '/' + username
+    for username in os.listdir(constants.DATASET_PATH):
+        concatenated_dir = constants.DATASET_PATH + '/' + username
         if os.path.isdir(concatenated_dir):
             students_image_count[username] = len([file for file in os.listdir(concatenated_dir) if (os.path.isfile(concatenated_dir + "/" + file) and os.path.splitext(file)[1].lower() == ".png")])
     check_and_begin_training()

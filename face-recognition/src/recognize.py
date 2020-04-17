@@ -6,16 +6,15 @@ import os
 import constants
 
 def recog(image):
-    detector = constants.BASE_PACKAGE + '/face_detection_model/'
-    embedding_model = constants.BASE_PACKAGE + '/openface_nn4.small2.v1.t7'
+    # detector = constants.MODEL_FILES_DIR
+    embedding_model = constants.MODEL_FILES_DIR + '/openface_nn4.small2.v1.t7'
     conf = 0.5
     recognizer = constants.PICKLE_FILES_DIR + '/recognizer.pickle'
     l = constants.PICKLE_FILES_DIR + '/le.pickle'
     print("[INFO] loading face detector...")
     try:
-        proto_path = os.path.sep.join([detector, "deploy.prototxt"])
-        model_path = os.path.sep.join([detector,
-                                      "res10_300x300_ssd_iter_140000.caffemodel"])
+        proto_path = constants.MODEL_FILES_DIR + "/deploy.prototxt"
+        model_path = constants.MODEL_FILES_DIR + "/res10_300x300_ssd_iter_140000.caffemodel"
         detector = cv2.dnn.readNetFromCaffe(proto_path, model_path)
 
         # load our serialized face embedding model from disk
