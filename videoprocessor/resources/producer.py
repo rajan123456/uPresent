@@ -21,8 +21,8 @@ def publish_message(producer_instance, topic_name, key, username, value):
         producer_instance.flush()
         log.info('Message published successfully.')
     except Exception as ex:
-        log.warn('Exception in publishing message')
-        log.warn(str(ex))
+        log.error('Exception in publishing message')
+        log.error(str(ex))
 
 
 def connect_kafka_producer():

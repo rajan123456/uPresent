@@ -5,13 +5,12 @@ from flask_restful_swagger import swagger
 import logging
 from resources import custom_logger
 
-
 app = Flask(__name__)
 app.config.from_object("config.Config")
 
 # Initializing custom logger
 log = logging.getLogger('root')
-log.setLevel('INFO')
+log.setLevel(logging.INFO)
 log.addHandler(custom_logger.LogHandler())
 
 apm = ElasticAPM(app)
@@ -20,3 +19,4 @@ api = swagger.docs(Api(app), apiVersion='0.1')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
+
