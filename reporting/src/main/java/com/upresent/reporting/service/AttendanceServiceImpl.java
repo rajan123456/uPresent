@@ -2,12 +2,16 @@ package com.upresent.reporting.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -43,18 +47,18 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Object> getStudentAttendanceRecords(String startDate, String endDate, String moduleCode)
-			throws ReportingException {
-		if (CommonUtility.isValidDate(startDate) && CommonUtility.isValidDate(endDate)
-				&& CommonUtility.isValidStartAndEndDate(startDate, endDate)) {
+	public Map<String, Object> getStudentAttendanceRecords(String filterStartDateStr, String filterEndDateStr,
+			String moduleId) throws ReportingException {
+		if (CommonUtility.isValidDate(filterStartDateStr) && CommonUtility.isValidDate(filterEndDateStr)
+				&& CommonUtility.isValidStartAndEndDate(filterStartDateStr, filterEndDateStr)) {
 			final String baseUrl = env.getProperty("managementms.hostname") + ":" + env.getProperty("managementms.port")
-					+ Constants.FETCH_MODULE_DETAILS_API_URL + moduleCode;
+					+ Constants.FETCH_MODULE_DETAILS_API_URL + moduleId;
 			Map<?, ?> response = restTemplate.getForObject(baseUrl, Map.class);
 			Map<String, Object> moduleDetails = objectMapper.convertValue(response.get("data"), Map.class);
 			if (moduleDetails != null) {
-				String moduleCodeRegexForQuery = QueryUtils.getRegexForModuleCode(moduleCode);
-				List<ReportingData> reportingRecords = reportingRepository.findBySourceIdAndEventDataRegex(
-						Constants.ATTENDANCE_SERVICE_SOURCE_ID, moduleCodeRegexForQuery);
+				String moduleIdRegexForQuery = QueryUtils.getRegexForModuleId(moduleId);
+				List<ReportingData> reportingRecords = reportingRepository
+						.findBySourceIdAndEventDataRegex(Constants.ATTENDANCE_SERVICE_SOURCE_ID, moduleIdRegexForQuery);
 				Map<String, Object> responseObj = new HashMap<>();
 				List<String> dates = new ArrayList<>();
 				Map<String, List<StudentAttendanceRecord>> attendanceInfoByDate = new HashMap<>();
@@ -62,24 +66,25 @@ public class AttendanceServiceImpl implements AttendanceService {
 					try {
 						Date date = new SimpleDateFormat(Constants.REPORTING_TIMESTAMP_FORMAT)
 								.parse(record.getTimeStamp());
-						String attendanceLogDateString = new SimpleDateFormat(Constants.DATE_FORMAT).format(date);
-						if (CommonUtility.checkDateInRange(startDate, endDate, attendanceLogDateString)) {
+						String attendanceLogDateStr = new SimpleDateFormat(Constants.DATE_FORMAT).format(date);
+						if (CommonUtility.checkDateInRange(filterStartDateStr, filterEndDateStr,
+								attendanceLogDateStr)) {
 							StudentAttendanceRecord studentAttendance = new StudentAttendanceRecord();
 							studentAttendance.setAttendance("PRESENT");
 							studentAttendance.setTimestamp(record.getTimeStamp());
 							Gson g = new Gson();
 							Map<String, Object> eventData = g.fromJson(record.getEventData(), HashMap.class);
 							studentAttendance.setStudentUsername((String) eventData.get("username"));
-							if (dates.contains(attendanceLogDateString)) {
+							if (dates.contains(attendanceLogDateStr)) {
 								List<StudentAttendanceRecord> existingRecords = attendanceInfoByDate
-										.get(attendanceLogDateString);
+										.get(attendanceLogDateStr);
 								existingRecords.add(studentAttendance);
-								attendanceInfoByDate.put(attendanceLogDateString, existingRecords);
+								attendanceInfoByDate.put(attendanceLogDateStr, existingRecords);
 							} else {
-								dates.add(attendanceLogDateString);
+								dates.add(attendanceLogDateStr);
 								List<StudentAttendanceRecord> records = new ArrayList<>();
 								records.add(studentAttendance);
-								attendanceInfoByDate.put(attendanceLogDateString, records);
+								attendanceInfoByDate.put(attendanceLogDateStr, records);
 							}
 						}
 					} catch (ParseException e) {
@@ -87,7 +92,6 @@ public class AttendanceServiceImpl implements AttendanceService {
 					}
 				});
 				List<String> allEnrolledStudentUsernames = (List<String>) moduleDetails.get("studentUsernames");
-				responseObj.put("dates", dates);
 				dates.forEach(date -> {
 					List<StudentAttendanceRecord> attendanceInfo = attendanceInfoByDate.get(date);
 					List<String> presentStudentUsernames = new ArrayList<>();
@@ -106,14 +110,65 @@ public class AttendanceServiceImpl implements AttendanceService {
 					});
 					attendanceInfoByDate.put(date, existingRecords);
 				});
+				List<StudentAttendanceRecord> allStudentsAbsentRecords = new ArrayList<>();
+				allEnrolledStudentUsernames.forEach(absentStudent -> {
+					StudentAttendanceRecord absentyRecord = new StudentAttendanceRecord();
+					absentyRecord.setAttendance("ABSENT");
+					absentyRecord.setStudentUsername(absentStudent);
+					absentyRecord.setTimestamp("");
+					allStudentsAbsentRecords.add(absentyRecord);
+				});
+				List<String> commonDates = getIntersectingDates(filterStartDateStr, filterEndDateStr,
+						(String) moduleDetails.get("startDate"), (String) moduleDetails.get("endDate"));
+				commonDates.forEach(date -> {
+					attendanceInfoByDate.computeIfAbsent(date, k -> allStudentsAbsentRecords);
+				});
+				responseObj.put("dates", commonDates);
 				responseObj.put("attendanceInfo", attendanceInfoByDate);
 				return responseObj;
 			} else {
 				throw new ReportingException(ExceptionResponseCode.MODULE_NOT_FOUND);
 			}
-
 		} else {
 			throw new ReportingException(ExceptionResponseCode.INVALID_DATE_FORMAT);
 		}
+	}
+
+	private List<String> getIntersectingDates(String filterStartDateStr, String filterEndDateStr,
+			String moduleStartDateStr, String moduleEndDateStr) {
+		List<String> intersectingDatesStr = new ArrayList<>();
+		try {
+			Date filterStartDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(filterStartDateStr);
+			Date filterEndDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(filterEndDateStr);
+			Date moduleStartDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(moduleStartDateStr);
+			Date moduleEndDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(moduleEndDateStr);
+			// check if the two date ranges overlap
+			if ((filterStartDate.compareTo(moduleEndDate) == 0 || filterStartDate.compareTo(moduleEndDate) < 0)
+					&& (moduleStartDate.compareTo(filterEndDate) == 0
+							|| moduleStartDate.compareTo(filterEndDate) < 0)) {
+				String intersectionStartDateStr = filterStartDate.compareTo(moduleStartDate) < 0 ? moduleStartDateStr
+						: filterStartDateStr;
+				String intersectionEndDateStr = filterEndDate.compareTo(moduleEndDate) < 0 ? filterEndDateStr
+						: moduleEndDateStr;
+				DateTimeFormatter dtf = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
+				LocalDate start = LocalDate.parse(intersectionStartDateStr, dtf);
+				LocalDate end = LocalDate.parse(intersectionEndDateStr, dtf);
+				long numOfDaysBetween = ChronoUnit.DAYS.between(start, end);
+				List<LocalDate> intersectingDates = IntStream.iterate(0, i -> i + 1).limit(numOfDaysBetween)
+						.mapToObj(i -> start.plusDays(i)).collect(Collectors.toList());
+				if (!intersectingDates.contains(start)) {
+					intersectingDates.add(start);
+				}
+				if (!intersectingDates.contains(end)) {
+					intersectingDates.add(end);
+				}
+				intersectingDates.forEach(date -> {
+					intersectingDatesStr.add(date.format(DateTimeFormatter.ofPattern(Constants.DATE_FORMAT)));
+				});
+			}
+		} catch (ParseException e) {
+			throw new ReportingException(ExceptionResponseCode.DATE_PARSE_ERROR);
+		}
+		return intersectingDatesStr;
 	}
 }
