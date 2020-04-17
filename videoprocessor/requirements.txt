@@ -6,4 +6,3 @@ flask_restful_swagger
 opencv-python
 elastic-apm[flask]
 psutil
-

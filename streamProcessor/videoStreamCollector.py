@@ -2,6 +2,7 @@ import os
 import json
 import base64
 import logging
+import config
 
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
@@ -9,16 +10,11 @@ from pyspark.streaming.kafka import KafkaUtils
 from pyspark.sql import SparkSession
 from resources import face_scrapper
 
-# Constants
-BATCH_DURATION = 3
-TOPIC = "videoCollector"
-BROKER_INFO = "broker:29092"
-IMAGE_FOLDER_PATH = "/training-data/images/"
 
 
 def init_spark():
     sc = SparkContext(appName="videoStreamCollector")
-    ssc = StreamingContext(sc, BATCH_DURATION)
+    ssc = StreamingContext(sc, config.Config.BATCH_DURATION)
     sc.setLogLevel("WARN")
     return sc, ssc
 
@@ -38,7 +34,7 @@ def process(rdd, sc):
                 # Getting imageBase64 from SQL and storing them into filesystem
                 image_no = 1
                 for imageInfo in imageDataFrame.collect():
-                    image_folder = IMAGE_FOLDER_PATH + imageInfo.username
+                    image_folder = config.Config.IMAGE_FOLDER_PATH + imageInfo.username
 
                     # Creating image folder based on userNames
                     if not os.path.exists(image_folder):
@@ -64,8 +60,8 @@ def process(rdd, sc):
 
 def main():
     sc, ssc = init_spark()
-    topic = TOPIC
-    brokers = BROKER_INFO
+    topic = config.Config.TOPIC
+    brokers = config.Config.BROKER_INFO
 
     # Creating spark DStreams
     stream = KafkaUtils.createDirectStream(

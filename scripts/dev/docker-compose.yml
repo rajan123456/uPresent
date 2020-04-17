@@ -173,6 +173,7 @@ services:
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.6.1
     container_name: filebeat
+    restart: always
     user: root
     volumes:
       - ./filebeat-data-vol/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
@@ -208,6 +209,7 @@ services:
   spark:
     image: bitnami/spark:2
     container_name: spark
+    restart: always
     user: root
     environment:
       - SPARK_MODE=master
@@ -232,9 +234,12 @@ services:
       - SPARK_SSL_ENABLED=no
     ports:
       - "8081:8081"
+    depends_on:
+      - spark
   streamprocessor:
     image: rajagupt/streamprocessor:latest
     container_name: streamprocessor
+    restart: always
     volumes:
       - ./stream-data-vol:/training-data/images/
     depends_on:
@@ -244,6 +249,7 @@ services:
   vault:
     image: vault:1.3.4
     container_name: vault
+    restart: always
     ports:
       - "8200:8200"
     environment:
