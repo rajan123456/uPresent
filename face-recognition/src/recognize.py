@@ -4,10 +4,15 @@ import pickle
 import cv2
 import os
 import constants
+import logging
+
+log = logging.getLogger('root')
+
 
 def recog(image):
     # detector = constants.MODEL_FILES_DIR
     embedding_model = constants.MODEL_FILES_DIR + '/openface_nn4.small2.v1.t7'
+    log.info('embedding_model...' + embedding_model)
     conf = 0.5
     recognizer = constants.PICKLE_FILES_DIR + '/recognizer.pickle'
     l = constants.PICKLE_FILES_DIR + '/le.pickle'
@@ -16,11 +21,9 @@ def recog(image):
         proto_path = constants.MODEL_FILES_DIR + "/deploy.prototxt"
         model_path = constants.MODEL_FILES_DIR + "/res10_300x300_ssd_iter_140000.caffemodel"
         detector = cv2.dnn.readNetFromCaffe(proto_path, model_path)
-
         # load our serialized face embedding model from disk
         print("[INFO] loading face recognizer...")
         embedder = cv2.dnn.readNetFromTorch(embedding_model)
-
         # load the actual face recognition model along with the label encoder
         recognizer = pickle.loads(open(recognizer, "rb").read())
         le = pickle.loads(open(l, "rb").read())
