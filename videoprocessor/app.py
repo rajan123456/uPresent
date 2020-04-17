@@ -2,11 +2,17 @@ from flask import Flask
 from flask_restful import Api
 from elasticapm.contrib.flask import ElasticAPM
 from flask_restful_swagger import swagger
+import logging
+from resources import custom_logger
 
-from resources.videoProcessor import VideoProcessorApi
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
+
+# Initializing custom logger
+log = logging.getLogger('root')
+log.setLevel('INFO')
+log.addHandler(custom_logger.LogHandler())
 
 apm = ElasticAPM(app)
 api = Api(app)
