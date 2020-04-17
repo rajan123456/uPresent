@@ -5,13 +5,8 @@ import cv2
 import numpy as np
 from PIL import Image
 
-# create logger with 'videoStreamCollector'
-logger = logging.getLogger('videoStreamCollector')
-logger.setLevel(logging.DEBUG)
-
 
 def face_detection(image):
-    logger.info("Inside face-detection method----->>")
     try:
         pilImage = Image.open(io.BytesIO(image))
         gray = cv2.cvtColor(np.array(pilImage), cv2.COLOR_BGR2GRAY)
@@ -22,10 +17,10 @@ def face_detection(image):
             minNeighbors=3,
             minSize=(30, 30)
         )
-        logger.info("Found {0} Faces!".format(len(faces)))
+        logging.warning("Found {0} Faces!".format(len(faces)))
         return len(faces)
     except Exception as ex:
-        logger.exception('Exception while processing images inside process method--->>')
-        logger.exception(str(ex))
+        logging.warning('Exception while processing images inside face detect method--->>')
+        logging.warning(str(ex))
         pass
 

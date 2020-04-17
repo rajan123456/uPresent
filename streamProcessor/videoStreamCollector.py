@@ -15,10 +15,6 @@ TOPIC = "videoCollector"
 BROKER_INFO = "broker:29092"
 IMAGE_FOLDER_PATH = "/training-data/images/"
 
-# create logger with 'videoStreamCollector'
-logger = logging.getLogger('videoStreamCollector')
-logger.setLevel(logging.DEBUG)
-
 
 def init_spark():
     sc = SparkContext(appName="videoStreamCollector")
@@ -59,10 +55,10 @@ def process(rdd, sc):
 
                         image_no += 1
         else:
-            logger.info("Video Stream has no  data to process")
+            logging.warning("StreamProcessor did not receive any new data to process.")
     except Exception as ex:
-        logger.debug('Exception while processing images inside process method--->>')
-        logger.exception(str(ex))
+        logging.warning('Exception while processing images inside process method--->>')
+        logging.warning(str(ex))
         pass
 
 
@@ -77,7 +73,7 @@ def main():
     lines = stream.map(lambda x: json.loads(x[1]))
     lines.pprint()
     lines.foreachRDD(lambda rdd: process(rdd, sc))
-    logger.info("Spark DStream created from Kafka stream input")
+    logging.warning("Spark DStream created from Kafka stream input")
     # To start the spark streaming
     ssc.start()
     ssc.awaitTermination()
