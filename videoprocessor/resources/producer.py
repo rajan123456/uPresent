@@ -2,6 +2,10 @@ from kafka import KafkaProducer
 import datetime
 import json
 import config
+import logging
+
+# set logging level for 'video Processor'
+log = logging.getLogger('root')
 
 
 def publish_message(producer_instance, topic_name, key, username, value):
@@ -15,10 +19,10 @@ def publish_message(producer_instance, topic_name, key, username, value):
 
         producer_instance.send(topic_name, key=key_bytes, value=data_set)
         producer_instance.flush()
-        print('Message published successfully.')
+        log.info('Message published successfully.')
     except Exception as ex:
-        print('Exception in publishing message')
-        print(str(ex))
+        log.error('Exception in publishing message')
+        log.error(str(ex))
 
 
 def connect_kafka_producer():
@@ -29,7 +33,7 @@ def connect_kafka_producer():
                                   linger_ms=config.Config.KAFKA_LINGER_MS,
                                   batch_size=config.Config.KAFKA_BATCH_SIZE)
     except Exception as ex:
-        print('Exception while connecting Kafka')
-        print(str(ex))
+        log.warn('Exception while connecting Kafka')
+        log.warn(str(ex))
     finally:
         return _producer

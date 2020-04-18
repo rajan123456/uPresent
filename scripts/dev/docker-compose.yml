@@ -11,6 +11,7 @@ services:
       - ./user-data-vol:/app/resources/images:ro
     depends_on:
       - apm-server
+      - broker
       - management
       - mongo
       - user
@@ -22,10 +23,10 @@ services:
     ports:
       - "8082:8080"
     depends_on:
-      - mongo
-      - broker
-      - user
       - apm-server
+      - broker
+      - mongo
+      - user
   reporting:
     image: rajagupt/reporting:latest
     container_name: reporting
@@ -33,9 +34,9 @@ services:
     ports:
       - "8083:8080"
     depends_on:
-      - mongo
-      - broker
       - apm-server
+      - broker
+      - mongo
   user:
     image: rajagupt/user:latest
     container_name: user
@@ -45,9 +46,9 @@ services:
     volumes:
       - ./user-data-vol:/app/resources/images
     depends_on:
-      - mongo
-      - broker
       - apm-server
+      - broker
+      - mongo
   admin:
     image: rajagupt/upresent-admin:latest
     container_name: admin
@@ -87,6 +88,10 @@ services:
     restart: always
     ports:
       - "6000:5000"
+    depends_on:
+      - apm-server
+      - broker
+      - srs
   mongo:
     image: mongo:latest
     container_name: mongo

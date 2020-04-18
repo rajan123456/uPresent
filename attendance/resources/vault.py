@@ -3,10 +3,15 @@ import ssl
 import urllib.request
 import http.client
 import mimetypes
+import logging
 from flask import current_app, jsonify
+
+# set logging level for 'video Processor'
+log = logging.getLogger('root')
 
 
 def obtain_token():
+    log.info("Trying to obtain token from vault ---->>")
     context = ssl._create_unverified_context()
     context.load_cert_chain(
         current_app.config['VAULT_CLIENT_CERT'], current_app.config['VAULT_CLIENT_KEY'])
@@ -24,6 +29,7 @@ def obtain_token():
 
 
 def obtain_data():
+    log.info("Trying to obtain secrets from vault ---->>")
     secrets = obtain_token()
     url = "https://" + current_app.config['VAULT_HOSTNAME'] + ":" + \
         str(current_app.config['VAULT_PORT']) + \
