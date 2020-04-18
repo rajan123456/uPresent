@@ -7,6 +7,7 @@ from resources.geofence import validateVicinity
 from resources.user import fetchUser
 from resources.producer import publish_message
 from resources.facenet import compare_faces_facenet
+from resources.module import check_module_active
 import datetime
 import logging
 
@@ -27,11 +28,8 @@ class AllAttendanceApi(Resource):
             log.info("Inside create attendance method for student ----->>")
             body = request.get_json()
             attendance = Attendance(**body)
-            attendance.save()
-            midnight_date = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
-            Attendance.objects().get_or_404(username = attendance.username,
-                                            moduleId = attendance.moduleId,
-                                            date_captured = midnight_date)
+            self.check_if_attendance_marked(attendance)
+            check_module_active(attendance.moduleId)
             validateVicinity(body)
             user = fetchUser(attendance.username)
             if user.get('imageId') is None:
@@ -44,6 +42,16 @@ class AllAttendanceApi(Resource):
             return {'message': str(ex)}, 400
         return {'id': str(attendance.id)}, 200
 
+    def check_if_attendance_marked(self, attendance):
+        midnight_date = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+        try:
+            Attendance.objects().get_or_404(username=attendance.username,
+                                        moduleId=attendance.moduleId,
+                                        date_captured=midnight_date)
+        except Exception as ex:
+            log.info('no attendance marked for today')
+        else:
+            raise Exception('Attendance already marked!')
 
 class AttendanceApi(Resource):
 

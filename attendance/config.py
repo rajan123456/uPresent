@@ -1,6 +1,6 @@
 class Config(object):
     MONGODB_SETTINGS = {
-        # 'host': "mongodb://localhost:27017/admin"
+        #'host': "mongodb://localhost:27017/admin"
         'host': "mongodb://root:example@mongo:27017/admin"
     }
     MANAGEMENT_API_GEO_FENCE = "http://management:8080/manage/geo-fence?universityName="
@@ -26,3 +26,5 @@ class Config(object):
     ATTENDANCE_SOURCE_ID = 3
     REPORT_PUBLISH_API = 'http://reporting:8080/reporting'
     FACENET_RECOGNITION_API = 'http://facenet:7000/api/face/'
+    MODULE_API_FETCH_DETAILS = 'http://management:8082/manage/module?moduleCode='
+    #MODULE_API_FETCH_DETAILS = 'https://dev.upresent.ga/management/manage/module?moduleCode='
