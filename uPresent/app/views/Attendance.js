@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
+  ToastAndroid,
   View,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
@@ -87,11 +88,15 @@ export class Attendance extends React.Component {
     const hasPermission = await PermissionsAndroid.check(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
     );
-    if (hasPermission) return true;
+    if (hasPermission) {
+      return true;
+    }
     const status = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
     );
-    if (status === PermissionsAndroid.RESULTS.GRANTED) return true;
+    if (status === PermissionsAndroid.RESULTS.GRANTED) {
+      return true;
+    }
     if (status === PermissionsAndroid.RESULTS.DENIED) {
       ToastAndroid.show(
         'Location permission denied by user.',
@@ -108,7 +113,9 @@ export class Attendance extends React.Component {
 
   getLocation = async () => {
     const hasLocationPermission = await this.hasLocationPermission();
-    if (!hasLocationPermission) return;
+    if (!hasLocationPermission) {
+      return;
+    }
     this.setState({loading: true}, () => {
       Geolocation.getCurrentPosition(
         position => {
@@ -185,11 +192,15 @@ export class Attendance extends React.Component {
         capturedImageId: this.state.imageIds[0],
         school: _resp.data.school,
       };
-      saveAttendance(attendance).then(_resp => {
-        if (_resp.message === 'Not in the right vicinity') {
+      saveAttendance(attendance).then(_respAtt => {
+        if (_respAtt.message === 'Not in the right vicinity') {
           Alert.alert('Geofence check failed. Try again later.');
           this.props.navigation.push('HomeRT');
-        } else {
+        } else if (_respAtt.message != null) {
+          Alert.alert('Something went wrong. Try again later.');
+          this.props.navigation.push('HomeRT');
+        } else if (_respAtt.id !== null) {
+          console.log(_respAtt);
           Alert.alert('Attendance submitted.');
           this.props.navigation.push('HomeRT');
         }
