@@ -2,14 +2,19 @@ import cv2
 import os
 import base64
 import config
+import logging
 from resources.producer import connect_kafka_producer, publish_message
+
+# set logging level for 'video Processor'
+log = logging.getLogger('root')
 
 
 def videosplitter(key):
     try:
         cap = cv2.VideoCapture(config.Config.VIDEO_INPUT_PATH + key)
         cap.open(config.Config.VIDEO_INPUT_PATH + key)
-        print('cap is opened', cap.isOpened())
+        isCapOpen = cap.isOpened()
+        log.info('cap is opened : ' + str(isCapOpen))
 
         currentFrame = 0
         while cap.isOpened():
@@ -26,14 +31,14 @@ def videosplitter(key):
 
             # Saves image of the current frame in jpg file
             name = '/frame' + str(currentFrame) + '.jpg'
-            print('Creating...' + name)
+            log.info('Creating...' + name)
 
             # To stop duplicate images
             currentFrame += 1
 
     except Exception as ex:
-        print('Exception while splitting video')
-        print(str(ex))
+        log.error('Exception while splitting video')
+        log.error(str(ex))
 
     finally:
         # When everything done, release the capture
