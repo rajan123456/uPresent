@@ -16,6 +16,7 @@ flask-restful-swagger = "*"
 kafka-python = "*"
 Flask = "*"
 Flask-RESTful = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"

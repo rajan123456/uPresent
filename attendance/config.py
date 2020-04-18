@@ -22,7 +22,6 @@ class Config(object):
     KAFKA_ADDRESS = "broker:29092"
     KAFKA_PUBLISH_TOPIC = "attendanceEvents"
     SAGA_ENABLED = 1
-    DATABASE_ENABLED = 0
     ATTENDANCE_RECORDED = 'attendanceRecorded'
     ATTENDANCE_SOURCE_ID = 3
     REPORT_PUBLISH_API = 'http://reporting:8080/reporting'

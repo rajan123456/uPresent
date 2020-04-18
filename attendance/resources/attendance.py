@@ -8,6 +8,8 @@ from resources.geofence import validateVicinity
 from resources.user import fetchUser
 from resources.producer import publish_message
 from resources.facenet import compare_faces_facenet
+import datetime
+
 
 class AllAttendanceApi(Resource):
 
@@ -21,14 +23,18 @@ class AllAttendanceApi(Resource):
         try:
             body = request.get_json()
             attendance = Attendance(**body)
+            attendance.save()
+            midnight_date = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+            Attendance.objects().get_or_404(username = attendance.username,
+                                            moduleId = attendance.moduleId,
+                                            date_captured = midnight_date)
             validateVicinity(body)
             user = fetchUser(attendance.username)
             if user.get('imageId') is None:
                 compare_faces_facenet(attendance.capturedImageId, attendance.username)
             else:
                 compare_faces_rekognition(attendance.capturedImageId, user.get('imageId')[0])
-            if current_app.config['DATABASE_ENABLED'] == 1:
-                attendance.save()
+            attendance.save()
             publish_message(body)
         except Exception as ex:
             return {'message': str(ex)}, 400
