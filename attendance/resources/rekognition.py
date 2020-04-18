@@ -1,9 +1,14 @@
 import boto3
+import logging
 from flask import current_app
 from resources.vault import obtain_data
 
+# set logging level for 'video Processor'
+log = logging.getLogger('root')
+
 
 def compare_faces(targetId, sourceId):
+    log.info("Trying to compare faces for student attendance ---->>")
     secrets = obtain_data()
     client = boto3.client('rekognition',
                           aws_access_key_id=secrets['aws_access_key_id'],
