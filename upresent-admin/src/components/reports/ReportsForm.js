@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 function ReportsForm(props) {
   return (
@@ -42,7 +43,9 @@ function ReportsForm(props) {
             />
           </Grid>
         </MuiPickersUtilsProvider>
-        <input type="submit" value="Generate" className="btn btn-primary" />
+        <Button type="submit" variant="contained" color="primary">
+          Generate
+        </Button>
       </Grid>
     </form>
   );

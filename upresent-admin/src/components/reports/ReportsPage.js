@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
-import Header from "../common/Header";
-import ReportsForm from "./ReportsForm";
-import moment from "moment";
-import { getModules, getModuleByModuleCode } from "../../api/moduleApi";
-import { getAttendanceReport } from "../../api/reportingApi";
 import { toast } from "react-toastify";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import moment from "moment";
+import Header from "../common/Header";
+import ReportsForm from "./ReportsForm";
+import { getModules, getModuleByModuleCode } from "../../api/moduleApi";
+import { getAttendanceReport } from "../../api/reportingApi";
 
 const useStyles = makeStyles({
   table: {
@@ -109,6 +113,32 @@ function ReportsPage() {
     });
   }
 
+  function exportPdf() {
+    if (attendance.length === 0) return;
+
+    const unit = "pt";
+    const size = "A4";
+    const orientation = "portrait";
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    doc.setFontSize(15);
+
+    const title = "Attendance Report";
+    const headers = [["NAME", reportData.dates.map((date) => date)]];
+    const data = attendance.map((elt) => [elt.key, elt.status]);
+
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data,
+    };
+
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save("Attendance.pdf");
+  }
+
   const classes = useStyles();
 
   return (
@@ -126,41 +156,56 @@ function ReportsPage() {
           onSubmit={handleSubmit}
         />
         <hr />
-        <TableContainer component={Paper}>
-          <Table
-            className={classes.table}
-            size="small"
-            aria-label="Attendance Report"
-          >
-            <TableHead>
-              <TableRow key="header">
-                {reportData.dates ? (
-                  <TableCell>Student\Date</TableCell>
-                ) : (
-                  <TableCell />
-                )}
-                {reportData.dates &&
-                  reportData.dates.map((date) => (
-                    <TableCell align="right">{date}</TableCell>
-                  ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {attendance &&
-                attendance.map((record) => (
-                  <TableRow key={record.key}>
-                    <TableCell component="th" scope="row">
-                      {record.key}
-                    </TableCell>
-                    {record.status &&
-                      record.status.map((stat) => (
-                        <TableCell align="right">{stat}</TableCell>
+        <Grid container spacing={Number(2)}>
+          {reportData.dates ? (
+            <Grid item xs={12}>
+              <TableContainer component={Paper}>
+                <Table
+                  className={classes.table}
+                  size="small"
+                  aria-label="Attendance Report"
+                >
+                  <TableHead>
+                    <TableRow key="header">
+                      {reportData.dates ? (
+                        <TableCell>Student/Date</TableCell>
+                      ) : (
+                        <TableCell />
+                      )}
+                      {reportData.dates &&
+                        reportData.dates.map((date) => (
+                          <TableCell align="right">{date}</TableCell>
+                        ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {attendance &&
+                      attendance.map((record) => (
+                        <TableRow key={record.key}>
+                          <TableCell component="th" scope="row">
+                            {record.key}
+                          </TableCell>
+                          {record.status &&
+                            record.status.map((stat) => (
+                              <TableCell align="right">{stat}</TableCell>
+                            ))}
+                        </TableRow>
                       ))}
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          ) : (
+            <Button />
+          )}
+          {reportData.dates ? (
+            <Grid item xs={12}>
+              <Button type="submit" onClick={exportPdf()} />
+            </Grid>
+          ) : (
+            <Button />
+          )}
+        </Grid>
       </div>
     </div>
   );
