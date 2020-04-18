@@ -2,24 +2,32 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.svm import SVC
 import pickle
 import constants
+import logging
+
+log = logging.getLogger('root')
 
 def train_model():
+    log.info("training started")
+    print("training started")
     recog = constants.PICKLE_FILES_DIR + '/recognizer.pickle'
     l = constants.PICKLE_FILES_DIR + '/le.pickle'
     embeddings = constants.PICKLE_FILES_DIR + '/embeddings.pickle'
 
     # load the face embeddings
+    log.info("[INFO] loading face embeddings...")
     print("[INFO] loading face embeddings...")
     try:
         data = pickle.loads(open(embeddings, "rb").read())
 
         # encode the labels
+        log.info("[INFO] encoding labels...")
         print("[INFO] encoding labels...")
         le = LabelEncoder()
         labels = le.fit_transform(data["names"])
 
         # train the model used to accept the 128-d embeddings of the face and
         # then produce the actual face recognition
+        log.info("[INFO] training model...")
         print("[INFO] training model...")
         recognizer = SVC(C=1.0, kernel="linear", probability=True)
         recognizer.fit(data["embeddings"], labels)
@@ -34,5 +42,6 @@ def train_model():
         f.write(pickle.dumps(le))
         f.close()
     except Exception as ex:
-        print(str(ex))
+        log.error("Exception occurred while trying to train model. Exception msg: " + str(ex))
+        print("Exception occurred while trying to train model. Exception msg: " + str(ex))
         return {"Exception occurred. Exception msg: ": str(ex)}, 500

@@ -6,12 +6,18 @@ import pickle
 import cv2
 import os
 import constants
+import logging
+
+log = logging.getLogger('root')
 
 def extract_embeddings():
+    log.info("embeddings extraction started.")
+    print("embeddings extraction started.")
     embeddings = constants.PICKLE_FILES_DIR + '/embeddings.pickle'
     embedding_model = constants.MODEL_FILES_DIR + '/openface_nn4.small2.v1.t7'
     conf = 0.5
     # load our serialized face detector from disk
+    log.info("[INFO] loading face detector...")
     print("[INFO] loading face detector...")
     try:
         proto_path = constants.MODEL_FILES_DIR + "/deploy.prototxt"
@@ -19,10 +25,12 @@ def extract_embeddings():
         detector = cv2.dnn.readNetFromCaffe(proto_path, model_path)
 
         # load our serialized face embedding model from disk
+        log.info("[INFO] loading face recognizer...")
         print("[INFO] loading face recognizer...")
         embedder = cv2.dnn.readNetFromTorch(embedding_model)
 
         # grab the paths to the input images in our dataset
+        log.info("[INFO] quantifying faces...")
         print("[INFO] quantifying faces...")
         image_paths = list(paths.list_images(constants.DATASET_PATH))
 
@@ -37,8 +45,8 @@ def extract_embeddings():
         # loop over the image paths
         for (i, image_path) in enumerate(image_paths):
             # extract_embeddings the person name from the image path
-            print("[INFO] processing image {}/{}".format(i + 1,
-                                                         len(image_paths)))
+            log.info("[INFO] processing image {}/{}".format(i + 1, len(image_paths)))
+            print("[INFO] processing image {}/{}".format(i + 1, len(image_paths)))
             name = image_path.split(os.path.sep)[-2]
 
             # load the image, resize it to have a width of 600 pixels (while
@@ -97,11 +105,13 @@ def extract_embeddings():
                     total += 1
 
         # dump the facial embeddings + names to disk
+        log.info("[INFO] serializing {} encodings...".format(total))
         print("[INFO] serializing {} encodings...".format(total))
         data = {"embeddings": known_embeddings, "names": known_names}
         f = open(embeddings, "wb")
         f.write(pickle.dumps(data))
         f.close()
     except Exception as ex:
-        print(str(ex))
+        log.error("Exception occurred while trying to extract embeddings. Exception msg: " + str(ex))
+        print("Exception occurred while trying to extract embeddings. Exception msg: " + str(ex))
         return {"Exception occurred. Exception msg: ": str(ex)}, 500

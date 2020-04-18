@@ -1,6 +1,5 @@
 import logging
 
-
 class LogHandler(logging.StreamHandler):
 
     def __init__(self):

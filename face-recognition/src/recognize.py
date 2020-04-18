@@ -8,9 +8,7 @@ import logging
 
 log = logging.getLogger('root')
 
-
 def recog(image):
-    # detector = constants.MODEL_FILES_DIR
     embedding_model = constants.MODEL_FILES_DIR + '/openface_nn4.small2.v1.t7'
     log.info('embedding_model...' + embedding_model)
     conf = 0.5
