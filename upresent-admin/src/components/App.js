@@ -16,6 +16,7 @@ import ManageFencesPage from "./fences/ManageFencesPage";
 import ModulesPage from "./modules/ModulesPage";
 import CreateModulesPage from "./modules/CreateModulesPage";
 import ManageModulesPage from "./modules/ManageModulesPage";
+import ReportsPage from "./reports/ReportsPage";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
             path="/module/:moduleCode"
             component={ManageModulesPage}
           />
+          <PrivateRoute path="/reports" component={ReportsPage} />
           <Route component={FileNotFoundPage} />
         </Switch>
       </div>
