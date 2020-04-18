@@ -3,6 +3,11 @@ from urllib.request import *
 from flask import current_app
 import json
 from datetime import datetime
+import logging
+
+
+# set logging level for 'video Processor'
+log = logging.getLogger('root')
 
 
 def connect_kafka_producer():
@@ -10,8 +15,8 @@ def connect_kafka_producer():
     try:
         _producer = KafkaProducer(bootstrap_servers=current_app.config['KAFKA_ADDRESS'], api_version=(0, 10))
     except Exception as ex:
-        print('Exception while connecting Kafka')
-        print(str(ex))
+        log.error('Exception while connecting Kafka')
+        log.error(str(ex))
     finally:
         return _producer
 
@@ -33,10 +38,10 @@ def publish_message_kafka(data):
         value_bytes = bytes(body, encoding='utf-8')
         producer_instance.send(current_app.config['KAFKA_PUBLISH_TOPIC'], key=key_bytes, value=value_bytes)
         producer_instance.flush()
-        print('Message published successfully.')
+        log.info('Message published successfully.')
     except Exception as ex:
-        print('Exception in publishing message via kafka')
-        print(str(ex))
+        log.error('Exception in publishing message via kafka')
+        log.error(str(ex))
 
 
 def publish_message_api_call(data):
@@ -52,7 +57,7 @@ def publish_message_api_call(data):
                       method='POST')
         with urlopen(req) as res:
             body = res.read().decode()
-        print(body)
+        log.info(body)
     except Exception as ex:
-        print('Exception in publishing message via api')
-        print(str(ex))
+        log.error('Exception in publishing message via api')
+        log.error(str(ex))
