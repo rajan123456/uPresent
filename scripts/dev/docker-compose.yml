@@ -65,12 +65,13 @@ services:
       - "7000:5000"
     volumes:
       - ./facenet-data-vol:/app/resources:ro
-  training:
-    image: rajagupt/training:latest
-    container_name: training
+  watchdog:
+    image: rajagupt/watchdog:latest
+    container_name: watchdog
     restart: always
     volumes:
       - ./facenet-data-vol:/app/resources
+      - ./stream-data-vol:/training-data/images:ro
   srs:
     image: ossrs/srs:3
     container_name: srs
