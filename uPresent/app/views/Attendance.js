@@ -222,7 +222,9 @@ export class Attendance extends React.Component {
           contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
-            <Text style={styles.heading}>Attendance</Text>
+            <View style={styles.headerViewStyle}>
+              <Text style={styles.headerTextStyle}>Attendance</Text>
+            </View>
             <ModalDropdown
               style={styles.dropdown}
               dropdownStyle={styles.dropdownStyle}
@@ -275,7 +277,7 @@ export class Attendance extends React.Component {
 
 const styles = {
   scroll: {
-    backgroundColor: 'transparent',
+    backgroundColor: '#EFEFF4',
   },
   container: {
     margin: 8,
@@ -322,5 +324,17 @@ const styles = {
     borderColor: 'cornflowerblue',
     borderWidth: 2,
     borderRadius: 3,
+  },
+  headerViewStyle: {
+    borderBottomWidth: 1,
+    backgroundColor: '#f7f7f8',
+    borderColor: '#c8c7cc',
+  },
+  headerTextStyle: {
+    alignSelf: 'center',
+    marginTop: 30,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 };

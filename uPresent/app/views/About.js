@@ -13,6 +13,9 @@ export class About extends React.Component {
   render() {
     return (
       <ScrollView style={styles.container}>
+        <View style={styles.headerViewStyle}>
+          <Text style={styles.headerTextStyle}>About</Text>
+        </View>
         <View style={styles.containerImage}>
           <Image
             style={styles.pics}
@@ -64,5 +67,17 @@ const styles = {
     paddingRight: 20,
     paddingBottom: 20,
     textAlign: 'center',
+  },
+  headerViewStyle: {
+    borderBottomWidth: 1,
+    backgroundColor: '#f7f7f8',
+    borderColor: '#c8c7cc',
+  },
+  headerTextStyle: {
+    alignSelf: 'center',
+    marginTop: 30,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 };

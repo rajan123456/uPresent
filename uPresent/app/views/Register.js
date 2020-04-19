@@ -208,7 +208,9 @@ export class Register extends React.Component {
           contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
-            <Text style={styles.heading}>Register</Text>
+            <View style={styles.headerViewStyle}>
+              <Text style={styles.headerTextStyle}>Register</Text>
+            </View>
             <TextField
               ref={this.usernameRef}
               autoCorrect={false}
@@ -305,7 +307,7 @@ export class Register extends React.Component {
 
 const styles = {
   scroll: {
-    backgroundColor: 'transparent',
+    backgroundColor: '#EFEFF4',
   },
   container: {
     margin: 8,
@@ -331,5 +333,17 @@ const styles = {
   imageTileStyle: {
     width: 50,
     height: 50,
+  },
+  headerViewStyle: {
+    borderBottomWidth: 1,
+    backgroundColor: '#f7f7f8',
+    borderColor: '#c8c7cc',
+  },
+  headerTextStyle: {
+    alignSelf: 'center',
+    marginTop: 30,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 };
