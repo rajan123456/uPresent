@@ -23,9 +23,13 @@ const CreateModulesPage = (props) => {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    getUsersOfType("STUDENT").then((_students) =>
-      setStudents(_students.data.map((a) => a.username).sort())
-    );
+    getUsersOfType("STUDENT").then((_students) => {
+      let activeUsers = [];
+      _students.data.forEach((element) => {
+        if (element.isActive === 1) activeUsers.push(element);
+      });
+      setStudents(activeUsers.map((a) => a.username).sort());
+    });
   }, []);
 
   function handleChange({ target }) {
