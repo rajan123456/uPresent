@@ -29,9 +29,13 @@ const ManageModulesPage = (props) => {
         setModule(_module.data);
       });
     }
-    getUsersOfType("STUDENT").then((_students) =>
-      setStudents(_students.data.map((a) => a.username).sort())
-    );
+    getUsersOfType("STUDENT").then((_students) => {
+      let activeUsers = [];
+      _students.data.forEach((element) => {
+        if (element.isActive === 1) activeUsers.push(element);
+      });
+      setStudents(activeUsers.map((a) => a.username).sort());
+    });
   }, [props.match.params.moduleCode]);
 
   function handleChange({ target }) {
