@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,9 +15,6 @@ import com.upresent.management.responsedto.FetchUserResp;
 @Component
 @SuppressWarnings("unchecked")
 public class UserModuleUtil {
-	
-	@Autowired
-	private Environment env;
 
 	@Autowired
 	RestTemplate restTemplate;
@@ -36,7 +32,7 @@ public class UserModuleUtil {
 	
 	private String getUserTypeFromUsername(String username) {
 		if (CommonUtility.isValidString(username)) {
-			final String baseUrl = env.getProperty("userms.hostname") + ":" + env.getProperty("userms.port")
+			final String baseUrl = System.getenv(Constant.USER_MS_HOSTNAME_ENV_VARIABLE) + ":" + System.getenv(Constant.USER_MS_PORT_ENV_VARIABLE)
 					+ Constant.FETCH_USER_API_URL + username;
 			Map<?, ?> response = restTemplate.getForObject(baseUrl, Map.class);
 			final FetchUserResp userInfo = objectMapper.convertValue(response.get("data"), FetchUserResp.class);
@@ -52,7 +48,7 @@ public class UserModuleUtil {
 	
 	public Map<String, Object> getUserTypesFromUsernames(List<String> usernames) {
 		if (CommonUtility.isValidList(usernames)) {
-			final String baseUrl = env.getProperty("userms.hostname") + ":" + env.getProperty("userms.port")
+			final String baseUrl = System.getenv(Constant.USER_MS_HOSTNAME_ENV_VARIABLE) + ":" + System.getenv(Constant.USER_MS_PORT_ENV_VARIABLE)
 					+ Constant.FETCH_USER_TYPES_API_URL;
 			Map<?, ?> response = restTemplate.postForObject(baseUrl, usernames, Map.class);
 			final Map<String, Object> userInfo = (Map<String, Object>) response.get("data");

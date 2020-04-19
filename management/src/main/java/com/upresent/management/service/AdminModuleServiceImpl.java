@@ -8,7 +8,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -34,9 +33,6 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 
 	@Autowired
 	private ModuleRepository moduleRepository;
-
-	@Autowired
-	private Environment env;
 
 	@Autowired
 	UserModuleUtil userModuleUtil;
@@ -130,7 +126,7 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 	private void publishAdminModuleUpdates(ModuleData module, String eventType) {
 		String message = CommonUtility.stringifyEventForPublish(gson.toJson(module), eventType,
 				Calendar.getInstance().getTime().toString(), "", Constant.MANAGEMENT_SOURCE_ID);
-		String useMessagePublisher = env.getProperty("sagaEnabled");
+		String useMessagePublisher = System.getenv(Constant.SAGA_ENABLED_ENV_VARIABLE);
 		if (null == useMessagePublisher || 1 == Integer.parseInt(useMessagePublisher)) {
 			kafkaMessageProducer.send(message);
 		} else {

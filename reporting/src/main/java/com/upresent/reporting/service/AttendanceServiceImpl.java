@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,9 +33,6 @@ import io.confluent.shaded.com.google.gson.Gson;
 public class AttendanceServiceImpl implements AttendanceService {
 
 	@Autowired
-	private Environment env;
-
-	@Autowired
 	ReportingRepository reportingRepository;
 
 	@Autowired
@@ -51,8 +47,9 @@ public class AttendanceServiceImpl implements AttendanceService {
 			String moduleId) throws ReportingException {
 		if (CommonUtility.isValidDate(filterStartDateStr) && CommonUtility.isValidDate(filterEndDateStr)
 				&& CommonUtility.isValidStartAndEndDate(filterStartDateStr, filterEndDateStr)) {
-			final String baseUrl = env.getProperty("managementms.hostname") + ":" + env.getProperty("managementms.port")
-					+ Constants.FETCH_MODULE_DETAILS_API_URL + moduleId;
+			final String baseUrl = System.getenv(Constants.MANAGEMENT_MS_HOSTNAME_ENV_VARIABLE) + ":"
+					+ System.getenv(Constants.MANAGEMENT_MS_PORT_ENV_VARIABLE) + Constants.FETCH_MODULE_DETAILS_API_URL
+					+ moduleId;
 			Map<?, ?> response = restTemplate.getForObject(baseUrl, Map.class);
 			Map<String, Object> moduleDetails = objectMapper.convertValue(response.get("data"), Map.class);
 			if (moduleDetails != null) {
