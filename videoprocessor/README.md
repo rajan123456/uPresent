@@ -11,9 +11,9 @@ and SRS is an industrial-strength live streaming cluster.
 After sending the video to SRS Cluster, subsequently, an API call is made to videoProcessor service to pull this video from SRS cluster. It is a `POST` request developed using `Python Flask`.
 
 Now, The videoProcessor service on recieving this video stream from SRS Cluster, firstly, splits the video stream into number of image frames using OpenCV library.
-These image frames are then Base64 encoded. After that, a JSON request object is constructed which contains base64 image string, username and timestamp. All these values are then serialized before converting into JSON request object.
+These image frames are then Base64 encoded. After that, a JSON request object is constructed which contains base64 image string, username and timestamp. All these values are serialized before passing into the JSON request object.
 
-Finally, a kafka connection is setup and the JSON request is pushed to the **"VideoCollector"** Kafka Topic through the Kafka producer. 
+Finally, a Kafka connection is setup and the JSON request is pushed to the **"VideoCollector"** Kafka Topic through the Kafka producer. 
 
 This stream of image frames is then consumed from kafka topic by our **streamProcessor** service for further processing.
 
