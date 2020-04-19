@@ -22,6 +22,7 @@ import {
   accountCreated,
   registrationCancelled,
 } from '../constants/registerConstants';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export class Register extends React.Component {
   constructor(props) {
@@ -51,6 +52,7 @@ export class Register extends React.Component {
       secureTextEntry: true,
       images: null,
       imageIds: [],
+      videoFlag: false,
     };
   }
 
@@ -197,6 +199,16 @@ export class Register extends React.Component {
     });
   }
 
+  async componentDidMount() {
+    await AsyncStorage.getItem('videoRegistration', (errs, result) => {
+      if (!errs) {
+        if (result !== null) {
+          this.setState({videoFlag: result === 'true'});
+        }
+      }
+    });
+  }
+
   render() {
     let {errors = {}, secureTextEntry, ...data} = this.state;
     let {username, password, passwordConfirm} = data;
@@ -265,14 +277,18 @@ export class Register extends React.Component {
               label="School"
               error={errors.school}
             />
-            <RaisedTextButton
-              onPress={() => this.pickFromCamera(true)}
-              title="Add Your Pictures"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
+            {!this.state.videoFlag ? (
+              <RaisedTextButton
+                onPress={() => this.pickFromCamera(true)}
+                title="Add Your Pictures"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            ) : (
+              <View />
+            )}
             <View style={styles.imageTileView}>
-              {this.state.images
+              {this.state.images && !this.state.videoFlag
                 ? this.state.images.map(i => {
                     return (
                       <Image

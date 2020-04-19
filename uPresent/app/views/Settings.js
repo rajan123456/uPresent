@@ -1,16 +1,33 @@
 import React from 'react';
 import {Image, Text, View} from 'react-native';
 import SettingsList from 'react-native-settings-list';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export class Settings extends React.Component {
   constructor() {
     super();
     this.onValueChange = this.onValueChange.bind(this);
+
     this.state = {switchValue: false};
   }
 
-  onValueChange(value) {
+  async componentDidMount() {
+    await AsyncStorage.getItem('videoRegistration', (errs, result) => {
+      if (!errs) {
+        if (result !== null) {
+          this.setState({switchValue: result === 'true'});
+        }
+      }
+    });
+  }
+
+  async onValueChange(value) {
     this.setState({switchValue: value});
+    try {
+      await AsyncStorage.setItem('videoRegistration', value.toString());
+    } catch {
+      this.setState({switchValue: !value});
+    }
   }
 
   render() {
