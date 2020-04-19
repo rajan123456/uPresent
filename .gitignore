@@ -14,3 +14,6 @@ target/
 .sonarlint/
 **/*.log
 .vscode/
+**/*.pyc
+**/test_images
+**/venv/**
