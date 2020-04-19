@@ -3,6 +3,8 @@
 The uPresent mobile app allows students to register themselves by uploading their video. We need to reliably handle and efficiently process these large-scale video stream data .As part of the video stream processing pipeline, the VideoProcessor is a `Python` service which converts the video stream into image frames using `OpenCV library` and pushes these image frames to Kafka queue.
 Below is the architecture diagram to further illustrate this :
 
+![Video Processor](https://github.com/rajan123456/uPresent/blob/documentation/dipty/videoprocessor/VideoProcessor(1).jpg)
+
 As shown in the above diagram, a student uploads his/her video for registration on uPresent mobile app. The video is then sent over `RTMP protocol` to `SRS Cluster`, along with a key. This key is nothing but the student's unique username. Here, RTMP is a Real-Time Messaging Protocol for streaming video or audio over internet
 and SRS is an industrial-strength live streaming cluster.
 
