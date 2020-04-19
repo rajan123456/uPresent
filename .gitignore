@@ -16,5 +16,4 @@ target/
 .vscode/
 **/*.pyc
 **/test_images
-**/dataset
 **/venv/**
