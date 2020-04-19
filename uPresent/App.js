@@ -6,6 +6,7 @@ import {Home} from './app/views/Home';
 import {Login} from './app/views/Login';
 import {Register} from './app/views/Register';
 import {Attendance} from './app/views/Attendance';
+import {Settings} from './app/views/Settings';
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ export default class App extends React.Component {
           <Stack.Screen name="LoginRT" component={Login} />
           <Stack.Screen name="AboutRT" component={About} />
           <Stack.Screen name="AttendanceRT" component={Attendance} />
+          <Stack.Screen name="SettingsRT" component={Settings} />
         </Stack.Navigator>
       </NavigationContainer>
     );
