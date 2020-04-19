@@ -1,17 +1,18 @@
 from flask import Response, request
 from flask_restful import Resource
 from flask_restful_swagger import swagger
-from flask import current_app
 from database.models import Attendance
-from resources.rekognition import compare_faces
+from resources.rekognition import compare_faces_rekognition
 from resources.geofence import validateVicinity
 from resources.user import fetchUser
 from resources.producer import publish_message
+from resources.facenet import compare_faces_facenet
+from resources.module import check_module_active
+import datetime
 import logging
 
 # set logging level for 'video Processor'
 log = logging.getLogger('root')
-
 
 class AllAttendanceApi(Resource):
 
@@ -27,16 +28,30 @@ class AllAttendanceApi(Resource):
             log.info("Inside create attendance method for student ----->>")
             body = request.get_json()
             attendance = Attendance(**body)
+            self.check_if_attendance_marked(attendance)
+            check_module_active(attendance.moduleId)
             validateVicinity(body)
             user = fetchUser(attendance.username)
-            compare_faces(attendance.capturedImageId, user.get('imageId')[0])
-            if current_app.config['DATABASE_ENABLED'] == 1:
-                attendance.save()
+            if user.get('imageId') is None:
+                compare_faces_facenet(attendance.capturedImageId, attendance.username)
+            else:
+                compare_faces_rekognition(attendance.capturedImageId, user.get('imageId')[0])
+            attendance.save()
             publish_message(body)
         except Exception as ex:
             return {'message': str(ex)}, 400
         return {'id': str(attendance.id)}, 200
 
+    def check_if_attendance_marked(self, attendance):
+        midnight_date = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+        try:
+            Attendance.objects().get_or_404(username=attendance.username,
+                                        moduleId=attendance.moduleId,
+                                        date_captured=midnight_date)
+        except Exception as ex:
+            log.info('no attendance marked for today')
+        else:
+            raise Exception('Attendance already marked!')
 
 class AttendanceApi(Resource):
 

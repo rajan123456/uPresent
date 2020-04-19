@@ -8,12 +8,15 @@ pylint = "*"
 
 [packages]
 flask-mongoengine = "*"
-flask = "*"
-flask-restful = "*"
 geopy = "*"
 boto3 = "*"
-elastic-apm = "*"
+elastic-apm = {extras = ["flask"],version = "*"}
 psutil = "*"
+flask-restful-swagger = "*"
+kafka-python = "*"
+Flask = "*"
+Flask-RESTful = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"

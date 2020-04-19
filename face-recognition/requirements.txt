@@ -1,0 +1,9 @@
+flask
+flask_restful
+elastic-apm[flask]
+psutil
+flask-restful-swagger
+numpy
+imutils
+opencv-python
+sklearn
