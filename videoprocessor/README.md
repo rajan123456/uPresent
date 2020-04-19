@@ -17,5 +17,7 @@ Finally, a kafka connection is setup and the JSON request is pushed to the **"Vi
 
 This stream of image frames is then consumed from kafka topic by our **streamProcessor** service for further processing.
 
+***SWAGGER URL :***
+
 
 
