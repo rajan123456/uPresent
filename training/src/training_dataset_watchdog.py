@@ -14,10 +14,10 @@ log.addHandler(log_config.LogHandler())
 
 log = logging.getLogger('root')
 log.info("Watchdog started.")
-students_image_count_obj = {}
-already_trained_students_count = -1
 
 def job():
+    already_trained_students_count = -1
+    students_image_count_obj = {}
     try:
         for username in os.listdir(constants.DATASET_PATH):
             concatenated_dir = constants.DATASET_PATH + '/' + username
