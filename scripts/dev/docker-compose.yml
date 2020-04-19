@@ -64,13 +64,13 @@ services:
     ports:
       - "7000:5000"
     volumes:
-      - ./ml-data-vol:/app/resources:ro
+      - ./facenet-data-vol:/app/resources:ro
   training:
     image: rajagupt/training:latest
     container_name: training
     restart: always
     volumes:
-      - ./ml-data-vol:/app/resources
+      - ./facenet-data-vol:/app/resources
   srs:
     image: ossrs/srs:3
     container_name: srs
@@ -318,4 +318,4 @@ volumes:
   vault-data-vol:
   zookeeper-data-vol:
   zookeeper-logs-vol:
-  ml-data-vol:
+  fmlacenet-data-vol:

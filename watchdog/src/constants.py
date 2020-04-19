@@ -1,0 +1,14 @@
+USER_TRAINING_IMAGE_COUNT = 30
+FILE_SYSTEM_POLLING_DELAY_IN_SECONDS = 2
+already_trained_students_count = -1
+CONFIDENCE_THRESHOLD = 0.5
+SUPPORTED_FILE_TYPE = ".png"
+# DATASET_PATH = '/app/resources/dataset'
+# PICKLE_FILES_DIR = '/app/resources/output'
+# MODEL_FILES_DIR = '/app/resources/model'
+# DATASET_PATH = '/Users/ashishgupta/git/uPresent/scripts/dev/facenet-data-vol/dataset'
+# PICKLE_FILES_DIR = '/Users/ashishgupta/git/uPresent/scripts/dev/facenet-data-vol/output'
+# MODEL_FILES_DIR = '/Users/ashishgupta/git/uPresent/scripts/dev/facenet-data-vol/model'
+DATASET_PATH = '/Users/anchitseth/Desktop/facenet-data-vol/dataset'
+PICKLE_FILES_DIR = '/Users/anchitseth/Desktop/facenet-data-vol/output'
+MODEL_FILES_DIR = '/Users/anchitseth/Desktop/facenet-data-vol/model'

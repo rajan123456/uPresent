@@ -37,6 +37,14 @@ script:
   - cd ../videoprocessor/
   - docker build -t rajagupt/videoprocessor .
   - cd ..
+  #Build Facenet
+  - cd ../facenet/
+  - docker build -t rajagupt/facenet .
+  - cd ..
+  #Build Watchdog
+  - cd ../watchdog/
+  - docker build -t rajagupt/watchdog .
+  - cd ..
   #Push Images to Docker Hub
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker push rajagupt/attendance
@@ -46,6 +54,8 @@ script:
   - docker push rajagupt/upresent-admin
   - docker push rajagupt/user
   - docker push rajagupt/videoprocessor
+  - docker push rajagupt/facenet
+  - docker push rajagupt/watchdog
   #Deploy on AWS EC2 from Master
   - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256; fi
   - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then chmod 400 iss-dev-upresent.pem; fi
