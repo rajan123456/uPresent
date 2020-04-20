@@ -10,7 +10,7 @@ Now to setup a runtime environment we must set the `SPARK_HOME`, `PYTHONPATH` an
 
 Let us look at the Stream Processor architecture diagram below :
 
-![Stream Processor]()
+![Stream Processor](https://github.com/rajan123456/uPresent/blob/documentation/dipty/streamProcessor/StreamProcessor.jpg)
 
 As seen in the architecture diagram, stream of image frame data is ingested to Spark from Kafka 'videoCollector' topic. Spark Streaming receives live input data streams and divides the data into micro-batches, which are called discretized stream or DStream. And internally, a DStream is represented as a sequence of RDDs.
 
