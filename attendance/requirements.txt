@@ -8,3 +8,4 @@ psutil
 flask-restful-swagger
 kafka-python
 flask_cors
+azure-cognitiveservices-vision-face
