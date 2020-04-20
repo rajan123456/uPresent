@@ -8,6 +8,9 @@ from resources.producer import connect_kafka_producer, publish_message
 # set logging level for 'video Processor'
 log = logging.getLogger('root')
 
+# get SAGA_ENABLED flag from environment variable
+saga_enabled = os.getenv('SAGA_ENABLED')
+
 
 def videosplitter(key):
     try:
@@ -27,7 +30,10 @@ def videosplitter(key):
 
             # Publishing frames to kafka topic
             kafka_producer = connect_kafka_producer()
-            publish_message(kafka_producer, config.Config.KAFKA_TOPIC, 'frame', key, imageData)
+            if saga_enabled is None:
+                saga_enabled = config.Config.SAGA_ENABLED
+            if str(saga_enabled) == '1':
+                publish_message(kafka_producer, config.Config.KAFKA_TOPIC, 'frame', key, imageData)
 
             # Saves image of the current frame in jpg file
             name = '/frame' + str(currentFrame) + '.jpg'

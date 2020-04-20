@@ -4,12 +4,9 @@ from elasticapm.contrib.flask import ElasticAPM
 from flask_restful_swagger import swagger
 from resources import custom_logger
 import logging
-import os
 
 app = Flask(__name__)
 app.config.from_object("config.Config")
-
-os.environ['SAGA_ENABLED'] = 1
 
 # Initializing custom logger
 log = logging.getLogger('root')
