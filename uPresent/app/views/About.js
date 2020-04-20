@@ -4,10 +4,10 @@ import {TextField} from 'react-native-material-textfield';
 import {RaisedTextButton} from 'react-native-material-buttons';
 
 const aboutUPresent =
-  'This is the best app in the world and it will identify your face and help you record your attendance.';
+  'uPresent is a facial-recognition based attendance recording application which ensures attendance with the help of geo-fencing.';
 
 const whatIsUPresent =
-  'This app is made by students to help students to record their attendance. No cheating though, we use a geo-fence to ensure that you are actually attending your classes';
+  'This app is made by students to help students record their attendance. No cheating though, we use a geo-fence to ensure that you are actually attending your classes, and facial recognition to recognize you.';
 
 export class About extends React.Component {
   render() {
