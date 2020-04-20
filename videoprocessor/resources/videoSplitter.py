@@ -15,6 +15,7 @@ def videosplitter(key):
         srs_cluster = os.getenv('SRS_CLUSTER')
         if srs_cluster is None:
             srs_cluster = config.Config.VIDEO_INPUT_PATH
+
         cap = cv2.VideoCapture(srs_cluster + key)
         cap.open(srs_cluster + key)
         isCapOpen = cap.isOpened()
@@ -31,10 +32,7 @@ def videosplitter(key):
 
             # Publishing frames to kafka topic
             kafka_producer = connect_kafka_producer()
-            if saga_enabled is None:
-                saga_enabled = config.Config.SAGA_ENABLED
-            if str(saga_enabled) == '1':
-                publish_message(kafka_producer, config.Config.KAFKA_TOPIC, 'frame', key, imageData)
+            publish_message(kafka_producer, config.Config.KAFKA_TOPIC, 'frame', key, imageData)
 
             # Saves image of the current frame in jpg file
             name = '/frame' + str(currentFrame) + '.jpg'
