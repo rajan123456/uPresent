@@ -3,10 +3,6 @@ class Config(object):
         #'host': "mongodb://localhost:27017/admin"
         'host': "mongodb://root:example@mongo:27017/admin"
     }
-    MANAGEMENT_API_GEO_FENCE = "http://management:8080/manage/geo-fence?universityName="
-    USER_API_FETCH_USER = "http://user:8080/user?username="
-    # MANAGEMENT_API_GEO_FENCE = "http://localhost:8081/manage/geo-fence?universityName="
-    # USER_API_FETCH_USER = "http://localhost:8083/user?username="
     UPLOAD_DIR = "/app/resources/images/"
     THRESHOLD_CONFIDENCE = 60
     ELASTIC_APM = {
@@ -25,6 +21,10 @@ class Config(object):
     ATTENDANCE_RECORDED = 'attendanceRecorded'
     ATTENDANCE_SOURCE_ID = 3
     REPORT_PUBLISH_API = 'http://reporting:8080/reporting'
-    FACENET_RECOGNITION_API = 'http://facenet:7000/api/face/'
-    MODULE_API_FETCH_DETAILS = 'http://management:8082/manage/module?moduleCode='
+    FACENET_RECOGNITION_API = 'http://facenet:5000/api/face/'
+    MODULE_API_FETCH_DETAILS = 'http://management:8080/manage/module?moduleCode='
+    MANAGEMENT_API_GEO_FENCE = "http://management:8080/manage/geo-fence?universityName="
+    USER_API_FETCH_USER = "http://user:8080/user?username="
+    # MANAGEMENT_API_GEO_FENCE = "http://localhost:8081/manage/geo-fence?universityName="
+    # USER_API_FETCH_USER = "http://localhost:8083/user?username="
     #MODULE_API_FETCH_DETAILS = 'https://dev.upresent.ga/management/manage/module?moduleCode='

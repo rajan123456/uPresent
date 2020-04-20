@@ -14,13 +14,13 @@ def recog(image):
     conf = 0.5
     recognizer = constants.PICKLE_FILES_DIR + '/recognizer.pickle'
     l = constants.PICKLE_FILES_DIR + '/le.pickle'
-    print("[INFO] loading face detector...")
+    log.info("[INFO] loading face detector...")
     try:
         proto_path = constants.MODEL_FILES_DIR + "/deploy.prototxt"
         model_path = constants.MODEL_FILES_DIR + "/res10_300x300_ssd_iter_140000.caffemodel"
         detector = cv2.dnn.readNetFromCaffe(proto_path, model_path)
         # load our serialized face embedding model from disk
-        print("[INFO] loading face recognizer...")
+        log.info("[INFO] loading face recognizer...")
         embedder = cv2.dnn.readNetFromTorch(embedding_model)
         # load the actual face recognition model along with the label encoder
         recognizer = pickle.loads(open(recognizer, "rb").read())
@@ -60,7 +60,7 @@ def recog(image):
                 (fH, fW) = face.shape[:2]
 
                 # ensure the face width and height are sufficiently large
-                if fW < 20 or fH < 20:
+                if fW < constants.MIN_DETECTED_FACE_WIDTH or fH < constants.MIN_DETECTED_FACE_HEIGHT:
                     continue
 
                 # construct a blob for the face ROI, then pass the blob
@@ -80,5 +80,5 @@ def recog(image):
         # show the output image
         return name, probability * 100
     except Exception as ex:
-        print(str(ex))
+        log.error("Exception occurred while trying to recognize image. Exception msg: " + str(ex))
         return {"Exception occurred. Exception msg: ": str(ex)}, 500

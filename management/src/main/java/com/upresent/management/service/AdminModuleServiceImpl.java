@@ -36,10 +36,10 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 	private ModuleRepository moduleRepository;
 
 	@Autowired
-	private Environment env;
+	UserModuleUtil userModuleUtil;
 
 	@Autowired
-	UserModuleUtil userModuleUtil;
+	Environment env;
 
 	Gson gson = new Gson();
 
@@ -130,7 +130,9 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 	private void publishAdminModuleUpdates(ModuleData module, String eventType) {
 		String message = CommonUtility.stringifyEventForPublish(gson.toJson(module), eventType,
 				Calendar.getInstance().getTime().toString(), "", Constant.MANAGEMENT_SOURCE_ID);
-		String useMessagePublisher = env.getProperty("sagaEnabled");
+		String useMessagePublisher = System.getenv(Constant.SAGA_ENABLED_ENV_VARIABLE) == null
+				? env.getProperty(Constant.SAGA_ENABLED_ENV_VARIABLE)
+				: System.getenv(Constant.SAGA_ENABLED_ENV_VARIABLE);
 		if (null == useMessagePublisher || 1 == Integer.parseInt(useMessagePublisher)) {
 			kafkaMessageProducer.send(message);
 		} else {

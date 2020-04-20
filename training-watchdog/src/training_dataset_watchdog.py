@@ -16,7 +16,7 @@ log = logging.getLogger('root')
 log.info("Watchdog started.")
 
 def job():
-    already_trained_students_count = -1
+
     students_image_count_obj = {}
     try:
         for username in os.listdir(constants.DATASET_PATH):
@@ -24,7 +24,7 @@ def job():
             if os.path.isdir(concatenated_dir):
                 students_image_count_obj[username] = len([file for file in os.listdir(concatenated_dir) if (
                             os.path.isfile(concatenated_dir + "/" + file) and os.path.splitext(file)[
-                        1].lower() == ".png")])
+                        1].lower() == constants.SUPPORTED_FILE_TYPE)])
         start_training = True
         for username in students_image_count_obj.keys():
             if students_image_count_obj[username] != constants.USER_TRAINING_IMAGE_COUNT:
@@ -33,8 +33,8 @@ def job():
         # check if any new user is added, i.e. is there really any need of training again.
         if start_training:
             students_count = len(students_image_count_obj.keys())
-            if students_count > already_trained_students_count:
-                already_trained_students_count = students_count
+            if students_count > constants.ALREADY_TRAINED_STUDENTS_COUNT:
+                constants.ALREADY_TRAINED_STUDENTS_COUNT = students_count
             else:
                 log.info("Training terminated to avoid redundant trainings.")
                 start_training = False
