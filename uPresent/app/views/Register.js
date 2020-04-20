@@ -14,14 +14,6 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-crop-picker';
 import {saveFile} from '../api/fileApi';
 import {saveUser, getUserByName} from '../api/userApi';
-import {userDataNotFound} from '../constants/userApiConstants';
-import {
-  shouldNotBeEmpty,
-  passwordsDoNotMatch,
-  accountAlreadyExists,
-  accountCreated,
-  registrationCancelled,
-} from '../constants/registerConstants';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export class Register extends React.Component {
@@ -99,16 +91,16 @@ export class Register extends React.Component {
       let value = this[name].value();
 
       if (!value) {
-        errors[name] = shouldNotBeEmpty;
+        errors[name] = 'Should not be empty';
       }
     });
 
     if (this.password.value() !== this.passwordConfirm.value()) {
-      errors.passwordConfirm = passwordsDoNotMatch;
+      errors.passwordConfirm = 'Passwords do not match';
     } else {
       getUserByName(this.username.value()).then(_resp => {
-        if (_resp.message !== userDataNotFound) {
-          errors.username = accountAlreadyExists;
+        if (_resp.message !== 'User data not found.') {
+          errors.username = 'An account with the same username alread exists.';
         }
       });
     }
@@ -126,8 +118,12 @@ export class Register extends React.Component {
       };
 
       saveUser(user).then(_resp => {
-        Alert.alert(accountCreated);
-        this.props.navigation.navigate('HomeRT');
+        if (!this.state.videoFlag) {
+          Alert.alert('Account created');
+          this.props.navigation.navigate('HomeRT');
+        } else {
+          this.props.navigation.navigate('LiveStreamRT');
+        }
       });
     }
   }
@@ -158,7 +154,7 @@ export class Register extends React.Component {
   }
 
   cancelRegister = () => {
-    Alert.alert(registrationCancelled);
+    Alert.alert('Registration cancelled');
     this.props.navigation.navigate('HomeRT');
   };
 
