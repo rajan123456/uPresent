@@ -2,8 +2,8 @@ from flask import Flask
 from flask_restful import Api
 from elasticapm.contrib.flask import ElasticAPM
 from flask_restful_swagger import swagger
-import logging
 from resources import custom_logger
+import logging
 
 app = Flask(__name__)
 app.config.from_object("config.Config")

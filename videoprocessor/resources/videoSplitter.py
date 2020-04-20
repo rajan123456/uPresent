@@ -11,8 +11,13 @@ log = logging.getLogger('root')
 
 def videosplitter(key):
     try:
-        cap = cv2.VideoCapture(config.Config.VIDEO_INPUT_PATH + key)
-        cap.open(config.Config.VIDEO_INPUT_PATH + key)
+        # get SRS_CLUSTER URL from environment variable
+        srs_cluster = os.getenv('SRS_CLUSTER')
+        if srs_cluster is None:
+            srs_cluster = config.Config.VIDEO_INPUT_PATH
+
+        cap = cv2.VideoCapture(srs_cluster + key)
+        cap.open(srs_cluster + key)
         isCapOpen = cap.isOpened()
         log.info('cap is opened : ' + str(isCapOpen))
 
