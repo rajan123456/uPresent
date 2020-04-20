@@ -1,6 +1,7 @@
 USER_TRAINING_IMAGE_COUNT = 30
 FILE_SYSTEM_POLLING_DELAY_IN_SECONDS = 2
-already_trained_students_count = -1
+# not really a constant, it's value changes at runtime as and when data of new students is trained
+ALREADY_TRAINED_STUDENTS_COUNT = -1
 CONFIDENCE_THRESHOLD = 0.5
 SUPPORTED_FILE_TYPE = ".png"
 DATASET_PATH = '/training-data/images'

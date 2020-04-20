@@ -320,4 +320,4 @@ volumes:
   vault-data-vol:
   zookeeper-data-vol:
   zookeeper-logs-vol:
-  fmlacenet-data-vol:
+  facenet-data-vol:

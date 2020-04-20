@@ -33,8 +33,8 @@ def job():
         # check if any new user is added, i.e. is there really any need of training again.
         if start_training:
             students_count = len(students_image_count_obj.keys())
-            if students_count > constants.already_trained_students_count:
-                constants.already_trained_students_count = students_count
+            if students_count > constants.ALREADY_TRAINED_STUDENTS_COUNT:
+                constants.ALREADY_TRAINED_STUDENTS_COUNT = students_count
             else:
                 log.info("Training terminated to avoid redundant trainings.")
                 start_training = False
