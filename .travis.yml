@@ -36,11 +36,9 @@ script:
   #Build Video Processor Service
   - cd ../videoprocessor/
   - docker build -t rajagupt/videoprocessor .
-  - cd ..
   #Build Facenet
   - cd ../facenet/
   - docker build -t rajagupt/facenet .
-  - cd ..
   #Build training-watchdog
   - cd ../training-watchdog/
   - docker build -t rajagupt/training-watchdog .
