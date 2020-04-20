@@ -16,7 +16,7 @@ As seen in the architecture diagram, stream of image frame data is ingested to S
 
 The inbound DStream, is transformed to parse the inbound messages from their native JSON format. To perform further action on these Dstreams we convert it into DataFrames. These dataframes are useful for doing structured query on the data streams.
 
-After the transformation process, we  clean the data by eliminating all the images which contains no faces or more than one face. This is done by retrieving the image base64 encoded string from dataframes and decodin them back into a 'png' format image data. Which is then processed using pre-trained `Haar Cascade model` from `OpenCV` and `Python` to detect and extract faces from an image.
+After the transformation process, we  clean the data by eliminating all the images which contains no faces or more than one face. This is done by retrieving the image base64 encoded string from dataframes and decodin them back into the '.png' format image data. Which is then processed using pre-trained `Haar Cascade model` from `OpenCV` and `Python` to detect and extract faces from an image.
 
 After the cleaning step, filtered image data is labeled. To do this we are segregating image files based on their respective usernames.
 
