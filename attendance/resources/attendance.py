@@ -11,7 +11,7 @@ from resources.module import check_module_active
 import datetime
 import logging
 
-# set logging level for 'video Processor'
+
 log = logging.getLogger('root')
 
 class AllAttendanceApi(Resource):
@@ -39,6 +39,7 @@ class AllAttendanceApi(Resource):
             attendance.save()
             publish_message(body)
         except Exception as ex:
+            log.error('error from attendance method', str(ex))
             return {'message': str(ex)}, 400
         return {'id': str(attendance.id)}, 200
 
@@ -51,6 +52,7 @@ class AllAttendanceApi(Resource):
         except Exception as ex:
             log.info('no attendance marked for today')
         else:
+            log.error('attendance has already been marked for today')
             raise Exception('Attendance already marked!')
 
 class AttendanceApi(Resource):

@@ -56,7 +56,7 @@ services:
     ports:
       - "3000:80"
     depends_on:
-      - user
+      - nginx
   facenet:
     image: rajagupt/facenet:latest
     container_name: facenet
@@ -64,13 +64,15 @@ services:
     ports:
       - "7000:5000"
     volumes:
-      - ./ml-data-vol:/app/resources:ro
-  training:
-    image: rajagupt/training:latest
-    container_name: training
+      - ./facenet-data-vol:/app/facenet/resources:ro
+      - ./user-data-vol:/app/resources/images:ro
+  training-watchdog:
+    image: rajagupt/training-watchdog:latest
+    container_name: training-watchdog
     restart: always
     volumes:
-      - ./ml-data-vol:/app/resources
+      - ./facenet-data-vol:/app/facenet/resources
+      - ./stream-data-vol:/training-data/images:ro
   srs:
     image: ossrs/srs:3
     container_name: srs
@@ -318,4 +320,4 @@ volumes:
   vault-data-vol:
   zookeeper-data-vol:
   zookeeper-logs-vol:
-  ml-data-vol:
+  facenet-data-vol:

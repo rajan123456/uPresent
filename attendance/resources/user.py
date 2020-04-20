@@ -2,15 +2,18 @@ import urllib.request
 from flask import current_app
 import json
 import logging
+import os
 
-# set logging level for 'video Processor'
+
 log = logging.getLogger('root')
 
 
 def fetchUser(username):
     log.info("Trying to fetch user info by username ---->>")
-    userApiResponse = urllib.request.urlopen(
-        current_app.config['USER_API_FETCH_USER'] + username).read()
+    user_api = os.getenv('USER_API_FETCH_USER')
+    if user_api is None:
+        user_api = current_app.config['USER_API_FETCH_USER']
+    userApiResponse = urllib.request.urlopen(user_api + username).read()
     userResponseData = json.loads(userApiResponse.decode('utf8')).get("data")
     if userResponseData is None:
         raise Exception('No data found for User')
