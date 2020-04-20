@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -29,6 +30,9 @@ public class GeoFenceServiceImpl implements GeoFenceService {
 
 	@Autowired
 	private GeoFenceRepository geoFenceRepository;
+	
+	@Autowired
+	Environment env;
 
 	Gson gson = new Gson();
 
@@ -79,7 +83,9 @@ public class GeoFenceServiceImpl implements GeoFenceService {
 	private void publishGeoUpdates(GeoFenceData geo, String eventType) {
 		String message = CommonUtility.stringifyEventForPublish(gson.toJson(geo), eventType,
 				Calendar.getInstance().getTime().toString(), "", Constant.MANAGEMENT_SOURCE_ID);
-		String useMessagePublisher = System.getenv(Constant.SAGA_ENABLED_ENV_VARIABLE);
+		String useMessagePublisher = System.getenv(Constant.SAGA_ENABLED_ENV_VARIABLE) == null
+				? env.getProperty(Constant.SAGA_ENABLED_ENV_VARIABLE)
+				: System.getenv(Constant.SAGA_ENABLED_ENV_VARIABLE);
 		if (null == useMessagePublisher || 1 == Integer.parseInt(useMessagePublisher)) {
 			kafkaMessageProducer.send(message);
 		} else {
