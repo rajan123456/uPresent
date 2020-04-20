@@ -1,3 +1,4 @@
 rootProject.name = 'uPresent'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
+startParameter.excludedTaskNames.add(':react-native-nodemediaclient:compileDebugUnitTestJavaWithJavac')
