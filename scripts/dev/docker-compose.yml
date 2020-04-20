@@ -64,13 +64,14 @@ services:
     ports:
       - "7000:5000"
     volumes:
-      - ./facenet-data-vol:/app/resources:ro
+      - ./facenet-data-vol:/app/facenet/resources:ro
+      - ./user-data-vol:/app/resources/images:ro
   watchdog:
     image: rajagupt/watchdog:latest
     container_name: watchdog
     restart: always
     volumes:
-      - ./facenet-data-vol:/app/resources
+      - ./facenet-data-vol:/app/facenet/resources
       - ./stream-data-vol:/training-data/images:ro
   srs:
     image: ossrs/srs:3
