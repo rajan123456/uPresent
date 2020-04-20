@@ -69,7 +69,7 @@ export class Register extends React.Component {
   }
 
   onChangeText(text) {
-    ['username', 'password', 'passwordConfirm']
+    ['username', 'password', 'passwordConfirm', 'school']
       .map(name => ({name, ref: this[name]}))
       .forEach(({name, ref}) => {
         if (ref.isFocused()) {
