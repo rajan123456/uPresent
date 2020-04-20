@@ -3,15 +3,18 @@ import urllib.request
 from flask import current_app
 import json
 import logging
+import os
 
-# set logging level for 'video Processor'
+
 log = logging.getLogger('root')
 
 
 def validateVicinity(attendanceBody):
-    log.info("Inside validate vicinity method for student's attendance ---->>")
-    managementApiResponse = urllib.request.urlopen(
-        current_app.config['MANAGEMENT_API_GEO_FENCE'] + attendanceBody.get("school")).read()
+    log.info("Inside validate vicinity method for student's attendance")
+    management_api = os.getenv('MANAGEMENT_API_GEO_FENCE')
+    if management_api is None:
+        management_api = current_app.config['MANAGEMENT_API_GEO_FENCE']
+    managementApiResponse = urllib.request.urlopen(management_api + attendanceBody.get("school")).read()
     managementResponseData = json.loads(managementApiResponse.decode('utf8')).get("data")
     if managementResponseData is None:
         raise Exception('No data found for School')

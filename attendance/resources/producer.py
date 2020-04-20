@@ -54,7 +54,10 @@ def publish_message_api_call(data):
             "sourceId": str(current_app.config['ATTENDANCE_SOURCE_ID']),
             "timeStamp": datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
         }
-        req = Request(url=current_app.config['REPORT_PUBLISH_API'], data=json.dumps(encoded_body).encode(),
+        report_api = os.getenv('REPORT_PUBLISH_API')
+        if report_api is None:
+            report_api = current_app.config['REPORT_PUBLISH_API']
+        req = Request(url=report_api, data=json.dumps(encoded_body).encode(),
                       headers={'Content-Type': 'application/json'},
                       method='POST')
         with urlopen(req) as res:
