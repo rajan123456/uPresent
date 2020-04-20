@@ -66,9 +66,9 @@ services:
     volumes:
       - ./facenet-data-vol:/app/facenet/resources:ro
       - ./user-data-vol:/app/resources/images:ro
-  watchdog:
-    image: rajagupt/watchdog:latest
-    container_name: watchdog
+  training-watchdog:
+    image: rajagupt/training-watchdog:latest
+    container_name: training-watchdog
     restart: always
     volumes:
       - ./facenet-data-vol:/app/facenet/resources

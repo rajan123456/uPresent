@@ -1,4 +1,3 @@
-watchdog
 handler
 numpy
 imutils
