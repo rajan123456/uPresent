@@ -4,7 +4,7 @@ The Stream Processor is another part of video processor pipeline. It is develope
 
 Stream Processing is a `PySpark` job which is ingesting data from Apache Kafka. As part of Spark processing environment setup, we have created a Master node and two worker nodes. 
 
-Now to setup a runtime environment we must set the `SPARK_HOME`, `PYTHONPATH` and also place `spark-streaming-kafka` jar in the working directory. We also need to import the necessary pySpark modules for Spark, Spark Streaming, and Spark Streaming with Kafka inside our pytho code.
+Now to setup a runtime environment we must set the `SPARK_HOME`, `PYTHONPATH` and also place `spark-streaming-kafka` jar in the working directory. We also need to import the necessary pySpark modules for Spark, Spark Streaming, and Spark Streaming with Kafka inside our python code.
 
 **Architecture**
 
@@ -18,7 +18,7 @@ The inbound DStream, is transformed to parse the inbound messages from their nat
 
 After the transformation process, we  clean the data by eliminating all the images which contains no faces or more than one face. This is done by retrieving the image base64 encoded string from dataframes and decodin them back into the '.png' format image data. Which is then processed using pre-trained `Haar Cascade model` from `OpenCV` and `Python` to detect and extract faces from an image.
 
-After the cleaning step, filtered image data is labeled. To do this we are segregating image files based on their respective usernames.
+After the cleaning step, filtered image data is then labeled. To do this we are segregating image files based on their respective usernames.
 
 After processing the image data, it is then stored into a filesystem. These processsed images are stored under different directories based on the username in the filesystem.
 
