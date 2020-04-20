@@ -25,6 +25,6 @@ class Config(object):
     ATTENDANCE_RECORDED = 'attendanceRecorded'
     ATTENDANCE_SOURCE_ID = 3
     REPORT_PUBLISH_API = 'http://reporting:8080/reporting'
-    FACENET_RECOGNITION_API = 'http://facenet:7000/api/face/'
-    MODULE_API_FETCH_DETAILS = 'http://management:8082/manage/module?moduleCode='
+    FACENET_RECOGNITION_API = 'http://facenet:5000/api/face/'
+    MODULE_API_FETCH_DETAILS = 'http://management:8080/manage/module?moduleCode='
     #MODULE_API_FETCH_DETAILS = 'https://dev.upresent.ga/management/manage/module?moduleCode='

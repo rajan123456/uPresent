@@ -51,6 +51,7 @@ class AllAttendanceApi(Resource):
         except Exception as ex:
             log.info('no attendance marked for today')
         else:
+            log.error('attendance has already been marked for today')
             raise Exception('Attendance already marked!')
 
 class AttendanceApi(Resource):
