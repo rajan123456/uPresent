@@ -4,9 +4,8 @@ from flask import current_app
 import json
 from datetime import datetime
 import logging
+import os
 
-
-# set logging level for 'video Processor'
 log = logging.getLogger('root')
 
 
@@ -22,7 +21,10 @@ def connect_kafka_producer():
 
 
 def publish_message(data):
-    if current_app.config['SAGA_ENABLED'] == 1:
+    saga_enabled = os.getenv('SAGA_ENABLED')
+    if saga_enabled is None:
+        saga_enabled = current_app.config['SAGA_ENABLED']
+    if saga_enabled == 1:
         publish_message_kafka(data)
     else:
         publish_message_api_call(data)
