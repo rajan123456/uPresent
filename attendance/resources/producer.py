@@ -24,7 +24,7 @@ def publish_message(data):
     saga_enabled = os.getenv('SAGA_ENABLED')
     if saga_enabled is None:
         saga_enabled = current_app.config['SAGA_ENABLED']
-    if saga_enabled == 1:
+    if str(saga_enabled) == '1':
         publish_message_kafka(data)
     else:
         publish_message_api_call(data)
