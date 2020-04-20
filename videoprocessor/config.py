@@ -8,4 +8,3 @@ class Config(object):
     KAFKA_TOPIC = 'videoCollector'
     KAFKA_BATCH_SIZE = 176580  # this value should be as per the size of image frames
     KAFKA_LINGER_MS = 10
-    SAGA_ENABLED = 1
