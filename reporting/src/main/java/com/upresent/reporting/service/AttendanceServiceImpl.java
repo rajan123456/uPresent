@@ -34,9 +34,6 @@ import io.confluent.shaded.com.google.gson.Gson;
 public class AttendanceServiceImpl implements AttendanceService {
 
 	@Autowired
-	private Environment env;
-
-	@Autowired
 	ReportingRepository reportingRepository;
 
 	@Autowired
@@ -45,13 +42,22 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Autowired
 	ObjectMapper objectMapper;
 
+	@Autowired
+	Environment env;
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> getStudentAttendanceRecords(String filterStartDateStr, String filterEndDateStr,
 			String moduleId) throws ReportingException {
 		if (CommonUtility.isValidDate(filterStartDateStr) && CommonUtility.isValidDate(filterEndDateStr)
 				&& CommonUtility.isValidStartAndEndDate(filterStartDateStr, filterEndDateStr)) {
-			final String baseUrl = env.getProperty("managementms.hostname") + ":" + env.getProperty("managementms.port")
+			String managementMSHostName = System.getenv(Constants.MANAGEMENT_MS_HOSTNAME_ENV_VARIABLE) == null
+					? env.getProperty(Constants.MANAGEMENT_MS_HOSTNAME_ENV_VARIABLE)
+					: System.getenv(Constants.MANAGEMENT_MS_HOSTNAME_ENV_VARIABLE);
+			String managementMSPort = System.getenv(Constants.MANAGEMENT_MS_PORT_ENV_VARIABLE) == null
+					? env.getProperty(Constants.MANAGEMENT_MS_PORT_ENV_VARIABLE)
+					: System.getenv(Constants.MANAGEMENT_MS_PORT_ENV_VARIABLE);
+			final String baseUrl = managementMSHostName + ":" + managementMSPort
 					+ Constants.FETCH_MODULE_DETAILS_API_URL + moduleId;
 			Map<?, ?> response = restTemplate.getForObject(baseUrl, Map.class);
 			Map<String, Object> moduleDetails = objectMapper.convertValue(response.get("data"), Map.class);
@@ -118,12 +124,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 					absentyRecord.setTimestamp("");
 					allStudentsAbsentRecords.add(absentyRecord);
 				});
-				List<String> commonDates = getIntersectingDates(filterStartDateStr, filterEndDateStr,
+				List<LocalDate> intersectingDates = getIntersectingDates(filterStartDateStr, filterEndDateStr,
 						(String) moduleDetails.get("startDate"), (String) moduleDetails.get("endDate"));
-				commonDates.forEach(date -> {
+				List<String> moduleClassesDate = getDatesInAccordanceWithModuleDays(intersectingDates,
+						(List<String>) moduleDetails.get("scheduledDays"));
+				moduleClassesDate.forEach(date -> {
 					attendanceInfoByDate.computeIfAbsent(date, k -> allStudentsAbsentRecords);
 				});
-				responseObj.put("dates", commonDates);
+				responseObj.put("dates", moduleClassesDate);
 				responseObj.put("attendanceInfo", attendanceInfoByDate);
 				return responseObj;
 			} else {
@@ -134,9 +142,20 @@ public class AttendanceServiceImpl implements AttendanceService {
 		}
 	}
 
-	private List<String> getIntersectingDates(String filterStartDateStr, String filterEndDateStr,
+	private List<String> getDatesInAccordanceWithModuleDays(List<LocalDate> commonDates, List<String> daysOfWeek) {
+		daysOfWeek.replaceAll(String::toUpperCase);
+		List<String> scheduledDays = new ArrayList<>();
+		List<LocalDate> moduleScheduledClassesDates = commonDates.stream()
+				.filter(date -> daysOfWeek.contains(date.getDayOfWeek().name())).collect(Collectors.toList());
+		moduleScheduledClassesDates.forEach(date -> {
+			scheduledDays.add(date.format(DateTimeFormatter.ofPattern(Constants.DATE_FORMAT)));
+		});
+		return scheduledDays;
+	}
+
+	private List<LocalDate> getIntersectingDates(String filterStartDateStr, String filterEndDateStr,
 			String moduleStartDateStr, String moduleEndDateStr) {
-		List<String> intersectingDatesStr = new ArrayList<>();
+		List<LocalDate> intersectingDates = new ArrayList<>();
 		try {
 			Date filterStartDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(filterStartDateStr);
 			Date filterEndDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(filterEndDateStr);
@@ -154,7 +173,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 				LocalDate start = LocalDate.parse(intersectionStartDateStr, dtf);
 				LocalDate end = LocalDate.parse(intersectionEndDateStr, dtf);
 				long numOfDaysBetween = ChronoUnit.DAYS.between(start, end);
-				List<LocalDate> intersectingDates = IntStream.iterate(0, i -> i + 1).limit(numOfDaysBetween)
+				intersectingDates = IntStream.iterate(0, i -> i + 1).limit(numOfDaysBetween)
 						.mapToObj(i -> start.plusDays(i)).collect(Collectors.toList());
 				if (!intersectingDates.contains(start)) {
 					intersectingDates.add(start);
@@ -162,13 +181,10 @@ public class AttendanceServiceImpl implements AttendanceService {
 				if (!intersectingDates.contains(end)) {
 					intersectingDates.add(end);
 				}
-				intersectingDates.forEach(date -> {
-					intersectingDatesStr.add(date.format(DateTimeFormatter.ofPattern(Constants.DATE_FORMAT)));
-				});
 			}
 		} catch (ParseException e) {
 			throw new ReportingException(ExceptionResponseCode.DATE_PARSE_ERROR);
 		}
-		return intersectingDatesStr;
+		return intersectingDates;
 	}
 }

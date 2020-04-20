@@ -98,7 +98,9 @@ public class UserServiceImpl implements UserService {
 	private void publishUserUpdates(UserDetail user, String eventType) {
 		String message = CommonUtility.stringifyEventForPublish(gson.toJson(user), eventType,
 				Calendar.getInstance().getTime().toString(), "", Constant.USER_SOURCE_ID);
-		String useMessagePublisher = env.getProperty("sagaEnabled");
+		String useMessagePublisher = System.getenv(Constant.SAGA_ENABLED_ENV_VARIABLE) == null
+				? env.getProperty(Constant.SAGA_ENABLED_ENV_VARIABLE)
+				: System.getenv(Constant.SAGA_ENABLED_ENV_VARIABLE);
 		if (null == useMessagePublisher || 1 == Integer.parseInt(useMessagePublisher)) {
 			kafkaMessageProducer.send(message);
 		} else {

@@ -9,4 +9,6 @@ public interface Constants {
 	String DATE_FORMAT = "MM/dd/yyyy";
 	String REPORTING_TIMESTAMP_FORMAT = "MM/dd/yyyy, HH:mm:ss";
 	String FETCH_MODULE_DETAILS_API_URL = "/manage/module?moduleCode=";
+	String MANAGEMENT_MS_HOSTNAME_ENV_VARIABLE = "managementms.hostname";
+	String MANAGEMENT_MS_PORT_ENV_VARIABLE = "managementms.port";
 }

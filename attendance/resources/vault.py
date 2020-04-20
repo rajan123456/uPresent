@@ -6,7 +6,7 @@ import mimetypes
 import logging
 from flask import current_app, jsonify
 
-# set logging level for 'video Processor'
+
 log = logging.getLogger('root')
 
 

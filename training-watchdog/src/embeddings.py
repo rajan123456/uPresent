@@ -14,7 +14,6 @@ def extract_embeddings():
     log.info("embeddings extraction started.")
     embeddings = constants.PICKLE_FILES_DIR + '/embeddings.pickle'
     embedding_model = constants.MODEL_FILES_DIR + '/openface_nn4.small2.v1.t7'
-    conf = 0.5
     # load our serialized face detector from disk
     log.info("[INFO] loading face detector...")
     try:
@@ -71,7 +70,7 @@ def extract_embeddings():
                 # ensure that the detection with the largest probability also
                 # means our minimum probability test (thus helping filter out
                 # weak detections)
-                if confidence > conf:
+                if confidence > constants.CONFIDENCE_THRESHOLD:
                     # compute the (x, y)-coordinates of the bounding box for
                     # the face
                     box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])

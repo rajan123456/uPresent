@@ -4,9 +4,8 @@ from flask import current_app
 import json
 from datetime import datetime
 import logging
+import os
 
-
-# set logging level for 'video Processor'
 log = logging.getLogger('root')
 
 
@@ -22,7 +21,10 @@ def connect_kafka_producer():
 
 
 def publish_message(data):
-    if current_app.config['SAGA_ENABLED'] == 1:
+    saga_enabled = os.getenv('SAGA_ENABLED')
+    if saga_enabled is None:
+        saga_enabled = current_app.config['SAGA_ENABLED']
+    if str(saga_enabled) == '1':
         publish_message_kafka(data)
     else:
         publish_message_api_call(data)
@@ -52,7 +54,10 @@ def publish_message_api_call(data):
             "sourceId": str(current_app.config['ATTENDANCE_SOURCE_ID']),
             "timeStamp": datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
         }
-        req = Request(url=current_app.config['REPORT_PUBLISH_API'], data=json.dumps(encoded_body).encode(),
+        report_api = os.getenv('REPORT_PUBLISH_API')
+        if report_api is None:
+            report_api = current_app.config['REPORT_PUBLISH_API']
+        req = Request(url=report_api, data=json.dumps(encoded_body).encode(),
                       headers={'Content-Type': 'application/json'},
                       method='POST')
         with urlopen(req) as res:
