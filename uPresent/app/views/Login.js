@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
+  TouchableHighlight,
   View,
 } from 'react-native';
 import {TextField} from 'react-native-material-textfield';
@@ -12,14 +13,6 @@ import {RaisedTextButton} from 'react-native-material-buttons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {loginUser} from '../api/authApi';
 import * as Keychain from 'react-native-keychain';
-import {unauthorizedAccess, ok} from '../constants/userApiConstants';
-import {
-  welcomeMessage,
-  passwordIsIncorrect,
-  accountDoesNotExist,
-  shouldNotBeEmpty,
-  loginCancelled,
-} from '../constants/loginConstants';
 
 let defaults = {
   username: '',
@@ -84,7 +77,7 @@ export class Login extends React.Component {
       let value = this[name].value();
 
       if (!value) {
-        errors[name] = shouldNotBeEmpty;
+        errors[name] = 'Should not be empty';
       }
     });
 
@@ -96,17 +89,20 @@ export class Login extends React.Component {
         username: this.state.username,
       };
       loginUser(auth).then(async _resp => {
-        if (_resp.message === unauthorizedAccess) {
-          Alert.alert(passwordIsIncorrect);
-        } else if (_resp.message === ok && _resp.data === 'STUDENT') {
+        if (
+          _resp.message ===
+          'Unauthorised access. Please retry with correct credentials.'
+        ) {
+          Alert.alert('Password is incorrect');
+        } else if (_resp.message === 'ok' && _resp.data === 'STUDENT') {
           await Keychain.setGenericPassword(
             this.state.username,
             this.state.password,
           );
-          Alert.alert(welcomeMessage);
+          Alert.alert('Welcome, you are logged in.');
           this.props.navigation.push('HomeRT');
         } else {
-          Alert.alert(accountDoesNotExist);
+          Alert.alert('The account does not exist');
         }
       });
     }
@@ -138,7 +134,7 @@ export class Login extends React.Component {
   }
 
   cancelLogin = () => {
-    Alert.alert(loginCancelled);
+    Alert.alert('Login cancelled');
     this.props.navigation.navigate('HomeRT');
   };
 
@@ -153,7 +149,9 @@ export class Login extends React.Component {
           contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
-            <Text style={styles.heading}>Login</Text>
+            <View style={styles.headerViewStyle}>
+              <Text style={styles.headerTextStyle}>Login</Text>
+            </View>
             <TextField
               ref={this.usernameRef}
               autoCorrect={false}
@@ -183,18 +181,22 @@ export class Login extends React.Component {
             />
           </View>
           <View style={styles.buttonContainer}>
-            <RaisedTextButton
-              onPress={this.onSubmit}
-              title="Login"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
-            <RaisedTextButton
-              onPress={this.cancelLogin}
-              title="Cancel"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.onSubmit}
+                title="Login"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.cancelLogin}
+                title="Cancel"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -204,7 +206,7 @@ export class Login extends React.Component {
 
 const styles = {
   scroll: {
-    backgroundColor: 'transparent',
+    backgroundColor: '#EFEFF4',
   },
   container: {
     margin: 8,
@@ -221,5 +223,25 @@ const styles = {
   safeContainer: {
     flex: 1,
     backgroundColor: '#E8EAF6',
+  },
+  headerViewStyle: {
+    borderBottomWidth: 1,
+    backgroundColor: '#f7f7f8',
+    borderColor: '#c8c7cc',
+  },
+  headerTextStyle: {
+    alignSelf: 'center',
+    marginTop: 30,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  buttonStyle: {
+    height: 40,
+    width: 180,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
   },
 };

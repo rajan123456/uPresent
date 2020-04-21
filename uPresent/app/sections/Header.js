@@ -66,10 +66,10 @@ export class Header extends React.Component {
 
 const styles = {
   headText: {
-    paddingTop: 15,
+    paddingTop: 20,
     textAlign: 'right',
     color: '#000000',
-    fontSize: 30,
+    fontSize: 25,
     flex: 1.5,
   },
   headStyle: {
