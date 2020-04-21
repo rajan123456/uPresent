@@ -1,11 +1,7 @@
 import React from 'react';
-import {Alert, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 
 export class Menu extends React.Component {
-  onPress = () => {
-    Alert.alert('You tapped the button!');
-  };
-
   render() {
     return (
       <View style={styles.container}>
@@ -22,7 +18,9 @@ export class Menu extends React.Component {
           </TouchableOpacity>
         </View>
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.buttonStyles} onPress={this.onPress}>
+          <TouchableOpacity
+            style={styles.buttonStyles}
+            onPress={() => this.props.navigate('SettingsRT')}>
             <Text style={styles.buttonText}>SETTINGS</Text>
           </TouchableOpacity>
           <TouchableOpacity

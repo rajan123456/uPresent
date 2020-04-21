@@ -5,3 +5,4 @@ export const baseUrlModuleApi =
   'https://dev.upresent.ga/management/student-module';
 export const baseUrlAttendanceApi =
   'https://dev.upresent.ga/attendance/api/attendance';
+export const baseUrlRtmp = 'rtmp://dev.upresent.ga/app/';
