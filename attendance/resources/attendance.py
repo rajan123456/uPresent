@@ -1,7 +1,10 @@
-from flask import Response, request
+import os
+
+from flask import Response, request, current_app
 from flask_restful import Resource
 from flask_restful_swagger import swagger
 from database.models import Attendance
+from resources.azureface import compare_faces_azure
 from resources.rekognition import compare_faces_rekognition
 from resources.geofence import validateVicinity
 from resources.user import fetchUser
@@ -11,8 +14,8 @@ from resources.module import check_module_active
 import datetime
 import logging
 
-
 log = logging.getLogger('root')
+
 
 class AllAttendanceApi(Resource):
 
@@ -26,6 +29,14 @@ class AllAttendanceApi(Resource):
     def post(self):
         try:
             log.info("Inside create attendance method for student ----->>")
+            azure_face_enabled = os.getenv('AZURE_FACE_ENABLED')
+            aws_rekog_enabled = os.getenv('AWS_REKOG_ENABLED')
+
+            if azure_face_enabled is None:
+                azure_face_enabled = current_app.config['AZURE_FACE_ENABLED']
+            if aws_rekog_enabled is None:
+                aws_rekog_enabled = current_app.config['AWS_REKOG_ENABLED']
+
             body = request.get_json()
             attendance = Attendance(**body)
             self.check_if_attendance_marked(attendance)
@@ -35,7 +46,11 @@ class AllAttendanceApi(Resource):
             if user.get('imageId') is None:
                 compare_faces_facenet(attendance.capturedImageId, attendance.username)
             else:
-                compare_faces_rekognition(attendance.capturedImageId, user.get('imageId')[0])
+                if azure_face_enabled == 1:
+                    compare_faces_azure(attendance.capturedImageId, user.get('imageId')[0])
+                if aws_rekog_enabled == 1:
+                    compare_faces_rekognition(attendance.capturedImageId, user.get('imageId')[0])
+
             attendance.save()
             publish_message(body)
         except Exception as ex:
@@ -47,16 +62,16 @@ class AllAttendanceApi(Resource):
         midnight_date = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
         try:
             Attendance.objects().get_or_404(username=attendance.username,
-                                        moduleId=attendance.moduleId,
-                                        date_captured=midnight_date)
+                                            moduleId=attendance.moduleId,
+                                            date_captured=midnight_date)
         except Exception as ex:
             log.info('no attendance marked for today')
         else:
             log.error('attendance has already been marked for today')
             raise Exception('Attendance already marked!')
 
-class AttendanceApi(Resource):
 
+class AttendanceApi(Resource):
     @swagger.operation()
     def put(self, id):
         log.info("Inside update attendance method for student by id ----->>")
