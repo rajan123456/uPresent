@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
+  TouchableHighlight,
   View,
 } from 'react-native';
 import {TextField} from 'react-native-material-textfield';
@@ -14,14 +15,8 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-crop-picker';
 import {saveFile} from '../api/fileApi';
 import {saveUser, getUserByName} from '../api/userApi';
-import {userDataNotFound} from '../constants/userApiConstants';
-import {
-  shouldNotBeEmpty,
-  passwordsDoNotMatch,
-  accountAlreadyExists,
-  accountCreated,
-  registrationCancelled,
-} from '../constants/registerConstants';
+import AsyncStorage from '@react-native-community/async-storage';
+import * as Keychain from 'react-native-keychain';
 
 export class Register extends React.Component {
   constructor(props) {
@@ -51,6 +46,7 @@ export class Register extends React.Component {
       secureTextEntry: true,
       images: null,
       imageIds: [],
+      videoFlag: false,
     };
   }
 
@@ -67,7 +63,7 @@ export class Register extends React.Component {
   }
 
   onChangeText(text) {
-    ['username', 'password', 'passwordConfirm']
+    ['username', 'password', 'passwordConfirm', 'school']
       .map(name => ({name, ref: this[name]}))
       .forEach(({name, ref}) => {
         if (ref.isFocused()) {
@@ -97,16 +93,16 @@ export class Register extends React.Component {
       let value = this[name].value();
 
       if (!value) {
-        errors[name] = shouldNotBeEmpty;
+        errors[name] = 'Should not be empty';
       }
     });
 
     if (this.password.value() !== this.passwordConfirm.value()) {
-      errors.passwordConfirm = passwordsDoNotMatch;
+      errors.passwordConfirm = 'Passwords do not match';
     } else {
       getUserByName(this.username.value()).then(_resp => {
-        if (_resp.message !== userDataNotFound) {
-          errors.username = accountAlreadyExists;
+        if (_resp.message !== 'User data not found.') {
+          errors.username = 'An account with the same username alread exists.';
         }
       });
     }
@@ -123,9 +119,17 @@ export class Register extends React.Component {
         school: this.school.value(),
       };
 
-      saveUser(user).then(_resp => {
-        Alert.alert(accountCreated);
-        this.props.navigation.navigate('HomeRT');
+      saveUser(user).then(async _resp => {
+        await Keychain.setGenericPassword(
+          this.state.username,
+          this.state.password,
+        );
+        if (!this.state.videoFlag) {
+          Alert.alert('Account created');
+          this.props.navigation.navigate('HomeRT');
+        } else {
+          this.props.navigation.navigate('LiveStreamRT');
+        }
       });
     }
   }
@@ -156,7 +160,7 @@ export class Register extends React.Component {
   }
 
   cancelRegister = () => {
-    Alert.alert(registrationCancelled);
+    Alert.alert('Registration cancelled');
     this.props.navigation.navigate('HomeRT');
   };
 
@@ -197,6 +201,16 @@ export class Register extends React.Component {
     });
   }
 
+  async componentDidMount() {
+    await AsyncStorage.getItem('videoRegistration', (errs, result) => {
+      if (!errs) {
+        if (result !== null) {
+          this.setState({videoFlag: result === 'true'});
+        }
+      }
+    });
+  }
+
   render() {
     let {errors = {}, secureTextEntry, ...data} = this.state;
     let {username, password, passwordConfirm} = data;
@@ -208,7 +222,9 @@ export class Register extends React.Component {
           contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
-            <Text style={styles.heading}>Register</Text>
+            <View style={styles.headerViewStyle}>
+              <Text style={styles.headerTextStyle}>Register</Text>
+            </View>
             <TextField
               ref={this.usernameRef}
               autoCorrect={false}
@@ -263,14 +279,20 @@ export class Register extends React.Component {
               label="School"
               error={errors.school}
             />
-            <RaisedTextButton
-              onPress={() => this.pickFromCamera(true)}
-              title="Add Your Pictures"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
+            {!this.state.videoFlag ? (
+              <TouchableHighlight style={styles.buttonStyle}>
+                <RaisedTextButton
+                  onPress={() => this.pickFromCamera(true)}
+                  title="Add Your Pictures"
+                  color={TextField.defaultProps.tintColor}
+                  titleColor="white"
+                />
+              </TouchableHighlight>
+            ) : (
+              <View />
+            )}
             <View style={styles.imageTileView}>
-              {this.state.images
+              {this.state.images && !this.state.videoFlag
                 ? this.state.images.map(i => {
                     return (
                       <Image
@@ -284,18 +306,22 @@ export class Register extends React.Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <RaisedTextButton
-              onPress={this.onSubmit}
-              title="Register"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
-            <RaisedTextButton
-              onPress={this.cancelRegister}
-              title="Cancel"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.onSubmit}
+                title="Register"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.cancelRegister}
+                title="Cancel"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -305,7 +331,7 @@ export class Register extends React.Component {
 
 const styles = {
   scroll: {
-    backgroundColor: 'transparent',
+    backgroundColor: '#EFEFF4',
   },
   container: {
     margin: 8,
@@ -331,5 +357,25 @@ const styles = {
   imageTileStyle: {
     width: 50,
     height: 50,
+  },
+  headerViewStyle: {
+    borderBottomWidth: 1,
+    backgroundColor: '#f7f7f8',
+    borderColor: '#c8c7cc',
+  },
+  headerTextStyle: {
+    alignSelf: 'center',
+    marginTop: 30,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  buttonStyle: {
+    height: 40,
+    width: 180,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
   },
 };

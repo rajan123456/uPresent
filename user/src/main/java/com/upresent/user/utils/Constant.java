@@ -11,4 +11,5 @@ public interface Constant {
 	String USER_CREATED_EVENT = "userCreated";
 	String USER_UPDATED_EVENT = "userUpdated";
 	String USER_DELETED_EVENT = "userDeleted";
+	String SAGA_ENABLED_ENV_VARIABLE = "sagaEnabled";
 }

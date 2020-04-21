@@ -8,6 +8,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -43,13 +44,15 @@ public class UserServiceImpl implements UserService {
 	public String registerUser(UserDetail userDetail) throws UserException {
 		userDetail.setUsername(userDetail.getUsername().toLowerCase());
 		userDetail.setUserType(userDetail.getUserType().toUpperCase());
-		String username = userDetail.getUsername();
-		UserDetail user = userRepository.findByUsernameAndIsActive(username, Constant.ACTIVE_STATUS);
-		if (user != null)
-			throw new UserException(ExceptionResponseCode.USERNAME_ALREADY_TAKEN);
 		if (userDetail.getUserType().equals("STUDENT") && userDetail.getSchool() == null)
 			throw new UserException(ExceptionResponseCode.USER_SCHOOL_MISSING);
-
+		String username = userDetail.getUsername();
+		UserDetail user = userRepository.findByUsername(username);
+		if (null != user && user.getIsActive() == Constant.ACTIVE_STATUS)
+			throw new UserException(ExceptionResponseCode.USERNAME_ALREADY_TAKEN);
+		if (null != user) {
+			userDetail.setUserId(user.getUserId());
+		}
 		user = userRepository.save(userDetail);
 		publishUserUpdates(user, Constant.USER_CREATED_EVENT);
 		return "User registered successfully!";
@@ -98,12 +101,14 @@ public class UserServiceImpl implements UserService {
 	private void publishUserUpdates(UserDetail user, String eventType) {
 		String message = CommonUtility.stringifyEventForPublish(gson.toJson(user), eventType,
 				Calendar.getInstance().getTime().toString(), "", Constant.USER_SOURCE_ID);
-		String useMessagePublisher = env.getProperty("sagaEnabled");
-		if (null == useMessagePublisher || 1 == Integer.parseInt(useMessagePublisher)) {
-			kafkaMessageProducer.send(message);
-		} else {
-			restMessageProducer.send(message);
-		}
+		String useMessagePublisher = System.getenv(Constant.SAGA_ENABLED_ENV_VARIABLE) == null
+				? env.getProperty(Constant.SAGA_ENABLED_ENV_VARIABLE)
+						: System.getenv(Constant.SAGA_ENABLED_ENV_VARIABLE);
+				if (null == useMessagePublisher || 1 == Integer.parseInt(useMessagePublisher)) {
+					kafkaMessageProducer.send(message);
+				} else {
+					restMessageProducer.send(message);
+				}
 	}
 
 	@Override

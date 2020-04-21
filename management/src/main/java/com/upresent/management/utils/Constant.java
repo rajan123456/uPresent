@@ -16,4 +16,7 @@ public interface Constant {
 	String UNIVERSITY_NAME = "NUS";
 	String FETCH_USER_API_URL = "/user?username=";
 	String FETCH_USER_TYPES_API_URL = "/user/get-type";
+	String USER_MS_HOSTNAME_ENV_VARIABLE = "userms.hostname";
+	String USER_MS_PORT_ENV_VARIABLE = "userms.port";
+	String SAGA_ENABLED_ENV_VARIABLE = "sagaEnabled";
 }
