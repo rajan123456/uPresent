@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, Platform, ScrollView, Text, View} from 'react-native';
+import {
+  Image,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+  View,
+} from 'react-native';
 import {TextField} from 'react-native-material-textfield';
 import {RaisedTextButton} from 'react-native-material-buttons';
 
