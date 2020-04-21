@@ -124,8 +124,8 @@ export class Register extends React.Component {
           this.state.username,
           this.state.password,
         );
-        Alert.alert('Account created');
         if (!this.state.videoFlag) {
+          Alert.alert('Account created');
           this.props.navigation.navigate('HomeRT');
         } else {
           this.props.navigation.navigate('LiveStreamRT');
