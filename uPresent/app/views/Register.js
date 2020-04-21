@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
+  TouchableHighlight,
   View,
 } from 'react-native';
 import {TextField} from 'react-native-material-textfield';
@@ -274,12 +275,14 @@ export class Register extends React.Component {
               error={errors.school}
             />
             {!this.state.videoFlag ? (
-              <RaisedTextButton
-                onPress={() => this.pickFromCamera(true)}
-                title="Add Your Pictures"
-                color={TextField.defaultProps.tintColor}
-                titleColor="white"
-              />
+              <TouchableHighlight style={styles.buttonStyle}>
+                <RaisedTextButton
+                  onPress={() => this.pickFromCamera(true)}
+                  title="Add Your Pictures"
+                  color={TextField.defaultProps.tintColor}
+                  titleColor="white"
+                />
+              </TouchableHighlight>
             ) : (
               <View />
             )}
@@ -298,18 +301,22 @@ export class Register extends React.Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <RaisedTextButton
-              onPress={this.onSubmit}
-              title="Register"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
-            <RaisedTextButton
-              onPress={this.cancelRegister}
-              title="Cancel"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.onSubmit}
+                title="Register"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.cancelRegister}
+                title="Cancel"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -357,5 +364,13 @@ const styles = {
     marginBottom: 10,
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  buttonStyle: {
+    height: 40,
+    width: 180,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
   },
 };

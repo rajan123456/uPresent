@@ -235,12 +235,14 @@ export class Attendance extends React.Component {
               defaultValue="Select Module"
               onSelect={(idx, value) => this.dropdownOnSelect(idx, value)}
             />
-            <RaisedTextButton
-              onPress={() => this.pickFromCamera(true)}
-              title="Take a Picture"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={() => this.pickFromCamera(true)}
+                title="Take a Picture"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
             <View style={styles.imageTileView}>
               {this.state.images
                 ? this.state.images.map(i => {
@@ -256,18 +258,22 @@ export class Attendance extends React.Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <RaisedTextButton
-              onPress={this.onSubmit}
-              title="Submit"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
-            <RaisedTextButton
-              onPress={this.cancelAttendance}
-              title="Cancel"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.onSubmit}
+                title="Submit"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.cancelAttendance}
+                title="Cancel"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -336,5 +342,13 @@ const styles = {
     marginBottom: 10,
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  buttonStyle: {
+    height: 40,
+    width: 180,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
   },
 };
