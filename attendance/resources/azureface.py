@@ -13,7 +13,7 @@ log = logging.getLogger('root')
 def compare_faces_azure(targetId, sourceId):
     secrets = obtain_data()
     # Create an authenticated FaceClient.
-    face_client = FaceClient(secrets['AZURE_FACE_ENDPOINT'], CognitiveServicesCredentials(secrets['AZURE_FACE_SUBSCRIPTION_KEY']))
+    face_client = FaceClient(secrets['azure_face_endpoint'], CognitiveServicesCredentials(secrets['azure_face_subscription_key']))
 
     image_source = open(current_app.config['UPLOAD_DIR'] + sourceId, 'r+b')
     image_target = open(current_app.config['UPLOAD_DIR'] + targetId, 'r+b')
