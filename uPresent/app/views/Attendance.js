@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
+  TouchableHighlight,
   ToastAndroid,
   View,
 } from 'react-native';
