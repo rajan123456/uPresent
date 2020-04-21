@@ -5,15 +5,15 @@ from azure.cognitiveservices.vision.face import FaceClient
 from flask import current_app
 from msrest.authentication import CognitiveServicesCredentials
 
-KEY = current_app.config['AZURE_FACE_SUBSCRIPTION_KEY']
-ENDPOINT = current_app.config['AZURE_FACE_ENDPOINT']
+from resources.vault import obtain_data
 
 log = logging.getLogger('root')
 
 
 def compare_faces_azure(targetId, sourceId):
+    secrets = obtain_data()
     # Create an authenticated FaceClient.
-    face_client = FaceClient(ENDPOINT, CognitiveServicesCredentials(KEY))
+    face_client = FaceClient(secrets['AZURE_FACE_ENDPOINT'], CognitiveServicesCredentials(secrets['AZURE_FACE_SUBSCRIPTION_KEY']))
 
     image_source = open(current_app.config['UPLOAD_DIR'] + sourceId, 'r+b')
     image_target = open(current_app.config['UPLOAD_DIR'] + targetId, 'r+b')
@@ -35,4 +35,5 @@ def compare_faces_azure(targetId, sourceId):
     image_source.close()
     image_target.close()
 
-    return verify_result_same.is_identical
+    if not verify_result_same.is_identical:
+        raise Exception('Image mismatch found!')

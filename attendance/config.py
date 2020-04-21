@@ -28,5 +28,4 @@ class Config(object):
     FACENET_RECOGNITION_API = 'http://facenet:7000/api/face/'
     MODULE_API_FETCH_DETAILS = 'http://management:8082/manage/module?moduleCode='
     #MODULE_API_FETCH_DETAILS = 'https://dev.upresent.ga/management/manage/module?moduleCode='
-    AZURE_FACE_SUBSCRIPTION_KEY = '4951af62dd2f4397a3a05049b51d6406'
-    AZURE_FACE_ENDPOINT = 'https://eastus.api.cognitive.microsoft.com/'
+
