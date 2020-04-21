@@ -29,12 +29,14 @@ export class About extends React.Component {
           <Text style={styles.aboutText}>{whatIsUPresent}</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <RaisedTextButton
-            onPress={() => this.props.navigation.goBack()}
-            title="Back"
-            color={TextField.defaultProps.tintColor}
-            titleColor="white"
-          />
+          <TouchableHighlight style={styles.buttonStyle}>
+            <RaisedTextButton
+              onPress={() => this.props.navigation.goBack()}
+              title="Back"
+              color={TextField.defaultProps.tintColor}
+              titleColor="white"
+            />
+          </TouchableHighlight>
         </View>
       </ScrollView>
     );
@@ -79,5 +81,13 @@ const styles = {
     marginBottom: 10,
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  buttonStyle: {
+    height: 40,
+    width: 180,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
   },
 };

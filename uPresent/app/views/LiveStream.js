@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {NodeCameraView} from 'react-native-nodemediaclient';
-import baseUrlRtmp from '../config/config';
+import {baseUrlRtmp} from '../config/config';
 import * as Keychain from 'react-native-keychain';
 
 const LiveStatus = {
@@ -47,7 +47,7 @@ export class LiveStream extends React.Component {
     this.setState({liveStatus: LiveStatus.FINISH});
     this.vbCamera.stop();
     Alert.alert('Account created.');
-    this.props.navigation.navigate('HomeRT');
+    this.props.navigation.push('HomeRT');
   };
 
   renderCancelStreamerButton = () => {
@@ -123,8 +123,8 @@ export class LiveStream extends React.Component {
           camera={{cameraId: 1, cameraFrontMirror: true}}
           audio={{bitrate: 32000, profile: 1, samplerate: 44100}}
           video={{
-            preset: 1,
-            bitrate: 500000,
+            preset: 12,
+            bitrate: 400000,
             profile: 1,
             fps: 15,
             videoFrontMirror: false,

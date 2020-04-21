@@ -16,6 +16,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {saveFile} from '../api/fileApi';
 import {saveUser, getUserByName} from '../api/userApi';
 import AsyncStorage from '@react-native-community/async-storage';
+import * as Keychain from 'react-native-keychain';
 
 export class Register extends React.Component {
   constructor(props) {
@@ -118,9 +119,13 @@ export class Register extends React.Component {
         school: this.school.value(),
       };
 
-      saveUser(user).then(_resp => {
+      saveUser(user).then(async _resp => {
+        await Keychain.setGenericPassword(
+          this.state.username,
+          this.state.password,
+        );
+        Alert.alert('Account created');
         if (!this.state.videoFlag) {
-          Alert.alert('Account created');
           this.props.navigation.navigate('HomeRT');
         } else {
           this.props.navigation.navigate('LiveStreamRT');
