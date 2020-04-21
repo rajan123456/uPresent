@@ -32,24 +32,26 @@ def process(rdd, sc):
                 imageDataFrame.show()
 
                 # Getting imageBase64 from SQL and storing them into filesystem
-                image_no = 1
                 for imageInfo in imageDataFrame.collect():
                     image_folder = config.Config.IMAGE_FOLDER_PATH + imageInfo.username
 
                     # Creating image folder based on userNames
                     if not os.path.exists(image_folder):
                         os.makedirs(image_folder)
+                        image_no = 1
+                    else:
+                        image_no = len(os.listdir(image_folder)) + 1
 
-                    # Converting Base64 to image
-                    with open(image_folder + "/imageToSave" + str(image_no) + ".png", "wb") as fh:
-                        image = base64.b64decode(imageInfo.imageData)
+                    if len(os.listdir(image_folder)) < config.Config.IMAGE_COUNT:
+                        # Converting Base64 to image
+                        with open(image_folder + "/imageToSave" + str(image_no) + ".png", "wb") as fh:
+                            image = base64.b64decode(imageInfo.imageData)
 
-                        # Calling face scrapper class to detect faces in the image
-                        face_len = face_scrapper.face_detection(image)
-                        if face_len == 1:
-                            fh.write(image)
-
-                        image_no += 1
+                            # Calling face scrapper class to detect faces in the image
+                            face_len = face_scrapper.face_detection(image)
+                            if face_len == 1:
+                                fh.write(image)
+                                image_no += 1
         else:
             logging.warning("StreamProcessor did not receive any new data to process.")
     except Exception as ex:
