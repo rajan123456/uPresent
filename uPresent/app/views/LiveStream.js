@@ -29,6 +29,7 @@ export class LiveStream extends React.Component {
       this,
     );
     this.renderStreamerUI = this.renderStreamerUI.bind(this);
+    this.onPressCancelStreamer = this.onPressCancelStreamer.bind(this);
 
     this.state = {
       liveStatus: LiveStatus.REGISTER,
@@ -40,7 +41,6 @@ export class LiveStream extends React.Component {
   onBeginLiveStream = () => {
     this.setState({liveStatus: LiveStatus.ON_LIVE});
     this.vbCamera.start();
-    // call videoProccssor
   };
 
   onFinishLiveStream = () => {
@@ -61,6 +61,36 @@ export class LiveStream extends React.Component {
         />
       </TouchableOpacity>
     );
+  };
+
+  onPressCancelStreamer = () => {
+    if (this.vbCamera !== null && this.vbCamera !== undefined) {
+      this.vbCamera.stop();
+    }
+    const {liveStatus} = this.state;
+    if (
+      liveStatus === LiveStatus.REGISTER ||
+      liveStatus === LiveStatus.ON_LIVE
+    ) {
+      return Alert.alert(
+        'Alert',
+        'Are you sure you want to cancel the registration?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'Sure',
+            onPress: () => {
+              this.props.navigation.navigate('HomeRT');
+            },
+          },
+        ],
+      );
+    }
+    this.props.navigation.navigate('HomeRT');
   };
 
   async fetchCredentials() {
