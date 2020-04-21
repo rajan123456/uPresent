@@ -45,10 +45,11 @@ class AllAttendanceApi(Resource):
             user = fetchUser(attendance.username)
             if user.get('imageId') is None:
                 compare_faces_facenet(attendance.capturedImageId, attendance.username)
-            elif azure_face_enabled == 1:
-                compare_faces_azure(attendance.capturedImageId, user.get('imageId')[0])
-            elif aws_rekog_enabled == 1:
-                compare_faces_rekognition(attendance.capturedImageId, user.get('imageId')[0])
+            else:
+                if azure_face_enabled == 1:
+                    compare_faces_azure(attendance.capturedImageId, user.get('imageId')[0])
+                if aws_rekog_enabled == 1:
+                    compare_faces_rekognition(attendance.capturedImageId, user.get('imageId')[0])
 
             attendance.save()
             publish_message(body)
