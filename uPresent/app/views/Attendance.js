@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
+  TouchableHighlight,
   ToastAndroid,
   View,
 } from 'react-native';
@@ -222,7 +223,9 @@ export class Attendance extends React.Component {
           contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
-            <Text style={styles.heading}>Attendance</Text>
+            <View style={styles.headerViewStyle}>
+              <Text style={styles.headerTextStyle}>Attendance</Text>
+            </View>
             <ModalDropdown
               style={styles.dropdown}
               dropdownStyle={styles.dropdownStyle}
@@ -233,12 +236,14 @@ export class Attendance extends React.Component {
               defaultValue="Select Module"
               onSelect={(idx, value) => this.dropdownOnSelect(idx, value)}
             />
-            <RaisedTextButton
-              onPress={() => this.pickFromCamera(true)}
-              title="Take a Picture"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={() => this.pickFromCamera(true)}
+                title="Take a Picture"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
             <View style={styles.imageTileView}>
               {this.state.images
                 ? this.state.images.map(i => {
@@ -254,18 +259,22 @@ export class Attendance extends React.Component {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <RaisedTextButton
-              onPress={this.onSubmit}
-              title="Submit"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
-            <RaisedTextButton
-              onPress={this.cancelAttendance}
-              title="Cancel"
-              color={TextField.defaultProps.tintColor}
-              titleColor="white"
-            />
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.onSubmit}
+                title="Submit"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.cancelAttendance}
+                title="Cancel"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -275,7 +284,7 @@ export class Attendance extends React.Component {
 
 const styles = {
   scroll: {
-    backgroundColor: 'transparent',
+    backgroundColor: '#EFEFF4',
   },
   container: {
     margin: 8,
@@ -322,5 +331,25 @@ const styles = {
     borderColor: 'cornflowerblue',
     borderWidth: 2,
     borderRadius: 3,
+  },
+  headerViewStyle: {
+    borderBottomWidth: 1,
+    backgroundColor: '#f7f7f8',
+    borderColor: '#c8c7cc',
+  },
+  headerTextStyle: {
+    alignSelf: 'center',
+    marginTop: 30,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  buttonStyle: {
+    height: 40,
+    width: 180,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
   },
 };
