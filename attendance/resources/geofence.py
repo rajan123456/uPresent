@@ -21,4 +21,8 @@ def validateVicinity(attendanceBody):
     distance = geodesic(attendanceBody.get("location"),
                         [managementResponseData.get("latitude"), managementResponseData.get("longitude")]).m
     if distance > managementResponseData.get("radiusInMeter"):
+        log.info("validate vicinity check failed as distance is " + str(distance)
+                 + " mobile lat long sent : "+ str(attendanceBody.get("location"))
+                 + "saved coordinates are : "+ str(managementResponseData.get("latitude"))
+                 + str(managementResponseData.get("longitude")))
         raise Exception('Not in the right vicinity')
