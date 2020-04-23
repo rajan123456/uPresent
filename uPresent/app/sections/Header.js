@@ -1,6 +1,6 @@
 import React from 'react';
 import {Alert, Image, Text, View} from 'react-native';
-import * as Keychain from 'react-native-keychain';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export class Header extends React.Component {
   constructor(props) {
@@ -16,9 +16,16 @@ export class Header extends React.Component {
   }
 
   async toggleUser() {
-    const credentials = await Keychain.getGenericPassword();
-    if (credentials) {
-      await Keychain.resetGenericPassword();
+    let credentials = {};
+    await AsyncStorage.getItem('credentials', (errs, result) => {
+      if (!errs) {
+        if (result !== null) {
+          credentials = JSON.parse(result);
+        }
+      }
+    });
+    if (this.state.isLoggedIn) {
+      await AsyncStorage.removeItem('credentials');
       this.setState({
         isLoggedIn: false,
         loggedUser: false,
@@ -30,19 +37,22 @@ export class Header extends React.Component {
   }
 
   async fetchCredentials() {
-    const credentials = await Keychain.getGenericPassword();
-    if (!credentials) {
-      console.log('No credentials stored');
-    } else {
-      this.setState({
-        isLoggedIn: true,
-        loggedUser: credentials.username,
-      });
-    }
+    let credentials = {};
+    await AsyncStorage.getItem('credentials', (errs, result) => {
+      if (!errs) {
+        if (result !== null) {
+          credentials = JSON.parse(result);
+          this.setState({
+            isLoggedIn: true,
+            loggedUser: credentials.username,
+          });
+        }
+      }
+    });
   }
 
-  componentDidMount() {
-    this.fetchCredentials();
+  async componentDidMount() {
+    await this.fetchCredentials();
   }
 
   render() {

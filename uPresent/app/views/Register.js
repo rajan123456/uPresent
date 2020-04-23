@@ -9,14 +9,13 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {TextField} from 'react-native-material-textfield';
 import {RaisedTextButton} from 'react-native-material-buttons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-crop-picker';
 import {saveFile} from '../api/fileApi';
 import {saveUser, getUserByName} from '../api/userApi';
-import AsyncStorage from '@react-native-community/async-storage';
-import * as Keychain from 'react-native-keychain';
 
 export class Register extends React.Component {
   constructor(props) {
@@ -120,10 +119,11 @@ export class Register extends React.Component {
       };
 
       saveUser(user).then(async _resp => {
-        await Keychain.setGenericPassword(
-          this.state.username,
-          this.state.password,
-        );
+        let auth = {
+          username: this.state.username,
+          password: this.state.password,
+        };
+        await AsyncStorage.setItem('credentials', JSON.stringify(auth));
         if (!this.state.videoFlag) {
           Alert.alert('Account created');
           this.props.navigation.navigate('HomeRT');

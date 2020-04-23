@@ -11,9 +11,9 @@ import {
   ToastAndroid,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from 'react-native-geolocation-service';
 import ImagePicker from 'react-native-image-crop-picker';
-import * as Keychain from 'react-native-keychain';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {RaisedTextButton} from 'react-native-material-buttons';
 import {TextField} from 'react-native-material-textfield';
@@ -51,22 +51,25 @@ export class Attendance extends React.Component {
   }
 
   async fetchCredentials() {
-    const credentials = await Keychain.getGenericPassword();
-    if (!credentials) {
-      console.log('No credentials stored');
-    } else {
-      this.setState({
-        isLoggedIn: true,
-        loggedUser: credentials.username,
-      });
-    }
+    let credentials = {};
+    await AsyncStorage.getItem('credentials', (errs, result) => {
+      if (!errs) {
+        if (result !== null) {
+          credentials = JSON.parse(result);
+          this.setState({
+            isLoggedIn: true,
+            loggedUser: credentials.username,
+          });
+        }
+      }
+    });
   }
 
-  async UNSAFE_componentWillMount() {
+  async componentDidMount() {
     await this.fetchCredentials();
     if (!this.state.isLoggedIn) {
       Alert.alert('Please log in first!');
-      this.props.navigation.push('HomeRT');
+      this.props.navigation.goBack();
     }
     getModulesOfUser(this.state.loggedUser).then(_resp => {
       this.setState({

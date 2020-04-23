@@ -8,11 +8,11 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {TextField} from 'react-native-material-textfield';
 import {RaisedTextButton} from 'react-native-material-buttons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {loginUser} from '../api/authApi';
-import * as Keychain from 'react-native-keychain';
 
 let defaults = {
   username: '',
@@ -95,10 +95,7 @@ export class Login extends React.Component {
         ) {
           Alert.alert('Password is incorrect');
         } else if (_resp.message === 'ok' && _resp.data === 'STUDENT') {
-          await Keychain.setGenericPassword(
-            this.state.username,
-            this.state.password,
-          );
+          await AsyncStorage.setItem('credentials', JSON.stringify(auth));
           Alert.alert('Welcome, you are logged in.');
           this.props.navigation.push('HomeRT');
         } else {
