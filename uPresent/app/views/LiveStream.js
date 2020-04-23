@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {NodeCameraView} from 'react-native-nodemediaclient';
 import {baseUrlRtmp} from '../config/config';
-import * as Keychain from 'react-native-keychain';
 
 const LiveStatus = {
   CANCEL: -1,
@@ -94,15 +94,18 @@ export class LiveStream extends React.Component {
   };
 
   async fetchCredentials() {
-    const credentials = await Keychain.getGenericPassword();
-    if (!credentials) {
-      console.log('No credentials stored');
-    } else {
-      this.setState({
-        isLoggedIn: true,
-        loggedUser: credentials.username,
-      });
-    }
+    let credentials = {};
+    await AsyncStorage.getItem('credentials', (errs, result) => {
+      if (!errs) {
+        if (result !== null) {
+          credentials = JSON.parse(result);
+          this.setState({
+            isLoggedIn: true,
+            loggedUser: credentials.username,
+          });
+        }
+      }
+    });
   }
 
   async componentDidMount() {
