@@ -35,19 +35,19 @@ spec:
           env:
           - name: SAGA_ENABLED
             value: "1"
-            name: REPORT_PUBLISH_API
+          - name: REPORT_PUBLISH_API
             value: "http://reporting:8080/reporting"
-            name: FACENET_RECOGNITION_API
+          - name: FACENET_RECOGNITION_API
             value: "http://facenet:5000/api/face/"
-            name: MODULE_API_FETCH_DETAILS
+          - name: MODULE_API_FETCH_DETAILS
             value: "http://management:8080/manage/module?moduleCode="            
-            name: MANAGEMENT_API_GEO_FENCE
+          - name: MANAGEMENT_API_GEO_FENCE
             value: "http://management:8080/manage/geo-fence?universityName="            
-            name: USER_API_FETCH_USER
+          - name: USER_API_FETCH_USER
             value: "http://user:8080/user?username="            
-            name: AZURE_FACE_ENABLED
+          - name: AZURE_FACE_ENABLED
             value: "0"            
-            name: AWS_REKOG_ENABLED
+          - name: AWS_REKOG_ENABLED
             value: "1"
           volumeMounts:
           - mountPath: /app/resources/images

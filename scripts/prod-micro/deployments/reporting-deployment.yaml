@@ -26,5 +26,5 @@ spec:
           env:
           - name: managementms.hostname
             value: "management"
-            name: managementms.port
+          - name: managementms.port
             value: "8080"
