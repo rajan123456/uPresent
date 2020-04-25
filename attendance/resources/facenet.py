@@ -8,6 +8,7 @@ import os
 log = logging.getLogger('root')
 
 def compare_faces_facenet(targetId, username):
+    log.info("Trying to compare faces for student attendance with FaceNet ---->>")
     facenet_api = os.getenv('FACENET_RECOGNITION_API')
     if facenet_api is None:
         facenet_api = current_app.config['FACENET_RECOGNITION_API']
