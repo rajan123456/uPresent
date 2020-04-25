@@ -11,6 +11,7 @@ log = logging.getLogger('root')
 
 
 def compare_faces_azure(targetId, sourceId):
+    log.info("Trying to compare faces for student attendance with AZURE Face ---->>")
     secrets = obtain_data()
     # Create an authenticated FaceClient.
     face_client = FaceClient(secrets['azure_face_endpoint'], CognitiveServicesCredentials(current_app.config.AZURE_FACE_ENDPOINT))

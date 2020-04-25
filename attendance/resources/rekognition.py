@@ -7,7 +7,7 @@ log = logging.getLogger('root')
 
 
 def compare_faces_rekognition(targetId, sourceId):
-    log.info("Trying to compare faces for student attendance ---->>")
+    log.info("Trying to compare faces for student attendance with AWS Rekognition ---->>")
     secrets = obtain_data()
     client = boto3.client('rekognition',
                           aws_access_key_id=secrets['aws_access_key_id'],
