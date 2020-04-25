@@ -1,5 +1,4 @@
 class Config(object):
-    BATCH_DURATION = 10
     TOPIC = "videoCollector"
     BROKER_INFO = "broker:29092"
     IMAGE_FOLDER_PATH = "/training-data/images/"
@@ -13,3 +12,4 @@ class Config(object):
 
     SPARK_EXECUTOR_JARS = "file:///streamProcessor//spark-sql-kafka-0-10_2.11-2.4.5.jar" \
                           ":file:///streamProcessor//kafka-clients-2.4.0.jar"
+    TRIGGER_INTERVAL = '1 seconds'

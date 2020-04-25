@@ -44,7 +44,7 @@ def main():
         .select(from_json(col("value"), transaction_detail_schema).alias("transaction_detail"), "timestamp")
     df3 = df2.select("transaction_detail.*", "timestamp")
     df3.printSchema()
-    df3.writeStream.trigger(processingTime='1 seconds').outputMode("append") \
+    df3.writeStream.trigger(processingTime=config.Config.TRIGGER_INTERVAL).outputMode("append") \
         .format("console") \
         .start()
 
@@ -52,7 +52,7 @@ def main():
         df4 = df3.select("imageData", "username")
         trans_detail_write_stream = df4 \
             .writeStream \
-            .trigger(processingTime='1 seconds') \
+            .trigger(processingTime=config.Config.TRIGGER_INTERVAL) \
             .format("memory") \
             .queryName("images") \
             .outputMode("append") \
