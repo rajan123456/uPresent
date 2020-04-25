@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: reporting
+  namespace: production
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 50%
+  progressDeadlineSeconds: 10
+  template:
+    metadata:
+      labels:
+        app: reporting
+    spec:
+      containers:
+        - image: rajagupt/reporting:latest
+          name: reporting
+          imagePullPolicy: Always
+          ports:
+            - name: reporting
+              containerPort: 8080
+          env:
+          - name: managementms.hostname
+            value: "management"
+            name: managementms.port
+            value: "8080"
