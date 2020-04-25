@@ -17,6 +17,7 @@ kafka-python = "*"
 Flask = "*"
 Flask-RESTful = "*"
 flask-cors = "*"
+azure-cognitiveservices-vision-face = "*"
 
 [requires]
 python_version = "3.8"
