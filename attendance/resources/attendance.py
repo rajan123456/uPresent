@@ -37,8 +37,8 @@ class AllAttendanceApi(Resource):
             if aws_rekog_enabled is None:
                 aws_rekog_enabled = current_app.config['AWS_REKOG_ENABLED']
 
-            log.info("Azure face enabled " + azure_face_enabled)
-            log.info("Aws rekog enabled " + aws_rekog_enabled)
+            log.info('AZURE_FACE_ENABLED: ' + str(azure_face_enabled))
+            log.info('AWS_REKOG_ENABLED: ' + str(aws_rekog_enabled))
 
             body = request.get_json()
             attendance = Attendance(**body)
@@ -57,7 +57,7 @@ class AllAttendanceApi(Resource):
             attendance.save()
             publish_message(body)
         except Exception as ex:
-            log.error('error from attendance method', str(ex))
+            log.error('error from attendance method' + str(ex))
             return {'message': str(ex)}, 400
         return {'id': str(attendance.id)}, 200
 
