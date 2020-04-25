@@ -46,9 +46,9 @@ class AllAttendanceApi(Resource):
             if user.get('imageId') is None:
                 compare_faces_facenet(attendance.capturedImageId, attendance.username)
             else:
-                if azure_face_enabled == 1:
+                if str(azure_face_enabled) == '1':
                     compare_faces_azure(attendance.capturedImageId, user.get('imageId')[0])
-                if aws_rekog_enabled == 1:
+                if str(aws_rekog_enabled) == '1':
                     compare_faces_rekognition(attendance.capturedImageId, user.get('imageId')[0])
 
             attendance.save()
@@ -59,7 +59,7 @@ class AllAttendanceApi(Resource):
         return {'id': str(attendance.id)}, 200
 
     def check_if_attendance_marked(self, attendance):
-        midnight_date = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+        midnight_date = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         try:
             Attendance.objects().get_or_404(username=attendance.username,
                                             moduleId=attendance.moduleId,
