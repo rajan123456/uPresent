@@ -19,9 +19,11 @@ def compare_faces_rekognition(targetId, sourceId):
     response = client.compare_faces(SimilarityThreshold=current_app.config['THRESHOLD_CONFIDENCE'],
                                     SourceImage={'Bytes': image_source.read()},
                                     TargetImage={'Bytes': image_target.read()})
+
     similarity = '0'
     for faceMatch in response['FaceMatches']:
         similarity = str(faceMatch['Similarity'])
+        log.info(" Facial recognition with AWS Rekognition confidence rating is" + str(similarity))
     image_source.close()
     image_target.close()
     if similarity == '0':
