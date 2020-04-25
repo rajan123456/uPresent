@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: adminui
+  namespace: production
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 50%
+  progressDeadlineSeconds: 10
+  template:
+    metadata:
+      labels:
+        app: adminui
+    spec:
+      containers:
+        - image: rajagupt/upresent-admin:latest
+          name: adminui
+          imagePullPolicy: Always
+          ports:
+            - name: adminui
+              containerPort: 80
+          env:
+          - name: REACT_APP_ENV
+            value: "prod"
