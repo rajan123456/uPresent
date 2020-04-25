@@ -27,7 +27,7 @@ def compare_faces_azure(targetId, sourceId):
 
     verify_result_same = face_client.face.verify_face_to_face(source_image_id, target_image_id)
 
-    log.info("Faces confidence measure in AZURE Face is " + str(verify_result_same.confidence))
+    log.info("Faces confidence measure in AZURE Face is " + verify_result_same.confidence)
 
     image_source.close()
     image_target.close()

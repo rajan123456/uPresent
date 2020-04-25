@@ -23,7 +23,7 @@ def compare_faces_rekognition(targetId, sourceId):
     similarity = '0'
     for faceMatch in response['FaceMatches']:
         similarity = str(faceMatch['Similarity'])
-        log.info(" Facial recognition with AWS Rekognition confidence rating is" + str(similarity))
+        log.info(" Facial recognition with AWS Rekognition confidence rating is" + similarity)
     image_source.close()
     image_target.close()
     if similarity == '0':
