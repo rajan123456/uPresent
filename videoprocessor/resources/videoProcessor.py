@@ -10,5 +10,6 @@ class VideoProcessorApi(Resource):
     @swagger.operation()
     def post(self):
         body = request.get_json()
-        Thread(target=videosplitter(body['stream'])).start()
+        thread = Thread(target=videosplitter, kwargs={'key': request.args.get('key', body['stream'])})
+        thread.start()
         return Response({'Video pushed to Kafka successfully...'}, status=200)
