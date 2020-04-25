@@ -24,4 +24,4 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
-CMD ["/usr/spark/bin/spark-submit", "--jars", "spark-streaming-kafka-0-8-assembly.jar", "videoStreamCollector.py"]
+CMD ["/usr/spark/bin/spark-submit", "--jars", "spark-sql-kafka-0-10_2.11-2.4.5.jar", "videoStreamCollector.py"]
