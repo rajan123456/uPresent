@@ -7,7 +7,7 @@ log = logging.getLogger('root')
 
 
 def compare_faces_rekognition(targetId, sourceId):
-    log.info("Trying to compare faces for student attendance ---->>")
+    log.info("Trying to compare faces for student attendance with AWS Rekognition ---->>")
     secrets = obtain_data()
     client = boto3.client('rekognition',
                           aws_access_key_id=secrets['aws_access_key_id'],
@@ -19,9 +19,11 @@ def compare_faces_rekognition(targetId, sourceId):
     response = client.compare_faces(SimilarityThreshold=current_app.config['THRESHOLD_CONFIDENCE'],
                                     SourceImage={'Bytes': image_source.read()},
                                     TargetImage={'Bytes': image_target.read()})
+
     similarity = '0'
     for faceMatch in response['FaceMatches']:
         similarity = str(faceMatch['Similarity'])
+        log.info(" Facial recognition with AWS Rekognition confidence rating is" + similarity)
     image_source.close()
     image_target.close()
     if similarity == '0':
