@@ -10,22 +10,6 @@ data:
     filebeat.autodiscover:
       providers:
         - type: kubernetes
-          templates:
-            - condition:
-              contains:
-                kubernetes.container.image: nginx
-              config:
-                - module: nginx
-                  access:
-                    input:
-                      type: container
-                      containers.ids:
-                        - "${data.kubernetes.container.id}"
-                  error:
-                    input:
-                      type: container
-                      containers.ids:
-                        - "${data.kubernetes.container.id}"
           node: ${NODE_NAME}
           hints.enabled: true
           hints.default_config:
