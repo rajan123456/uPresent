@@ -37,6 +37,9 @@ class AllAttendanceApi(Resource):
             if aws_rekog_enabled is None:
                 aws_rekog_enabled = current_app.config['AWS_REKOG_ENABLED']
 
+            log.info("Azure face enabled " + azure_face_enabled)
+            log.info("Aws rekog enabled " + aws_rekog_enabled)
+
             body = request.get_json()
             attendance = Attendance(**body)
             self.check_if_attendance_marked(attendance)
