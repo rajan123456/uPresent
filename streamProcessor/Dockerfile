@@ -1,9 +1,8 @@
-FROM python:3.6
+FROM python:3.6-stretch
 
 RUN apt-get update \
     && apt-get install -y \
-    default-jre \
-    default-jdk \
+    openjdk-8-jdk \
     && apt-get clean
 
 RUN cd /usr/ \
