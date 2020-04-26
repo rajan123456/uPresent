@@ -47,6 +47,9 @@ def extract_embeddings():
             # maintaining the aspect ratio), and then grab the image
             # dimensions
             image = cv2.imread(image_path)
+            if(image is None):
+                log.warn("\n\n\nthis image was skipped because its size is 0:" + image_path)
+                continue
             image = imutils.resize(image, width=600)
             (h, w) = image.shape[:2]
 
