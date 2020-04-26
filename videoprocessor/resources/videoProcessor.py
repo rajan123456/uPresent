@@ -12,4 +12,4 @@ class VideoProcessorApi(Resource):
         body = request.get_json()
         thread = Thread(target=videosplitter, kwargs={'key': request.args.get('key', body['stream'])})
         thread.start()
-        return Response("0", status=200)
+        return Response({"0"}, status=200)
