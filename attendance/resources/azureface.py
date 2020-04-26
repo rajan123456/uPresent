@@ -17,14 +17,20 @@ def compare_faces_azure(targetId, sourceId):
     face_client = FaceClient(current_app.config['AZURE_FACE_ENDPOINT'], CognitiveServicesCredentials(
         secrets['azure_face_subscription_key']))
 
-    image_source = open(current_app.config['UPLOAD_DIR'] + sourceId, 'r+b')
-    image_target = open(current_app.config['UPLOAD_DIR'] + targetId, 'r+b')
+    image_source = open(current_app.config['UPLOAD_DIR'] + sourceId, 'rb')
+    image_target = open(current_app.config['UPLOAD_DIR'] + targetId, 'rb')
+
+    log.info("image source and target opened to compare faces for student attendance with AZURE Face ---->>")
 
     detected_faces_source = face_client.face.detect_with_stream(image_source)
     source_image_id = detected_faces_source[0].face_id
 
+    log.info("source_image_id compare faces for student attendance with AZURE Face ---->>" + str(source_image_id))
+
     detected_faces_target = face_client.face.detect_with_stream(image_target)
     target_image_id = detected_faces_target[0].face_id
+
+    log.info("target_image_id compare faces for student attendance with AZURE Face ---->>" + str(target_image_id))
 
     verify_result_same = face_client.face.verify_face_to_face(
         source_image_id, target_image_id)
