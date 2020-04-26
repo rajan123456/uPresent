@@ -48,7 +48,7 @@ class AllAttendanceApi(Resource):
             check_module_active(attendance.moduleId)
             validateVicinity(body)
             user = fetchUser(attendance.username)
-            if user.get('imageId') is None:
+            if user.get('imageId') is None or len(user.get('imageId')) < 1:
                 compare_faces_facenet(attendance.capturedImageId, attendance.username)
             else:
                 if str(azure_face_enabled) == '1':
