@@ -25,6 +25,6 @@ spec:
               containerPort: 8080
           env:
           - name: managementms.hostname
-            value: "management"
+            value: "http://management"
           - name: managementms.port
             value: "8080"
