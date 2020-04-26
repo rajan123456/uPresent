@@ -24,4 +24,4 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
-CMD ["/usr/spark/bin/spark-submit", "--jars", "spark-streaming-kafka-0-8-assembly.jar", "--conf" , "spark.driver.host=streamprocessor", "spark.driver.port=19999", "videoStreamCollector.py"]
+CMD ["/usr/spark/bin/spark-submit", "--jars", "spark-streaming-kafka-0-8-assembly.jar", "--conf", "spark.driver.host=streamprocessor", "--conf", "spark.driver.port=19999", "videoStreamCollector.py"]
