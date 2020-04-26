@@ -25,4 +25,4 @@ spec:
               containerPort: 5000
           env:
           - name: SRS_CLUSTER
-            value: "rtmp://srs/app/"
+            value: "rtmp://srs.upresent.ga/app/"

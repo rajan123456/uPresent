@@ -20,20 +20,23 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                - ip-192-168-33-3.us-east-2.compute.internal
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - ip-192-168-33-3.us-east-2.compute.internal
       containers:
         - image: rajagupt/streamprocessor:latest
           name: streamprocessor
           imagePullPolicy: Always
           volumeMounts:
-          - mountPath: /training-data/images/
-            name: stream-data-vol
+            - mountPath: /training-data/images/
+              name: stream-data-vol
+          ports:
+            - name: spark-driver
+              containerPort: 19999
       volumes:
-      - name: stream-data-vol
-        persistentVolumeClaim:
-          claimName: stream-data-vol-claim
-          readOnly: false
+        - name: stream-data-vol
+          persistentVolumeClaim:
+            claimName: stream-data-vol-claim
+            readOnly: false

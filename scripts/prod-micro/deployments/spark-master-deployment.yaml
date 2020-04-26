@@ -20,9 +20,9 @@ spec:
             - name: SPARK_RPC_AUTHENTICATION_ENABLED
               value: "no"
             - name: SPARK_RPC_ENCRYPTION_ENABLED
-              value: "no"            
+              value: "no"
             - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
-              value: "no"            
+              value: "no"
             - name: SPARK_SSL_ENABLED
               value: "no"
           imagePullPolicy: Always
@@ -30,5 +30,8 @@ spec:
             - name: spark-ui
               containerPort: 8080
             - name: spark-master
-              containerPort: 7077              
+              containerPort: 7077
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
 status: {}

@@ -56,8 +56,6 @@ services:
     image: rajagupt/upresent-admin:latest
     container_name: admin
     restart: always
-    # environment:
-    #   REACT_APP_ENV: dev
     ports:
       - "3000:80"
     depends_on:
@@ -95,6 +93,8 @@ services:
     restart: always
     ports:
       - "6000:5000"
+    environment:
+      SRS_CLUSTER: rtmp://dev.upresent.ga/app/
     depends_on:
       - apm-server
       - broker
