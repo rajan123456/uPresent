@@ -31,18 +31,6 @@ data:
         network         0;
         disk            sda sdb xvda xvdb;
     }
-    vhost __defaultVhost__ {
-        hls {
-            enabled     on;
-        }
-        http_remux {
-            enabled     on;
-        }
-        http_hooks {
-            enabled     on;
-            on_publish  http://videoprocessor:5000/api/videoprocessor;
-        }
-    }
     vhost srs.upresent.ga {
         hls {
             enabled     on;

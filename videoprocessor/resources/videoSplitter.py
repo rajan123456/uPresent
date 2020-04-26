@@ -14,8 +14,9 @@ def videosplitter(key):
         # get SRS_CLUSTER URL from environment variable
         srs_cluster = os.getenv('SRS_CLUSTER')
         if srs_cluster is None:
+            log.info("srs cluster not found in env")
             srs_cluster = config.Config.VIDEO_INPUT_PATH
-
+        log.info("final srs cluster and key value is "+ srs_cluster + key)
         cap = cv2.VideoCapture(srs_cluster + key)
         cap.open(srs_cluster + key)
         isCapOpen = cap.isOpened()

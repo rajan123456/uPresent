@@ -14,15 +14,19 @@ spec:
       containers:
         - image: bitnami/spark:2
           name: spark-worker
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
           env:
             - name: SPARK_MODE
               value: "worker"
             - name: SPARK_RPC_AUTHENTICATION_ENABLED
               value: "no"
             - name: SPARK_RPC_ENCRYPTION_ENABLED
-              value: "no"            
+              value: "no"
             - name: SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED
-              value: "no"            
+              value: "no"
             - name: SPARK_SSL_ENABLED
               value: "no"
             - name: SPARK_MASTER_URL
@@ -31,8 +35,15 @@ spec:
               value: "1G"
             - name: SPARK_WORKER_CORES
               value: "1"
+            - name: SPARK_WORKER_PORT
+              value: "9999"
           imagePullPolicy: Always
           ports:
-            - name: spark-worker
+            - name: worker-ui
               containerPort: 8081
+            - name: worker-port
+              containerPort: 9999
+      securityContext:
+        runAsUser: 1000
+        fsGroup: 1000
 status: {}

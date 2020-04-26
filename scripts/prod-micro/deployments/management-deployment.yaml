@@ -27,6 +27,6 @@ spec:
           - name: sagaEnabled
             value: "1"
           - name: userms.hostname
-            value: "user"
+            value: "http://user"
           - name: userms.port
             value: "8080"

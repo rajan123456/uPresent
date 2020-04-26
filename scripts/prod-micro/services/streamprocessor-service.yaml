@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: videoprocessor
+  name: streamprocessor
   namespace: production
 spec:
   selector:
-    app: videoprocessor
+    app: streamprocessor
   type: ClusterIP
   ports:
     - protocol: TCP
-      port: 5000
-      targetPort: 5000
-      name: videoprocessor
+      port: 19999
+      targetPort: 19999
+      name: spark-driver
