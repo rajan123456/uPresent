@@ -1,14 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: streamprocessor
+  name: streamprocessor-headless
   namespace: production
 spec:
   selector:
     app: streamprocessor
-  type: ClusterIP
-  ports:
-    - protocol: TCP
-      port: 19999
-      targetPort: 19999
-      name: spark-driver
+  clusterIP: None
