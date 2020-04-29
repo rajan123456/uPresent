@@ -26,15 +26,12 @@ spec:
                     values:
                       - ip-192-168-33-3.us-east-2.compute.internal
       containers:
-        - image: rajagupt/streamprocessor:latest
+        - image: rajagupt/streamprocessor-kub:latest
           name: streamprocessor
           imagePullPolicy: Always
           volumeMounts:
             - mountPath: /training-data/images/
               name: stream-data-vol
-          ports:
-            - name: spark-driver
-              containerPort: 19999
       volumes:
         - name: stream-data-vol
           persistentVolumeClaim:

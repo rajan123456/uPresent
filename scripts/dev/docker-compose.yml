@@ -181,7 +181,7 @@ services:
     restart: always
     user: root
     environment:
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
       - "discovery.type=single-node"
     ports:
       - "9200:9200"
@@ -245,7 +245,8 @@ services:
       - SPARK_SSL_ENABLED=no
     ports:
       - "8080:8080"
-  spark-worker-1:
+      - "7077:7077"
+  spark-worker:
     image: bitnami/spark:2
     container_name: spark-worker-1
     user: root
@@ -270,7 +271,7 @@ services:
       - ./stream-data-vol:/training-data/images/
     depends_on:
       - spark
-      - spark-worker-1
+      - spark-worker
       - broker
   vault:
     image: vault:1.3.4

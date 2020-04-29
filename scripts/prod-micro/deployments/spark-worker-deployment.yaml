@@ -35,14 +35,10 @@ spec:
               value: "1G"
             - name: SPARK_WORKER_CORES
               value: "1"
-            - name: SPARK_WORKER_PORT
-              value: "9999"
           imagePullPolicy: Always
           ports:
             - name: worker-ui
               containerPort: 8081
-            - name: worker-port
-              containerPort: 9999
       securityContext:
         runAsUser: 1000
         fsGroup: 1000

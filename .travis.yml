@@ -26,6 +26,7 @@ script:
   #Build Stream Processor
   - cd ../streamProcessor/
   - docker build -t rajagupt/streamprocessor .
+  - docker build -t rajagupt/streamprocessor-kub -f Dockerfile_Prod .
   #Build Admin UI
   - cd ../upresent-admin/
   - docker build -t rajagupt/upresent-admin .
@@ -49,6 +50,7 @@ script:
   - docker push rajagupt/management
   - docker push rajagupt/reporting
   - docker push rajagupt/streamprocessor
+  - docker push rajagupt/streamprocessor-kub
   - docker push rajagupt/upresent-admin
   - docker push rajagupt/user
   - docker push rajagupt/videoprocessor
