@@ -44,12 +44,13 @@ def process(rdd, sc):
 
                     if len(os.listdir(image_folder)) < config.Config.IMAGE_COUNT:
                         # Converting Base64 to image
-                        with open(image_folder + "/imageToSave" + str(image_no) + ".png", "wb") as fh:
-                            image = base64.b64decode(imageInfo.imageData)
+                        image = base64.b64decode(imageInfo.imageData)
 
-                            # Calling face scrapper class to detect faces in the image
-                            face_len = face_scrapper.face_detection(image)
-                            if face_len == 1:
+                        # Calling face scrapper class to detect faces in the image
+                        face_len = face_scrapper.face_detection(image)
+
+                        if face_len == 1:
+                            with open(image_folder + "/imageToSave" + str(image_no) + ".png", "wb") as fh:
                                 fh.write(image)
                                 image_no += 1
         else:
