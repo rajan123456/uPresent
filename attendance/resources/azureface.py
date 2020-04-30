@@ -20,17 +20,21 @@ def compare_faces_azure(targetId, sourceId):
     image_source = open(current_app.config['UPLOAD_DIR'] + sourceId, 'rb')
     image_target = open(current_app.config['UPLOAD_DIR'] + targetId, 'rb')
 
-    log.info("image source and target opened to compare faces for student attendance with AZURE Face ---->>")
-
     detected_faces_source = face_client.face.detect_with_stream(image_source)
-    source_image_id = detected_faces_source[0].face_id
-
-    log.info("source_image_id compare faces for student attendance with AZURE Face ---->>" + str(source_image_id))
+    if len(detected_faces_source) == 1:
+        source_image_id = detected_faces_source[0].face_id
+    else:
+        log.error(
+            'Either no or more than one face detected in the source image: ' + sourceId)
+        raise Exception('Face not found in source image')
 
     detected_faces_target = face_client.face.detect_with_stream(image_target)
-    target_image_id = detected_faces_target[0].face_id
-
-    log.info("target_image_id compare faces for student attendance with AZURE Face ---->>" + str(target_image_id))
+    if len(detected_faces_target) == 1:
+        target_image_id = detected_faces_target[0].face_id
+    else:
+        log.error(
+            'Either no or more than one face detected in the target image: ' + targetId)
+        raise Exception('Face not found in target image')
 
     verify_result_same = face_client.face.verify_face_to_face(
         source_image_id, target_image_id)
