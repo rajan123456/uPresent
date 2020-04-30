@@ -1,6 +1,6 @@
 class Config(object):
     MONGODB_SETTINGS = {
-        #'host': "mongodb://localhost:27017/admin"
+        # 'host': "mongodb://localhost:27017/admin"
         'host': "mongodb://root:example@mongo:27017/admin"
     }
     UPLOAD_DIR = "/app/resources/images/"
@@ -27,7 +27,7 @@ class Config(object):
     USER_API_FETCH_USER = "http://user:8080/user?username="
     # MANAGEMENT_API_GEO_FENCE = "http://localhost:8081/manage/geo-fence?universityName="
     # USER_API_FETCH_USER = "http://localhost:8083/user?username="
-    #MODULE_API_FETCH_DETAILS = 'https://dev.upresent.ga/management/manage/module?moduleCode='
-    AZURE_FACE_ENDPOINT= "https://eastus.api.cognitive.microsoft.com/"
+    # MODULE_API_FETCH_DETAILS = 'https://dev.upresent.ga/management/manage/module?moduleCode='
+    AZURE_FACE_ENDPOINT = "https://eastus.api.cognitive.microsoft.com/"
     AZURE_FACE_ENABLED = 0
     AWS_REKOG_ENABLED = 1
