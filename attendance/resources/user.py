@@ -5,16 +5,16 @@ import logging
 import os
 
 
-log = logging.getLogger('root')
+log = logging.getLogger("root")
 
 
 def fetchUser(username):
     log.info("Trying to fetch user info by username ---->>")
-    user_api = os.getenv('USER_API_FETCH_USER')
+    user_api = os.getenv("USER_API_FETCH_USER")
     if user_api is None:
-        user_api = current_app.config['USER_API_FETCH_USER']
+        user_api = current_app.config["USER_API_FETCH_USER"]
     userApiResponse = urllib.request.urlopen(user_api + username).read()
-    userResponseData = json.loads(userApiResponse.decode('utf8')).get("data")
+    userResponseData = json.loads(userApiResponse.decode("utf8")).get("data")
     if userResponseData is None:
-        raise Exception('No data found for User')
+        raise Exception("No data found for User")
     return userResponseData
