@@ -9,7 +9,7 @@ from resources import custom_logger
 import logging
 
 # Initializing custom logger
-log = logging.getLogger('root')
+log = logging.getLogger("root")
 log.setLevel(logging.INFO)
 log.addHandler(custom_logger.LogHandler())
 
@@ -19,8 +19,8 @@ app.config.from_object("config.Config")
 
 apm = ElasticAPM(app)
 api = Api(app)
-api = swagger.docs(Api(app), apiVersion='0.1')
+api = swagger.docs(Api(app), apiVersion="0.1")
 
 initialize_db(app)
 initialize_routes(api)
-app.run(host='0.0.0.0')
+app.run(host="0.0.0.0")
