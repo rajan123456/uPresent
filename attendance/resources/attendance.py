@@ -18,7 +18,6 @@ log = logging.getLogger('root')
 
 
 class AllAttendanceApi(Resource):
-
     @swagger.operation()
     def get(self):
         log.info("Inside get all attendance method ----->>")
@@ -49,13 +48,15 @@ class AllAttendanceApi(Resource):
             validateVicinity(body)
             user = fetchUser(attendance.username)
             if user.get('imageId') is None or len(user.get('imageId')) < 1:
-                compare_faces_facenet(attendance.capturedImageId, attendance.username)
+                compare_faces_facenet(
+                    attendance.capturedImageId, attendance.username)
             else:
                 if str(azure_face_enabled) == '1':
-                    compare_faces_azure(attendance.capturedImageId, user.get('imageId')[0])
+                    compare_faces_azure(
+                        attendance.capturedImageId, user.get('imageId')[0])
                 if str(aws_rekog_enabled) == '1':
-                    compare_faces_rekognition(attendance.capturedImageId, user.get('imageId')[0])
-
+                    compare_faces_rekognition(
+                        attendance.capturedImageId, user.get('imageId')[0])
             attendance.save()
             publish_message(body)
         except Exception as ex:
@@ -64,7 +65,8 @@ class AllAttendanceApi(Resource):
         return {'id': str(attendance.id)}, 200
 
     def check_if_attendance_marked(self, attendance):
-        midnight_date = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        midnight_date = datetime.datetime.now().replace(
+            hour=0, minute=0, second=0, microsecond=0)
         try:
             Attendance.objects().get_or_404(username=attendance.username,
                                             moduleId=attendance.moduleId,
@@ -94,4 +96,10 @@ class AttendanceApi(Resource):
     def get(self, id):
         log.info("Inside get attendance method for student by id ----->>")
         attendance = Attendance.objects.get(userId=id).to_json()
+        return Response(attendance, mimetype="application/json", status=200)
+
+    @swagger.operation()
+    def get(self, username):
+        log.info("Inside get attendance method for student by username ----->>")
+        attendance = Attendance.objects.get(username=username).to_json()
         return Response(attendance, mimetype="application/json", status=200)
