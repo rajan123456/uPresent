@@ -1,6 +1,6 @@
 class Config(object):
     MONGODB_SETTINGS = {
-        # 'host': "mongodb://localhost:27017/admin"
+        # 'host': "mongodb://root:example@localhost:27017/admin"
         'host': "mongodb://root:example@mongo:27017/admin"
     }
     UPLOAD_DIR = "/app/resources/images/"
