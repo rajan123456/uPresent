@@ -6,18 +6,21 @@ import os
 import constants
 import logging
 
-log = logging.getLogger('root')
+log = logging.getLogger("root")
+
 
 def recog(image):
-    embedding_model = constants.MODEL_FILES_DIR + '/openface_nn4.small2.v1.t7'
-    log.info('embedding_model...' + embedding_model)
+    embedding_model = constants.MODEL_FILES_DIR + "/openface_nn4.small2.v1.t7"
+    log.info("embedding_model..." + embedding_model)
     conf = 0.5
-    recognizer = constants.PICKLE_FILES_DIR + '/recognizer.pickle'
-    l = constants.PICKLE_FILES_DIR + '/le.pickle'
+    recognizer = constants.PICKLE_FILES_DIR + "/recognizer.pickle"
+    l = constants.PICKLE_FILES_DIR + "/le.pickle"
     log.info("[INFO] loading face detector...")
     try:
         proto_path = constants.MODEL_FILES_DIR + "/deploy.prototxt"
-        model_path = constants.MODEL_FILES_DIR + "/res10_300x300_ssd_iter_140000.caffemodel"
+        model_path = (
+            constants.MODEL_FILES_DIR + "/res10_300x300_ssd_iter_140000.caffemodel"
+        )
         detector = cv2.dnn.readNetFromCaffe(proto_path, model_path)
         # load our serialized face embedding model from disk
         log.info("[INFO] loading face recognizer...")
@@ -34,8 +37,13 @@ def recog(image):
 
         # construct a blob from the image
         image_blob = cv2.dnn.blobFromImage(
-            cv2.resize(image, (300, 300)), 1.0, (300, 300),
-            (104.0, 177.0, 123.0), swapRB=False, crop=False)
+            cv2.resize(image, (300, 300)),
+            1.0,
+            (300, 300),
+            (104.0, 177.0, 123.0),
+            swapRB=False,
+            crop=False,
+        )
 
         # apply OpenCV's deep learning-based face detector to localize
         # faces in the input image
@@ -60,14 +68,18 @@ def recog(image):
                 (fH, fW) = face.shape[:2]
 
                 # ensure the face width and height are sufficiently large
-                if fW < constants.MIN_DETECTED_FACE_WIDTH or fH < constants.MIN_DETECTED_FACE_HEIGHT:
+                if (
+                    fW < constants.MIN_DETECTED_FACE_WIDTH
+                    or fH < constants.MIN_DETECTED_FACE_HEIGHT
+                ):
                     continue
 
                 # construct a blob for the face ROI, then pass the blob
                 # through our face embedding model to obtain the 128-d
                 # quantification of the face
-                face_blob = cv2.dnn.blobFromImage(face, 1.0 / 255, (96, 96),
-                                                 (0, 0, 0), swapRB=True, crop=False)
+                face_blob = cv2.dnn.blobFromImage(
+                    face, 1.0 / 255, (96, 96), (0, 0, 0), swapRB=True, crop=False
+                )
                 embedder.setInput(face_blob)
                 vec = embedder.forward()
 
@@ -80,5 +92,8 @@ def recog(image):
         # show the output image
         return name, probability * 100
     except Exception as ex:
-        log.error("Exception occurred while trying to recognize image. Exception msg: " + str(ex))
+        log.error(
+            "Exception occurred while trying to recognize image. Exception msg: "
+            + str(ex)
+        )
         return {"Exception occurred. Exception msg: ": str(ex)}, 500
