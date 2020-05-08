@@ -22,9 +22,6 @@ def connect_kafka_producer():
         return _producer
 
 
-# handle delete attendance messages
-
-
 def publish_message(data, recorded):
     saga_enabled = os.getenv("SAGA_ENABLED")
     if saga_enabled is None:
