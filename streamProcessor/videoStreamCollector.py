@@ -11,7 +11,6 @@ from pyspark.sql import SparkSession
 from resources import face_scrapper
 
 
-
 def init_spark():
     sc = SparkContext(appName="videoStreamCollector")
     ssc = StreamingContext(sc, config.Config.BATCH_DURATION)
@@ -50,13 +49,16 @@ def process(rdd, sc):
                         face_len = face_scrapper.face_detection(image)
 
                         if face_len == 1:
-                            with open(image_folder + "/imageToSave" + str(image_no) + ".png", "wb") as fh:
+                            with open(
+                                image_folder + "/imageToSave" + str(image_no) + ".png",
+                                "wb",
+                            ) as fh:
                                 fh.write(image)
                                 image_no += 1
         else:
             logging.warning("StreamProcessor did not receive any new data to process.")
     except Exception as ex:
-        logging.warning('Exception while processing images inside process method--->>')
+        logging.warning("Exception while processing images inside process method--->>")
         logging.warning(str(ex))
         pass
 
@@ -68,7 +70,8 @@ def main():
 
     # Creating spark DStreams
     stream = KafkaUtils.createDirectStream(
-        ssc, [topic], {"metadata.broker.list": brokers})
+        ssc, [topic], {"metadata.broker.list": brokers}
+    )
     lines = stream.map(lambda x: json.loads(x[1]))
     lines.pprint()
     lines.foreachRDD(lambda rdd: process(rdd, sc))
@@ -78,5 +81,5 @@ def main():
     ssc.awaitTermination()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

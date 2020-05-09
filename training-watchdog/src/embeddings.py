@@ -8,17 +8,20 @@ import os
 import constants
 import logging
 
-log = logging.getLogger('root')
+log = logging.getLogger("root")
+
 
 def extract_embeddings():
     log.info("embeddings extraction started.")
-    embeddings = constants.PICKLE_FILES_DIR + '/embeddings.pickle'
-    embedding_model = constants.MODEL_FILES_DIR + '/openface_nn4.small2.v1.t7'
+    embeddings = constants.PICKLE_FILES_DIR + "/embeddings.pickle"
+    embedding_model = constants.MODEL_FILES_DIR + "/openface_nn4.small2.v1.t7"
     # load our serialized face detector from disk
     log.info("[INFO] loading face detector...")
     try:
         proto_path = constants.MODEL_FILES_DIR + "/deploy.prototxt"
-        model_path = constants.MODEL_FILES_DIR + "/res10_300x300_ssd_iter_140000.caffemodel"
+        model_path = (
+            constants.MODEL_FILES_DIR + "/res10_300x300_ssd_iter_140000.caffemodel"
+        )
         detector = cv2.dnn.readNetFromCaffe(proto_path, model_path)
 
         # load our serialized face embedding model from disk
@@ -47,16 +50,23 @@ def extract_embeddings():
             # maintaining the aspect ratio), and then grab the image
             # dimensions
             image = cv2.imread(image_path)
-            if(image is None):
-                log.warn("\n\n\nthis image was skipped because its size is 0:" + image_path)
+            if image is None:
+                log.warn(
+                    "\n\n\nthis image was skipped because its size is 0:" + image_path
+                )
                 continue
             image = imutils.resize(image, width=600)
             (h, w) = image.shape[:2]
 
             # construct a blob from the image
             image_blob = cv2.dnn.blobFromImage(
-                cv2.resize(image, (300, 300)), 1.0, (300, 300),
-                (104.0, 177.0, 123.0), swapRB=False, crop=False)
+                cv2.resize(image, (300, 300)),
+                1.0,
+                (300, 300),
+                (104.0, 177.0, 123.0),
+                swapRB=False,
+                crop=False,
+            )
 
             # apply OpenCV's deep learning-based face detector to localize
             # faces in the input image
@@ -90,8 +100,9 @@ def extract_embeddings():
                     # construct a blob for the face ROI, then pass the blob
                     # through our face embedding model to obtain the 128-d
                     # quantification of the face
-                    face_blob = cv2.dnn.blobFromImage(face, 1.0 / 255,
-                                                     (96, 96), (0, 0, 0), swapRB=True, crop=False)
+                    face_blob = cv2.dnn.blobFromImage(
+                        face, 1.0 / 255, (96, 96), (0, 0, 0), swapRB=True, crop=False
+                    )
                     embedder.setInput(face_blob)
                     vec = embedder.forward()
 
@@ -108,5 +119,8 @@ def extract_embeddings():
         f.write(pickle.dumps(data))
         f.close()
     except Exception as ex:
-        log.error("Exception occurred while trying to extract embeddings. Exception msg: " + str(ex))
+        log.error(
+            "Exception occurred while trying to extract embeddings. Exception msg: "
+            + str(ex)
+        )
         return {"Exception occurred. Exception msg: ": str(ex)}, 500

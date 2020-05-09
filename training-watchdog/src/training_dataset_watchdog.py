@@ -8,26 +8,38 @@ import schedule
 import log_config
 
 # Initializing custom logger
-log = logging.getLogger('root')
+log = logging.getLogger("root")
 log.setLevel(logging.INFO)
 log.addHandler(log_config.LogHandler())
 
-log = logging.getLogger('root')
+log = logging.getLogger("root")
 log.info("Watchdog started.")
+
 
 def job():
 
     students_image_count_obj = {}
     try:
         for username in os.listdir(constants.DATASET_PATH):
-            concatenated_dir = constants.DATASET_PATH + '/' + username
+            concatenated_dir = constants.DATASET_PATH + "/" + username
             if os.path.isdir(concatenated_dir):
-                students_image_count_obj[username] = len([file for file in os.listdir(concatenated_dir) if (
-                            os.path.isfile(concatenated_dir + "/" + file) and os.path.splitext(file)[
-                        1].lower() == constants.SUPPORTED_FILE_TYPE)])
+                students_image_count_obj[username] = len(
+                    [
+                        file
+                        for file in os.listdir(concatenated_dir)
+                        if (
+                            os.path.isfile(concatenated_dir + "/" + file)
+                            and os.path.splitext(file)[1].lower()
+                            == constants.SUPPORTED_FILE_TYPE
+                        )
+                    ]
+                )
         start_training = True
         for username in students_image_count_obj.keys():
-            if students_image_count_obj[username] != constants.USER_TRAINING_IMAGE_COUNT:
+            if (
+                students_image_count_obj[username]
+                != constants.USER_TRAINING_IMAGE_COUNT
+            ):
                 start_training = False
                 break
         # check if any new user is added, i.e. is there really any need of training again.
@@ -47,6 +59,7 @@ def job():
             train_model()
     except KeyboardInterrupt:
         log.error("Training process' polling job interrupted.")
+
 
 schedule.every(constants.FILE_SYSTEM_POLLING_DELAY_IN_SECONDS).seconds.do(job)
 
