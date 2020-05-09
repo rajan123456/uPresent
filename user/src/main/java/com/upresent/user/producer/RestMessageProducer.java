@@ -27,7 +27,7 @@ public class RestMessageProducer {
 	private RestTemplate restTemplate;
 
 	public String send(String message) {
-		String url = env.getProperty("metrics.publisher.api");
+		String url = env.getProperty("reporting.publisher.api");
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 		HttpEntity<?> entity = new HttpEntity<>(constructMetricsData(message), headers);

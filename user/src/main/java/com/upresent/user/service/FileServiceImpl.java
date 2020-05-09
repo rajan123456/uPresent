@@ -1,13 +1,20 @@
 package com.upresent.user.service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +41,20 @@ public class FileServiceImpl implements FileService {
 			Files.copy(file.getInputStream(), copyLocation, StandardCopyOption.REPLACE_EXISTING);
 			return uniqueFileName;
 		} catch (Exception e) {
-			throw new UserException(ExceptionResponseCode.GENRAL_ERROR);
+			throw new UserException(ExceptionResponseCode.GENERAL_ERROR);
+		}
+	}
+
+	@Override
+	public ResponseEntity<byte[]> getUserImage(String filename) throws IOException {
+		Path fileLocation = Paths.get(env.getProperty("uploadDir") + filename);
+		if(!Files.exists(fileLocation))
+			throw new UserException(ExceptionResponseCode.USER_DATA_NOT_FOUND);
+		else {
+			InputStream in = Files.newInputStream(fileLocation);
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.IMAGE_JPEG);
+			return new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.OK);
 		}
 	}
 }
