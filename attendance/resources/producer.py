@@ -22,23 +22,27 @@ def connect_kafka_producer():
         return _producer
 
 
-def publish_message(data):
+def publish_message(data, recorded):
     saga_enabled = os.getenv("SAGA_ENABLED")
     if saga_enabled is None:
         saga_enabled = current_app.config["SAGA_ENABLED"]
     if str(saga_enabled) == "1":
-        publish_message_kafka(data)
+        publish_message_kafka(data, recorded)
     else:
-        publish_message_api_call(data)
+        publish_message_api_call(data, recorded)
 
 
-def publish_message_kafka(data):
+def publish_message_kafka(data, recorded):
+    if recorded is True:
+        eventType = str(current_app.config["ATTENDANCE_RECORDED"])
+    else:
+        eventType = str(current_app.config["ATTENDANCE_REVOKED"])
     try:
         producer_instance = connect_kafka_producer()
         body = (
             json.dumps(data)
             + ";"
-            + str(current_app.config["ATTENDANCE_RECORDED"])
+            + eventType
             + ";"
             + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
             + "; ;"
@@ -50,17 +54,21 @@ def publish_message_kafka(data):
             current_app.config["KAFKA_PUBLISH_TOPIC"], key=key_bytes, value=value_bytes
         )
         producer_instance.flush()
-        log.info("Message published successfully.")
+        log.info("Message published successfully via kafka")
     except Exception as ex:
         log.error("Exception in publishing message via kafka")
         log.error(str(ex))
 
 
-def publish_message_api_call(data):
+def publish_message_api_call(data, recorded):
+    if recorded is True:
+        eventType = str(current_app.config["ATTENDANCE_RECORDED"])
+    else:
+        eventType = str(current_app.config["ATTENDANCE_REVOKED"])
     try:
         encoded_body = {
             "eventData": json.dumps(data),
-            "eventType": str(current_app.config["ATTENDANCE_RECORDED"]),
+            "eventType": eventType,
             "sourceId": str(current_app.config["ATTENDANCE_SOURCE_ID"]),
             "timeStamp": datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
         }
@@ -75,7 +83,7 @@ def publish_message_api_call(data):
         )
         with urlopen(req) as res:
             body = res.read().decode()
-        log.info(body)
+        log.info("Message published successfully via api")
     except Exception as ex:
         log.error("Exception in publishing message via api")
         log.error(str(ex))

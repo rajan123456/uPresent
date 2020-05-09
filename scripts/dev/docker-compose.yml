@@ -15,6 +15,7 @@ services:
     depends_on:
       - apm-server
       - broker
+      - facenet
       - management
       - mongo
       - user
@@ -228,10 +229,13 @@ services:
     image: docker.elastic.co/apm/apm-server:7.6.1
     container_name: apm-server
     restart: always
+    ports:
+      - "8200:8200"
     user: apm-server
     command: --strict.perms=false -E output.elasticsearch.hosts=["elasticsearch:9200"]
-    volumes:
-      - ./apm-data-vol/apm-server.docker.yaml:/usr/share/apm-server/apm-server.yml:ro
+    # Commented out since no config overrides are being applied on apm-server presently
+    # volumes:
+    #  - ./apm-data-vol:/usr/share/apm-server:ro
     depends_on:
       - elasticsearch
   spark:
