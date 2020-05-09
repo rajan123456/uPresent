@@ -4,13 +4,14 @@ import pickle
 import constants
 import logging
 
-log = logging.getLogger('root')
+log = logging.getLogger("root")
+
 
 def train_model():
     log.info("training started")
-    recog = constants.PICKLE_FILES_DIR + '/recognizer.pickle'
-    l = constants.PICKLE_FILES_DIR + '/le.pickle'
-    embeddings = constants.PICKLE_FILES_DIR + '/embeddings.pickle'
+    recog = constants.PICKLE_FILES_DIR + "/recognizer.pickle"
+    l = constants.PICKLE_FILES_DIR + "/le.pickle"
+    embeddings = constants.PICKLE_FILES_DIR + "/embeddings.pickle"
 
     # load the face embeddings
     log.info("[INFO] loading face embeddings...")
@@ -38,5 +39,7 @@ def train_model():
         f.write(pickle.dumps(le))
         f.close()
     except Exception as ex:
-        log.error("Exception occurred while trying to train model. Exception msg: " + str(ex))
+        log.error(
+            "Exception occurred while trying to train model. Exception msg: " + str(ex)
+        )
         return {"Exception occurred. Exception msg: ": str(ex)}, 500

@@ -6,12 +6,14 @@ from threading import Thread
 
 
 class VideoProcessorApi(Resource):
-
     @swagger.operation()
     def post(self):
         body = request.get_json()
-        thread = Thread(target=videosplitter, kwargs={'key': request.args.get('key', body['stream'])})
+        thread = Thread(
+            target=videosplitter,
+            kwargs={"key": request.args.get("key", body["stream"])},
+        )
         thread.start()
-        resp = Response('0')
-        resp.headers['content-type'] = 'text/html;charset=utf-8'
+        resp = Response("0")
+        resp.headers["content-type"] = "text/html;charset=utf-8"
         return resp

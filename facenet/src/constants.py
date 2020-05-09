@@ -1,9 +1,9 @@
 SAGA_ENABLED = 1
 MIN_DETECTED_FACE_WIDTH = 20
 MIN_DETECTED_FACE_HEIGHT = 20
-PICKLE_FILES_DIR = '/app/facenet/resources/output'
-MODEL_FILES_DIR = '/app/facenet/resources/model'
-UPLOAD_DIR = '/app/resources/images/'
+PICKLE_FILES_DIR = "/app/facenet/resources/output"
+MODEL_FILES_DIR = "/app/facenet/resources/model"
+UPLOAD_DIR = "/app/resources/images/"
 # PICKLE_FILES_DIR = '/Users/ashishgupta/git/uPresent/face-recognition/resources/output'
 # MODEL_FILES_DIR = '/Users/ashishgupta/git/uPresent/face-recognition/resources/model'
 # UPLOAD_DIR = '/Users/ashishgupta/git/uPresent/face-recognition/resources/images/'
