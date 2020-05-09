@@ -7,7 +7,7 @@ from database.models import Attendance
 from resources.azureface import compare_faces_azure
 from resources.rekognition import compare_faces_rekognition
 from resources.geofence import validateVicinity
-from resources.user import fetchAdmin, fetchStudent
+from resources.user import User
 from resources.producer import publish_message
 from resources.facenet import compare_faces_facenet
 from resources.module import check_module_active
@@ -26,6 +26,7 @@ class AllAttendanceApi(Resource):
 
     @swagger.operation()
     def post(self):
+        u = User()
         try:
             log.info("Inside create attendance method for student ----->>")
             azure_face_enabled = os.getenv("AZURE_FACE_ENABLED")
@@ -43,7 +44,7 @@ class AllAttendanceApi(Resource):
             self.check_if_attendance_marked(attendance)
             check_module_active(attendance.moduleId)
             validateVicinity(body)
-            user = fetchStudent(attendance.username)
+            user = u.fetchStudent(username=attendance.username)
             if user.get("imageId") is None or len(user.get("imageId")) < 1:
                 compare_faces_facenet(attendance.capturedImageId, attendance.username)
             else:
@@ -58,7 +59,7 @@ class AllAttendanceApi(Resource):
             attendance.save()
             publish_message(data=body, recorded=True)
         except Exception as ex:
-            log.error("error from attendance method " + str(ex))
+            log.error("error from post attendance method " + str(ex))
             return {"message": str(ex)}, 400
         return {"id": str(attendance.id)}, 200
 
@@ -90,19 +91,32 @@ class AttendanceApi(Resource):
     @swagger.operation()
     def delete(self, id):
         log.info("Inside delete attendance method for student by id ---->>")
-        username = request.headers.get("Username")
-        if username is None:
-            raise Exception("Username header missing in delete request")
-        else:
-            user = fetchAdmin(username)
-            Attendance.objects.get(id=id).delete()
-            publish_message(data=username, recorded=False)
+        try:
+            u = User()
+            username = request.headers.get("Username")
+            if username is None:
+                raise Exception("Username header missing in delete request")
+            else:
+                user = u.fetchAdmin(username=username)
+                attendance = Attendance.objects.get(id=id)
+                Attendance.objects.get(id=id).delete()
+                publish_message(
+                    data={
+                        "username": username,
+                        "id": id,
+                        "studentId": attendance.username,
+                    },
+                    recorded=False,
+                )
+        except Exception as ex:
+            log.error("error from delete attendance method " + str(ex))
+            return {"message": str(ex)}, 400
         return "", 200
 
     @swagger.operation()
     def get(self, id):
-        log.info("Inside get attendance method for student by id ----->>")
-        attendance = Attendance.objects.get(userId=id).to_json()
+        log.info("Inside get attendance method by id ----->>")
+        attendance = Attendance.objects.get(id=id).to_json()
         return Response(attendance, mimetype="application/json", status=200)
 
     @swagger.operation()

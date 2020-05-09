@@ -54,7 +54,7 @@ def publish_message_kafka(data, recorded):
             current_app.config["KAFKA_PUBLISH_TOPIC"], key=key_bytes, value=value_bytes
         )
         producer_instance.flush()
-        log.info("Message published successfully.")
+        log.info("Message published successfully via kafka")
     except Exception as ex:
         log.error("Exception in publishing message via kafka")
         log.error(str(ex))
@@ -83,7 +83,7 @@ def publish_message_api_call(data, recorded):
         )
         with urlopen(req) as res:
             body = res.read().decode()
-        log.info(body)
+        log.info("Message published successfully via api")
     except Exception as ex:
         log.error("Exception in publishing message via api")
         log.error(str(ex))

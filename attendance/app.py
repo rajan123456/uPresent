@@ -23,4 +23,6 @@ api = swagger.docs(Api(app), apiVersion="0.1")
 
 initialize_db(app)
 initialize_routes(api)
-app.run(host="0.0.0.0")
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0")
