@@ -25,6 +25,7 @@ export class Login extends React.Component {
 
     this.onFocus = this.onFocus.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onClear = this.onClear.bind(this);
     this.onChangeText = this.onChangeText.bind(this);
     this.onSubmitUsername = this.onSubmitUsername.bind(this);
     this.onSubmitPassword = this.onSubmitPassword.bind(this);
@@ -69,6 +70,15 @@ export class Login extends React.Component {
   }
 
   onSubmitPassword() {}
+
+  onClear() {
+    this.setState({
+      secureTextEntry: true,
+      ...defaults,
+    });
+    this.username.clear();
+    this.password.clear();
+  }
 
   onSubmit() {
     let errors = {};
@@ -182,6 +192,14 @@ export class Login extends React.Component {
               <RaisedTextButton
                 onPress={this.onSubmit}
                 title="Login"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.onClear}
+                title="Clear"
                 color={TextField.defaultProps.tintColor}
                 titleColor="white"
               />
