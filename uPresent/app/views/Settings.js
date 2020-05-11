@@ -6,27 +6,44 @@ import AsyncStorage from '@react-native-community/async-storage';
 export class Settings extends React.Component {
   constructor() {
     super();
-    this.onValueChange = this.onValueChange.bind(this);
+    this.onVideoValueChange = this.onVideoValueChange.bind(this);
+    this.onHexagonValueChange = this.onHexagonValueChange.bind(this);
 
-    this.state = {switchValue: false};
+    this.state = {videoSwitchValue: false, hexagonSwitchValue: false};
   }
 
   async componentDidMount() {
     await AsyncStorage.getItem('videoRegistration', (errs, result) => {
       if (!errs) {
         if (result !== null) {
-          this.setState({switchValue: result === 'true'});
+          this.setState({videoSwitchValue: result === 'true'});
+        }
+      }
+    });
+    await AsyncStorage.getItem('hexagonEnvironment', (errs, result) => {
+      if (!errs) {
+        if (result !== null) {
+          this.setState({hexagonSwitchValue: result === 'true'});
         }
       }
     });
   }
 
-  async onValueChange(value) {
-    this.setState({switchValue: value});
+  async onVideoValueChange(value) {
+    this.setState({videoSwitchValue: value});
     try {
       await AsyncStorage.setItem('videoRegistration', value.toString());
     } catch {
-      this.setState({switchValue: !value});
+      this.setState({videoSwitchValue: !value});
+    }
+  }
+
+  async onHexagonValueChange(value) {
+    this.setState({hexagonSwitchValue: value});
+    try {
+      await AsyncStorage.setItem('hexagonEnvironment', value.toString());
+    } catch {
+      this.setState({hexagonSwitchValue: !value});
     }
   }
 
@@ -47,10 +64,23 @@ export class Settings extends React.Component {
                 />
               }
               hasSwitch={true}
-              switchState={this.state.switchValue}
-              switchOnValueChange={this.onValueChange}
+              switchState={this.state.videoSwitchValue}
+              switchOnValueChange={this.onVideoValueChange}
               hasNavArrow={false}
               title="Video Registration"
+            />
+            <SettingsList.Item
+              icon={
+                <Image
+                  style={styles.imageStyle}
+                  source={require('../sections/img/hexagon.png')}
+                />
+              }
+              hasSwitch={true}
+              switchState={this.state.hexagonSwitchValue}
+              switchOnValueChange={this.onHexagonValueChange}
+              hasNavArrow={false}
+              title="Hexagon Environment"
             />
           </SettingsList>
         </View>

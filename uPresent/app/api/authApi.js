@@ -1,8 +1,10 @@
-import {baseUrlAuthApi} from '../config/config';
+import AsyncStorage from '@react-native-community/async-storage';
+import {baseUrlAuthApi, baseUrlAuthHexApi} from '../config/config';
 import {handleResponse, handleError} from './apiUtils';
 
 export function loginUser(user) {
-  return fetch(baseUrlAuthApi, {
+  const baseUrl = getBaseUrlAuthApi();
+  return fetch(baseUrl, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -11,4 +13,18 @@ export function loginUser(user) {
   })
     .then(handleResponse)
     .catch(handleError);
+}
+
+async function getBaseUrlAuthApi() {
+  await AsyncStorage.getItem('hexagonEnvironment', (errs, result) => {
+    if (!errs) {
+      if (result !== null) {
+        if (result === 'true') {
+          return baseUrlAuthHexApi;
+        } else {
+          return baseUrlAuthApi;
+        }
+      }
+    }
+  });
 }
