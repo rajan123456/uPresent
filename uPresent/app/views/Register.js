@@ -23,6 +23,7 @@ export class Register extends React.Component {
 
     this.onFocus = this.onFocus.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onClear = this.onClear.bind(this);
     this.onChangeText = this.onChangeText.bind(this);
     this.onSubmitUsername = this.onSubmitUsername.bind(this);
     this.onSubmitPassword = this.onSubmitPassword.bind(this);
@@ -211,6 +212,23 @@ export class Register extends React.Component {
     });
   }
 
+  onClear() {
+    this.setState({
+      username: '',
+      password: '',
+      passwordConfirm: '',
+      school: '',
+      secureTextEntry: true,
+      images: null,
+      imageIds: [],
+      //videoFlag: false, -- Do not clear videoFlag
+    });
+    this.username.clear();
+    this.password.clear();
+    this.passwordConfirm.clear();
+    this.school.clear();
+  }
+
   render() {
     let {errors = {}, secureTextEntry, ...data} = this.state;
     let {username, password, passwordConfirm} = data;
@@ -310,6 +328,14 @@ export class Register extends React.Component {
               <RaisedTextButton
                 onPress={this.onSubmit}
                 title="Register"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.onClear}
+                title="Clear"
                 color={TextField.defaultProps.tintColor}
                 titleColor="white"
               />

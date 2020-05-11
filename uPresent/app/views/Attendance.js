@@ -31,6 +31,7 @@ export class Attendance extends React.Component {
     this.fetchCredentials = this.fetchCredentials.bind(this);
     this.dropdownOnSelect = this.dropdownOnSelect.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onClear = this.onClear.bind(this);
     this.cancelAttendance = this.cancelAttendance.bind(this);
 
     this.loggedUser = this.updateRef.bind(this, 'loggedUser');
@@ -183,6 +184,20 @@ export class Attendance extends React.Component {
     });
   }
 
+  onClear() {
+    this.setState({
+      loading: false,
+      updatesEnabled: false,
+      location: {},
+      images: null,
+      imageIds: [],
+      //modules: [], -- Do not clear modules
+      module: '',
+      isLoggedIn: false,
+      loggedUser: false,
+    });
+  }
+
   async onSubmit() {
     await this.getLocation();
     getUserByName(this.state.loggedUser).then(_resp => {
@@ -200,6 +215,8 @@ export class Attendance extends React.Component {
         if (_respAtt.message === 'Not in the right vicinity') {
           Alert.alert('Geofence check failed. Try again later.');
           this.props.navigation.push('HomeRT');
+        } else if (_respAtt.message === 'Attendance already marked!') {
+          Alert.alert('Attendance already submitted, duplicate rejected.');
         } else if (_respAtt.message != null) {
           Alert.alert('Something went wrong. Try again later.');
           this.props.navigation.push('HomeRT');
@@ -266,6 +283,14 @@ export class Attendance extends React.Component {
               <RaisedTextButton
                 onPress={this.onSubmit}
                 title="Submit"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={this.onClear}
+                title="Clear"
                 color={TextField.defaultProps.tintColor}
                 titleColor="white"
               />
