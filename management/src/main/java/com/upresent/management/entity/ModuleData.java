@@ -13,13 +13,11 @@ public class ModuleData {
 
 	@Id
 	private String moduleCode;
+	private String schoolCode;
     private String moduleName;
-//  pattern = "MM/dd/yyyy"
-    private String startDate;
-//  pattern = "MM/dd/yyyy"
-    private String endDate;
-    // Mon, Tue, Wed, Thur, Fri, Sat, Sun
-    private List<String> scheduledDays;
+    private String startDate; //pattern = "MM/dd/yyyy"
+    private String endDate; //pattern = "MM/dd/yyyy"
+    private List<String> scheduledDays; // Mon, Tue, Wed, Thur, Fri, Sat, Sun
     private String createdBy;
     @LastModifiedDate
     private Date updatedOn;
