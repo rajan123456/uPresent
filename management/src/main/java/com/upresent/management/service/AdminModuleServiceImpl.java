@@ -13,17 +13,18 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.upresent.management.entity.ModuleData;
+import com.upresent.management.entity.SchoolData;
 import com.upresent.management.exception.ExceptionResponseCode;
 import com.upresent.management.exception.ManagementException;
 import com.upresent.management.producer.KafkaMessageProducer;
 import com.upresent.management.producer.RestMessageProducer;
 import com.upresent.management.repository.ModuleRepository;
+import com.upresent.management.repository.SchoolRepository;
 import com.upresent.management.utils.CommonUtility;
 import com.upresent.management.utils.Constant;
 import com.upresent.management.utils.UserModuleUtil;
 
 @Service
-@SuppressWarnings("unchecked")
 public class AdminModuleServiceImpl implements AdminModuleService {
 
 	@Autowired
@@ -34,6 +35,9 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 
 	@Autowired
 	private ModuleRepository moduleRepository;
+
+	@Autowired
+	private SchoolRepository schoolRepository;
 
 	@Autowired
 	UserModuleUtil userModuleUtil;
@@ -50,10 +54,15 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 			if (optionalExistingModule.isPresent()) {
 				throw new ManagementException(ExceptionResponseCode.MODULE_ALREADY_EXISTS);
 			} else {
+				Optional<SchoolData> optionalExistingSchool = schoolRepository.findById(moduleData.getSchoolCode());
+       			if(!optionalExistingSchool.isPresent()) {
+					throw new ManagementException((ExceptionResponseCode.DATA_NOT_FOUND));
+				}
 				int idealNumberOfStudents = moduleData.getStudentUsernames().size();
 				if (idealNumberOfStudents > 0) {
 					Map<String, Object> userTypes = userModuleUtil
 							.getUserTypesFromUsernames(moduleData.getStudentUsernames());
+					//noinspection unchecked
 					List<String> students = (List<String>) userTypes.get("student");
 					if (students.size() != idealNumberOfStudents) {
 						throw new ManagementException(ExceptionResponseCode.ALL_USERS_NOT_STUDENTS);
@@ -77,6 +86,7 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 				if (idealNumberOfStudents > 0) {
 					Map<String, Object> userTypes = userModuleUtil
 							.getUserTypesFromUsernames(moduleData.getStudentUsernames());
+					//noinspection unchecked
 					List<String> students = (List<String>) userTypes.get("student");
 					if (students.size() != idealNumberOfStudents) {
 						throw new ManagementException(ExceptionResponseCode.ALL_USERS_NOT_STUDENTS);
@@ -103,7 +113,7 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 	}
 
 	@Override
-	public List<ModuleData> getAllModules() throws ManagementException {
+	public List<ModuleData> getAllModules() {
 		return moduleRepository.findAll();
 	}
 

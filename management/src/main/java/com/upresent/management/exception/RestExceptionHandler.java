@@ -26,7 +26,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(value = {ManagementException.class})
-	protected ResponseEntity<?> handleknownException(ManagementException ex, WebRequest request) {
+	protected ResponseEntity<?> handleKnownException(ManagementException ex, WebRequest request) {
 		if(!CommonUtility.isNullObject(ex.getResponseCode())){
 			log.error("Custom Exception:: Error Code :: {} Custom Exception:: Error Description {}",ex.getResponseCode().getCode(), ex.getResponseCode().getDescription());
 		}else{

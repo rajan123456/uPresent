@@ -17,7 +17,6 @@ public class GeoFenceData {
 	private String id;
 	@JsonIgnore
     private String username;
-	private String universityName;
     private Float latitude;
     private Float longitude;
     private Float radiusInMeter;

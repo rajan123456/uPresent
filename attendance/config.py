@@ -16,7 +16,7 @@ class Config(object):
     VAULT_PORT = 8200
     VAULT_LOGIN_URL = "/v1/auth/cert/login"
     VAULT_DATA_URL = "/v1/aws/data"
-    # KAFKA_ADDRESS = "localhost:29092"
+    # KAFKA_ADDRESS = "localhost:9092"
     KAFKA_ADDRESS = "broker:29092"
     KAFKA_PUBLISH_TOPIC = "attendanceEvents"
     SAGA_ENABLED = 1
@@ -28,8 +28,12 @@ class Config(object):
     FACENET_RECOGNITION_API = "http://facenet:5000/api/face/"
     # MODULE_API_FETCH_DETAILS = 'https://dev.upresent.ga/management/manage/module?moduleCode='
     MODULE_API_FETCH_DETAILS = "http://management:8080/manage/module?moduleCode="
-    # MANAGEMENT_API_GEO_FENCE = "http://localhost:8081/manage/geo-fence?universityName="
-    MANAGEMENT_API_GEO_FENCE = "http://management:8080/manage/geo-fence?universityName="
+    # MANAGEMENT_API_GEO_FENCE = (
+    #     "http://localhost:8081/manage/school/geo-fence?schoolCode="
+    # )
+    MANAGEMENT_API_GEO_FENCE = (
+        "http://management:8080/manage/school/geo-fence?schoolCode="
+    )
     # USER_API_FETCH_USER = "http://localhost:8084/user?username="
     USER_API_FETCH_USER = "http://user:8080/user?username="
     AZURE_FACE_ENDPOINT = "https://eastus.api.cognitive.microsoft.com/"

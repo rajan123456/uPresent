@@ -30,6 +30,7 @@ services:
       - apm-server
       - broker
       - mongo
+      - reporting
       - user
   reporting:
     image: rajagupt/reporting:latest
@@ -104,8 +105,8 @@ services:
     image: mongo:latest
     container_name: mongo
     restart: always
-    # ports:
-    # - "27017:27017"
+    ports:
+      - "27017:27017"
     volumes:
       - mongo-data-vol:/data/db
     environment:
