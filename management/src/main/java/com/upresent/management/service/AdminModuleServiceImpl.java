@@ -25,7 +25,6 @@ import com.upresent.management.utils.Constant;
 import com.upresent.management.utils.UserModuleUtil;
 
 @Service
-@SuppressWarnings("unchecked")
 public class AdminModuleServiceImpl implements AdminModuleService {
 
 	@Autowired
@@ -63,6 +62,7 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 				if (idealNumberOfStudents > 0) {
 					Map<String, Object> userTypes = userModuleUtil
 							.getUserTypesFromUsernames(moduleData.getStudentUsernames());
+					//noinspection unchecked
 					List<String> students = (List<String>) userTypes.get("student");
 					if (students.size() != idealNumberOfStudents) {
 						throw new ManagementException(ExceptionResponseCode.ALL_USERS_NOT_STUDENTS);
@@ -86,6 +86,7 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 				if (idealNumberOfStudents > 0) {
 					Map<String, Object> userTypes = userModuleUtil
 							.getUserTypesFromUsernames(moduleData.getStudentUsernames());
+					//noinspection unchecked
 					List<String> students = (List<String>) userTypes.get("student");
 					if (students.size() != idealNumberOfStudents) {
 						throw new ManagementException(ExceptionResponseCode.ALL_USERS_NOT_STUDENTS);
@@ -112,7 +113,7 @@ public class AdminModuleServiceImpl implements AdminModuleService {
 	}
 
 	@Override
-	public List<ModuleData> getAllModules() throws ManagementException {
+	public List<ModuleData> getAllModules() {
 		return moduleRepository.findAll();
 	}
 

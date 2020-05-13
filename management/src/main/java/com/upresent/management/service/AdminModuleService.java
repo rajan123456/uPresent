@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.upresent.management.entity.ModuleData;
 import com.upresent.management.exception.ManagementException;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface AdminModuleService {
 
 	String createModule(ModuleData moduleData) throws ManagementException;
@@ -17,5 +19,5 @@ public interface AdminModuleService {
 
 	ModuleData getModule(String moduleCode) throws ManagementException;
 
-	List<ModuleData> getAllModules() throws ManagementException;
+	List<ModuleData> getAllModules();
 }

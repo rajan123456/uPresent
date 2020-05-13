@@ -20,7 +20,7 @@ public class SchoolController {
     private SchoolService schoolService;
 
     @PostMapping
-    public ResponseEntity<RestResponse<String>> createModule(
+    public ResponseEntity<RestResponse<String>> createSchool(
             @RequestBody SchoolData schoolInfo) {
         return RestUtils.successResponse(schoolService.createSchool(schoolInfo));
     }
