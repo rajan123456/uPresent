@@ -1,8 +1,10 @@
-import {baseUrlFileApi} from '../config/config';
+import AsyncStorage from '@react-native-community/async-storage';
+import {baseUrlFileApi, baseUrlFileHexApi} from '../config/config';
 import {handleResponse, handleError} from './apiUtils';
 
-export function saveFile(file) {
-  return fetch(baseUrlFileApi, {
+export async function saveFile(file) {
+  const baseUrl = await getBaseUrlFileApi();
+  return fetch(baseUrl, {
     method: 'POST',
     body: file,
     headers: {
@@ -11,4 +13,20 @@ export function saveFile(file) {
   })
     .then(handleResponse)
     .catch(handleError);
+}
+
+async function getBaseUrlFileApi() {
+  let baseUrl = '';
+  await AsyncStorage.getItem('hexagonEnvironment', (errs, result) => {
+    if (!errs) {
+      if (result !== null) {
+        if (result === 'true') {
+          baseUrl = baseUrlFileHexApi;
+        } else {
+          baseUrl = baseUrlFileApi;
+        }
+      }
+    }
+  });
+  return baseUrl;
 }

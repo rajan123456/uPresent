@@ -1,7 +1,7 @@
 export async function handleResponse(response) {
   if (response.ok && response.status === 200) {
     return response.json();
-  } else if (response.status === 400 || response.status === 500) {
+  } else if (response.status === 400) {
     console.log('Bad response: ' + response);
     return response.json();
   } else {
