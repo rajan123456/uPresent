@@ -32,7 +32,7 @@ public class AdminModuleController {
 			@RequestBody ModuleData moduleInfo) {
 		return RestUtils.successResponse(adminModuleService.createModule(moduleInfo));
 	}
-	
+
 	@PutMapping
 	public ResponseEntity<RestResponse<String>> updateModule(
 			@RequestBody ModuleData moduleInfo) {
