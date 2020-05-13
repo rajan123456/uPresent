@@ -51,7 +51,10 @@ public class SchoolServiceImpl implements SchoolService {
                             && CommonUtility.isValidLongitude(schoolData.getGeoFenceData().getLongitude())
                             && schoolData.getGeoFenceData().getRadiusInMeter() > 0)) {
                         throw new ManagementException(ExceptionResponseCode.INVALID_REQUEST);
-                    }
+                 }
+                 if(!(CommonUtility.isValidTimeZone(schoolData.getTimeZone()))) {
+                     throw new ManagementException(ExceptionResponseCode.INVALID_REQUEST);
+                 }
                 SchoolData school = schoolRepository.save(schoolData);
                 publishAdminSchoolUpdates(school, Constant.SCHOOL_CREATED_EVENT);
             }
@@ -69,6 +72,9 @@ public class SchoolServiceImpl implements SchoolService {
                 if (!(CommonUtility.isValidLatitude(schoolData.getGeoFenceData().getLatitude())
                         && CommonUtility.isValidLongitude(schoolData.getGeoFenceData().getLongitude())
                         && schoolData.getGeoFenceData().getRadiusInMeter() > 0)) {
+                    throw new ManagementException(ExceptionResponseCode.INVALID_REQUEST);
+                }
+                if(!(CommonUtility.isValidTimeZone(schoolData.getTimeZone()))) {
                     throw new ManagementException(ExceptionResponseCode.INVALID_REQUEST);
                 }
                 SchoolData school = schoolRepository.save(schoolData);

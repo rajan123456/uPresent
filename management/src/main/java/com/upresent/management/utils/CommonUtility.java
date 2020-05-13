@@ -1,8 +1,6 @@
 package com.upresent.management.utils;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CommonUtility {
 
@@ -56,6 +54,16 @@ public class CommonUtility {
 	
 	public static boolean isValidLongitude(Float longitude) {
 		return (longitude >= -180 && longitude <= 180);
+	}
+
+	public static boolean isValidTimeZone(String timezone) {
+		String[] validIDs = TimeZone.getAvailableIDs();
+		for (String str : validIDs) {
+			if (str != null && str.equals(timezone)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public static String stringifyEventForPublish(String param1, String param2, String param3, String param4, String param5) {

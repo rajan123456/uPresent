@@ -14,6 +14,7 @@ public class SchoolData {
     private String schoolCode;
     private String schoolName;
     private List<Date> holidays;
+    private String timeZone;
     private GeoFenceData geoFenceData;
     private String createdBy;
     @JsonIgnore
