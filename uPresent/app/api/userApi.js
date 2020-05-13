@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {baseUrlUserApi, baseUrlUserHexApi} from '../config/config';
 import {handleResponse, handleError} from './apiUtils';
 
-export function saveUser(user) {
-  const baseUrl = getBaseUrlUserApi();
+export async function saveUser(user) {
+  const baseUrl = await getBaseUrlUserApi();
   return fetch(baseUrl, {
     method: 'POST',
     headers: {
@@ -15,8 +15,8 @@ export function saveUser(user) {
     .catch(handleError);
 }
 
-export function getUserByName(username) {
-  const baseUrl = getBaseUrlUserApi();
+export async function getUserByName(username) {
+  const baseUrl = await getBaseUrlUserApi();
   return fetch(baseUrl + '?username=' + username, {
     method: 'GET',
     headers: {
@@ -28,15 +28,17 @@ export function getUserByName(username) {
 }
 
 async function getBaseUrlUserApi() {
+  let baseUrl = '';
   await AsyncStorage.getItem('hexagonEnvironment', (errs, result) => {
     if (!errs) {
       if (result !== null) {
         if (result === 'true') {
-          return baseUrlUserHexApi;
+          baseUrl = baseUrlUserHexApi;
         } else {
-          return baseUrlUserApi;
+          baseUrl = baseUrlUserApi;
         }
       }
     }
   });
+  return baseUrl;
 }

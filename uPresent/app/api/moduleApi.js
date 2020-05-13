@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {handleResponse, handleError} from './apiUtils';
 import {baseUrlModuleApi, baseUrlModuleHexApi} from '../config/config';
 
-export function getModulesOfUser(username) {
-  const baseUrl = getBaseUrlModuleApi();
+export async function getModulesOfUser(username) {
+  const baseUrl = await getBaseUrlModuleApi();
   return fetch(baseUrl + '?username=' + username, {
     method: 'GET',
     headers: {
@@ -15,15 +15,17 @@ export function getModulesOfUser(username) {
 }
 
 async function getBaseUrlModuleApi() {
+  let baseUrl = '';
   await AsyncStorage.getItem('hexagonEnvironment', (errs, result) => {
     if (!errs) {
       if (result !== null) {
         if (result === 'true') {
-          return baseUrlModuleHexApi;
+          baseUrl = baseUrlModuleHexApi;
         } else {
-          return baseUrlModuleApi;
+          baseUrl = baseUrlModuleApi;
         }
       }
     }
   });
+  return baseUrl;
 }

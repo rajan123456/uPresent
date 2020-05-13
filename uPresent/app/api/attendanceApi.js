@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {baseUrlAttendanceApi, baseUrlAttendanceHexApi} from '../config/config';
 import {handleResponse, handleError} from './apiUtils';
 
-export function saveAttendance(attendance) {
-  const baseUrl = getBaseUrlAttendanceApi();
+export async function saveAttendance(attendance) {
+  const baseUrl = await getBaseUrlAttendanceApi();
   return fetch(baseUrl, {
     method: 'POST',
     headers: {
@@ -16,15 +16,17 @@ export function saveAttendance(attendance) {
 }
 
 async function getBaseUrlAttendanceApi() {
+  let baseUrl = '';
   await AsyncStorage.getItem('hexagonEnvironment', (errs, result) => {
     if (!errs) {
       if (result !== null) {
         if (result === 'true') {
-          return baseUrlAttendanceHexApi;
+          baseUrl = baseUrlAttendanceHexApi;
         } else {
-          return baseUrlAttendanceApi;
+          baseUrl = baseUrlAttendanceApi;
         }
       }
     }
   });
+  return baseUrl;
 }
