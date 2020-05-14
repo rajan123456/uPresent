@@ -18,6 +18,7 @@ services:
       - facenet
       - management
       - mongo
+      - reporting
       - user
       - vault
   management:
@@ -54,6 +55,7 @@ services:
       - apm-server
       - broker
       - mongo
+      - reporting
   admin:
     image: rajagupt/upresent-admin:latest
     container_name: admin
