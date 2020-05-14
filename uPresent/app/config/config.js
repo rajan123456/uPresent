@@ -13,6 +13,7 @@ export const baseUrlUserApi = 'https://user.upresent.ga/user';
 export const baseUrlFileApi = 'https://user.upresent.ga/file';
 export const baseUrlAuthApi = 'https://user.upresent.ga/auth';
 export const baseUrlModuleApi = 'https://management.upresent.ga/student-module';
+export const baseUrlSchoolApi = 'https://management.upresent.ga/manage/school';
 export const baseUrlAttendanceApi =
   'https://attendance.upresent.ga/api/attendance';
 export const baseUrlRtmp = 'rtmp://srs.upresent.ga/app/';
@@ -23,6 +24,8 @@ export const baseUrlFileHexApi = 'https://user-hex.upresent.ga/file';
 export const baseUrlAuthHexApi = 'https://user-hex.upresent.ga/auth';
 export const baseUrlModuleHexApi =
   'https://management-hex.upresent.ga/student-module';
+export const baseUrlSchoolHexApi =
+  'https://management-hex.upresent.ga/manage/school';
 export const baseUrlAttendanceHexApi =
   'https://attendance-hex.upresent.ga/api/attendance';
 export const baseUrlHexRtmp = 'rtmp://srs-hex.upresent.ga/app/';
