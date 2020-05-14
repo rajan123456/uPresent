@@ -1,11 +1,17 @@
+main {
+  font-family: sans-serif;
+  margin: 10px;
+  padding: 10px;
+  z-index: inherit -1;
+}
+
 body {
-  margin: 0;
-  padding: 0;
   font-family: sans-serif;
 }
 
-.body {
-  margin: 15px;
+.container-fluid {
+  padding: 0px;
+  padding-left: 0px;
 }
 
 h1,
@@ -29,7 +35,7 @@ nav ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-image: linear-gradient(to bottom right, #f0582a, #eb0685);
+  /* background-image: linear-gradient(to bottom right, #f0582a, #eb0685); */
 }
 
 nav li {
@@ -44,9 +50,9 @@ nav li a {
   text-decoration: none;
 }
 
-nav li a:hover {
+/* nav li a:hover {
   background-color: #d9390d;
-}
+} */
 
 nav button {
   margin-top: 13px;

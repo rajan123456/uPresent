@@ -23,8 +23,9 @@ function LoginForm(props) {
         value={props.user.password}
         error={props.errors.password}
       />
-
-      <input type="submit" value="Login" className="btn btn-primary" />
+      <div class="text-center">
+        <input type="submit" value="Login" className="btn btn-primary" />
+      </div>
     </form>
   );
 }

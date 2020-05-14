@@ -45,7 +45,9 @@ function CreateFenceForm(props) {
         error={props.errors.radiusInMeter}
         readOnly={false}
       />
-      <input type="submit" value="Save" className="btn btn-primary" />
+      <div style={{textAlign: 'center'}}>
+        <input type="submit" value="Save" className="btn btn-primary" />
+      </div>
     </form>
   );
 }

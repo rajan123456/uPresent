@@ -60,11 +60,12 @@ const LoginPage = (props) => {
   }
 
   return (
-    <div className="jumbotron">
+    <div>
+    <h1 style={{textAlign: 'center'}}>uPresent Admin Portal</h1>
+    <div className="jumbotron" style={{width:'50%', marginLeft:'25%'}}>
       <div className="container">
-        <div className="col-sm-8 col-sm-offset-2">
           <>
-            <h1>uPresent Admin Portal</h1>
+          <h2 style={{textAlign: 'center',color:'black'}}>Login</h2>
             <LoginForm
               errors={errors}
               user={user}
@@ -73,7 +74,7 @@ const LoginPage = (props) => {
             />
           </>
         </div>
-      </div>
+    </div>
     </div>
   );
 };

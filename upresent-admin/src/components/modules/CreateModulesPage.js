@@ -96,7 +96,7 @@ const CreateModulesPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
+      <div className="main" style={{padding: '10px', width:'30%'}}>
         <h2>Add Module</h2>
         <CreateModuleForm
           errors={errors}

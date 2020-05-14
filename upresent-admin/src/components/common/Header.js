@@ -11,7 +11,7 @@ const rightStyle = {
 
 function Header() {
   return (
-    <nav>
+    <nav class="bg-dark">
       <ul>
         <li>
           <Link to="/home">Home</Link>

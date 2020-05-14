@@ -112,7 +112,7 @@ const ManageModulesPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
+      <div className="main" style={{padding: '10px'}}>
         <h2>Manage Module</h2>
         <ManageModuleForm
           errors={errors}

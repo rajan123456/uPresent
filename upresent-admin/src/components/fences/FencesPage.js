@@ -14,11 +14,11 @@ function FencesPage() {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
-        <h2>Geo-Fence</h2>
+      <div className="main" style={{padding: '10px'}}>
+      <h2 style={{display: 'inline-block'}}>Geo-Fence</h2>
         <Link
           className="btn btn-primary"
-          style={{ margin: "5px" }}
+          style={{ marginBottom: "25px", float:'right' }}
           to="/fence/add"
         >
           Add Geo-Fence

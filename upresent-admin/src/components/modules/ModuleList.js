@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function ModuleList(props) {
   return (
-    <table className="table">
+    <table className="table table-bordered">
       <thead>
         <tr>
           <th>Code</th>

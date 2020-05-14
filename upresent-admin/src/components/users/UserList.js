@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 function UserList(props) {
   return (
-    <table className="table">
+    <table className="table table-bordered">
       <thead>
-        <tr>
+        <tr class="success">
           <th>Name</th>
           <th>Username</th>
           <th>Role</th>

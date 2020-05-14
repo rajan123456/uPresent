@@ -35,7 +35,9 @@ function CreateUserForm(props) {
         error={props.errors.username}
         readOnly={false}
       />
+      <div style={{textAlign: 'center'}}>
       <input type="submit" value="Save" className="btn btn-primary" />
+      </div>
     </form>
   );
 }

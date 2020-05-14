@@ -144,7 +144,7 @@ function ReportsPage() {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
+      <div className="main" style={{padding: '10px'}}>
         <h2>Reports</h2>
         <ReportsForm
           report={report}

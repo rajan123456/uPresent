@@ -78,8 +78,10 @@ function CreateModuleForm(props) {
             options={props.availableStudents}
           />
         </Grid>
-        <input type="submit" value="Save" className="btn btn-primary" />
       </Grid>
+      <div style={{textAlign: 'center'}}>
+        <input type="submit" value="Save" className="btn btn-primary" />
+        </div>
     </form>
   );
 }

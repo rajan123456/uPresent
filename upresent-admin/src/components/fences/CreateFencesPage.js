@@ -54,7 +54,7 @@ const CreateFencesPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
+      <div className="main" style={{padding: '10px'}}>
         <h2>Add Geo-Fence</h2>
         <CreateFenceForm
           errors={errors}

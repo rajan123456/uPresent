@@ -6,7 +6,7 @@ function NotFoundPage() {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
+      <div className="main" style={{padding: '10px'}}>
         <h2>Huh! What's that?</h2>
         <p>
           Looks like that does not exist <br />
