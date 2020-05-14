@@ -30,7 +30,6 @@ export class Register extends React.Component {
     this.onSubmitUsername = this.onSubmitUsername.bind(this);
     this.onSubmitPassword = this.onSubmitPassword.bind(this);
     this.onSubmitPasswordConfirm = this.onSubmitPasswordConfirm.bind(this);
-    this.onSubmitSchool = this.onSubmitSchool.bind(this);
     this.onAccessoryPress = this.onAccessoryPress.bind(this);
     this.dropdownOnSelect = this.dropdownOnSelect.bind(this);
 
