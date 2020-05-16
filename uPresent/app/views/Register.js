@@ -13,9 +13,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TextField} from 'react-native-material-textfield';
 import {RaisedTextButton} from 'react-native-material-buttons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import ModalDropdown from 'react-native-modal-dropdown';
 import ImagePicker from 'react-native-image-crop-picker';
 import {saveFile} from '../api/fileApi';
 import {saveUser, getUserByName} from '../api/userApi';
+import {getAllSchools} from '../api/schoolApi';
 
 export class Register extends React.Component {
   constructor(props) {
@@ -28,13 +30,14 @@ export class Register extends React.Component {
     this.onSubmitUsername = this.onSubmitUsername.bind(this);
     this.onSubmitPassword = this.onSubmitPassword.bind(this);
     this.onSubmitPasswordConfirm = this.onSubmitPasswordConfirm.bind(this);
-    this.onSubmitSchool = this.onSubmitSchool.bind(this);
     this.onAccessoryPress = this.onAccessoryPress.bind(this);
+    this.dropdownOnSelect = this.dropdownOnSelect.bind(this);
 
     this.usernameRef = this.updateRef.bind(this, 'username');
     this.passwordRef = this.updateRef.bind(this, 'password');
     this.passwordConfirmRef = this.updateRef.bind(this, 'passwordConfirm');
     this.schoolRef = this.updateRef.bind(this, 'school');
+    this.schools = this.updateRef.bind(this, 'schools');
 
     this.renderPasswordAccessory = this.renderPasswordAccessory.bind(this);
 
@@ -43,6 +46,7 @@ export class Register extends React.Component {
       password: '',
       passwordConfirm: '',
       school: '',
+      schools: [],
       secureTextEntry: true,
       images: null,
       imageIds: [],
@@ -58,12 +62,17 @@ export class Register extends React.Component {
         delete errors[name];
       }
     }
-
     this.setState({errors});
   }
 
+  dropdownOnSelect(idx, value) {
+    this.setState({
+      school: value,
+    });
+  }
+
   onChangeText(text) {
-    ['username', 'password', 'passwordConfirm', 'school']
+    ['username', 'password', 'passwordConfirm']
       .map(name => ({name, ref: this[name]}))
       .forEach(({name, ref}) => {
         if (ref.isFocused()) {
@@ -80,16 +89,12 @@ export class Register extends React.Component {
     this.passwordConfirm.focus();
   }
 
-  onSubmitPasswordConfirm() {
-    this.school.focus();
-  }
-
-  onSubmitSchool() {}
+  onSubmitPasswordConfirm() {}
 
   onSubmit() {
     let errors = {};
 
-    ['username', 'password', 'passwordConfirm', 'school'].forEach(name => {
+    ['username', 'password', 'passwordConfirm'].forEach(name => {
       let value = this[name].value();
 
       if (!value) {
@@ -116,7 +121,7 @@ export class Register extends React.Component {
         name: this.username.value(),
         username: this.username.value(),
         password: this.password.value(),
-        school: this.school.value(),
+        school: this.state.school,
       };
 
       saveUser(user).then(async _resp => {
@@ -210,6 +215,13 @@ export class Register extends React.Component {
         }
       }
     });
+    getAllSchools().then(_resp => {
+      if (_resp.message === 'ok') {
+        this.setState({
+          schools: _resp.data.map(a => a.schoolCode).sort(),
+        });
+      }
+    });
   }
 
   onClear() {
@@ -218,6 +230,7 @@ export class Register extends React.Component {
       password: '',
       passwordConfirm: '',
       school: '',
+      //schools: [], -- Do not clear schools
       secureTextEntry: true,
       images: null,
       imageIds: [],
@@ -226,12 +239,11 @@ export class Register extends React.Component {
     this.username.clear();
     this.password.clear();
     this.passwordConfirm.clear();
-    this.school.clear();
   }
 
   render() {
     let {errors = {}, secureTextEntry, ...data} = this.state;
-    let {username, password, passwordConfirm} = data;
+    let {username, password, passwordConfirm, schools} = data;
 
     return (
       <SafeAreaView style={styles.safeContainer}>
@@ -286,16 +298,15 @@ export class Register extends React.Component {
               maxLength={15}
               renderRightAccessory={this.renderPasswordAccessory}
             />
-            <TextField
+            <ModalDropdown
+              style={styles.dropdown}
+              dropdownStyle={styles.dropdownStyle}
+              dropdownTextStyle={styles.dropdownTextStyle}
+              dropdownTextHighlightStyle={styles.dropdownTextHighlightStyle}
               ref={this.schoolRef}
-              autoCorrect={false}
-              enablesReturnKeyAutomatically={true}
-              onFocus={this.onFocus}
-              onChangeText={this.onChangeText}
-              onSubmitEditing={this.onSubmitSchool}
-              returnKeyType="next"
-              label="School"
-              error={errors.school}
+              options={this.state.schools}
+              defaultValue="Select School"
+              onSelect={(idx, value) => this.dropdownOnSelect(idx, value)}
             />
             {!this.state.videoFlag ? (
               <TouchableHighlight style={styles.buttonStyle}>
@@ -403,5 +414,26 @@ const styles = {
     marginTop: 10,
     marginBottom: 10,
     alignSelf: 'center',
+  },
+  dropdown: {
+    margin: 8,
+    borderColor: 'lightgray',
+    borderWidth: 1,
+    borderRadius: 1,
+  },
+  dropdownTextStyle: {
+    backgroundColor: '#000',
+    color: '#fff',
+  },
+  dropdownTextHighlightStyle: {
+    backgroundColor: '#fff',
+    color: '#000',
+  },
+  dropdownStyle: {
+    width: 150,
+    height: 300,
+    borderColor: 'cornflowerblue',
+    borderWidth: 2,
+    borderRadius: 3,
   },
 };
