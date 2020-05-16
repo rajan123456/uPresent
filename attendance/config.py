@@ -26,7 +26,7 @@ class Config(object):
     # REPORT_PUBLISH_API = "http://localhost:8083/reporting"
     REPORT_PUBLISH_API = "http://reporting:8080/reporting"
     FACENET_RECOGNITION_API = "http://facenet:5000/api/face/"
-    # MODULE_API_FETCH_DETAILS = 'https://dev.upresent.ga/management/manage/module?moduleCode='
+    # MODULE_API_FETCH_DETAILS = "http://localhost:8082/manage/module?moduleCode="
     MODULE_API_FETCH_DETAILS = "http://management:8080/manage/module?moduleCode="
     # MANAGEMENT_API_GEO_FENCE = (
     #     "http://localhost:8081/manage/school/geo-fence?schoolCode="
@@ -34,6 +34,8 @@ class Config(object):
     MANAGEMENT_API_GEO_FENCE = (
         "http://management:8080/manage/school/geo-fence?schoolCode="
     )
+    # MANAGEMENT_API_SCHOOL = "http://localhost:8082/manage/school?schoolCode="
+    MANAGEMENT_API_SCHOOL = "http://management:8080/manage/school?schoolCode="
     # USER_API_FETCH_USER = "http://localhost:8084/user?username="
     USER_API_FETCH_USER = "http://user:8080/user?username="
     AZURE_FACE_ENDPOINT = "https://eastus.api.cognitive.microsoft.com/"
