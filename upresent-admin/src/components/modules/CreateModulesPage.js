@@ -16,11 +16,12 @@ const CreateModulesPage = (props) => {
     endDate: moment(new Date()).format("MM/DD/YYYY"),
     moduleCode: "",
     moduleName: "",
+    schoolCode: "",
     endTime: new Date(),
     startTime: new Date(),
     scheduledDays: [],
     studentUsernames: [],
-    schedule: []
+    schedule: [],
   });
 
   const [students, setStudents] = useState([]);

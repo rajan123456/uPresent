@@ -10,11 +10,23 @@ function CreateModuleForm(props) {
   return (
     <form onSubmit={props.onSubmit}>
       <Grid container spacing={Number(2)}>
+      <Grid item xs={12}>
+          <TextInput
+            id="schoolCode"
+            type="text"
+            label="School Code"
+            onChange={props.onChange}
+            name="schoolCode"
+            value={props.module.schoolCode}
+            error={props.errors.schoolCode}
+            readOnly={false}
+          />
+        </Grid>
         <Grid item xs={12}>
           <TextInput
             id="moduleCode"
             type="text"
-            label="Code"
+            label="Module Code"
             onChange={props.onChange}
             name="moduleCode"
             value={props.module.moduleCode}
@@ -26,7 +38,7 @@ function CreateModuleForm(props) {
           <TextInput
             id="moduleName"
             type="text"
-            label="Name"
+            label="Module Name"
             onChange={props.onChange}
             name="moduleName"
             value={props.module.moduleName}

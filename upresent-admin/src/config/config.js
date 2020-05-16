@@ -6,28 +6,29 @@ export const baseUrlUserApi =
   //   ?
   //"https://user.upresent.ga/user";
   //   :
-  "https://dev.upresent.ga/user/user";
+  "http://localhost:8084/user";
 export const baseUrlAuthApi =
   // environmentVariable === "prod"
   //   ?
   //"https://user.upresent.ga/auth";
   //   :
-  "https://dev.upresent.ga/user/auth";
-export const baseUrlFenceApi =
+  "http://localhost:8084/auth";
+export const baseUrlSchoolApi =
   // environmentVariable === "prod"
   //   ?
-  //"https://management.upresent.ga/manage/geo-fence";
+  //"https://management.upresent.ga/manage/school";
   //   :
-  "https://dev.upresent.ga/management/manage/geo-fence";
+  "http://localhost:8082/manage/school";
 export const baseUrlModuleApi =
   // environmentVariable === "prod"
   //   ?
   //"https://management.upresent.ga/manage/module";
   //   :
-  "https://dev.upresent.ga/management/manage/module";
+  "http://localhost:8082/manage/module";
 export const baseUrlReportingApi =
   // environmentVariable === "prod"
   //   ?
   //"https://reporting.upresent.ga/attendance";
   //   :
   "https://dev.upresent.ga/reporting/attendance";
+

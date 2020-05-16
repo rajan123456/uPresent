@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import CreateFenceForm from "./CreateFenceForm";
+import React, { useState, useEffect } from "react";
+import ManageSchoolForm from "./ManageSchoolForm";
 import Header from "../common/Header";
 import * as fenceApi from "../../api/fenceApi";
 import { toast } from "react-toastify";
 
-const CreateFencesPage = (props) => {
+const ManageSchoolPage = (props) => {
   const [errors, setErrors] = useState({});
 
   const [fence, setFence] = useState({
@@ -14,6 +14,15 @@ const CreateFencesPage = (props) => {
     radiusInMeter: "",
     username: "",
   });
+
+  useEffect(() => {
+    const universityName = props.match.params.universityName;
+    if (universityName) {
+      fenceApi
+        .getFenceByUniversityName(universityName)
+        .then((_fence) => setFence(_fence.data));
+    }
+  }, [props.match.params.universityName]);
 
   function handleChange({ target }) {
     setFence({
@@ -45,9 +54,11 @@ const CreateFencesPage = (props) => {
     fence.radiusInMeter = parseFloat(fence.radiusInMeter);
     fence.username = localStorage.getItem("user");
 
-    fenceApi.saveFence(fence).then(() => {
-      props.history.push("/fences");
-      toast.success("Fence saved");
+    fenceApi.saveFence(fence).then((_resp) => {
+      if (_resp.message === "ok") {
+        props.history.push("/fences");
+        toast.success("Fence updated");
+      } else toast.warn("There was an error. Please try again later.");
     });
   }
 
@@ -55,8 +66,8 @@ const CreateFencesPage = (props) => {
     <div className="container-fluid">
       <Header />
       <div className="main" style={{padding: '10px'}}>
-        <h2>Add Geo-Fence</h2>
-        <CreateFenceForm
+        <h2>Manage Geo-Fence</h2>
+        <ManageSchoolForm
           errors={errors}
           fence={fence}
           onChange={handleChange}
@@ -67,4 +78,4 @@ const CreateFencesPage = (props) => {
   );
 };
 
-export default CreateFencesPage;
+export default ManageSchoolPage;

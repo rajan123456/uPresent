@@ -2,7 +2,7 @@ import React from "react";
 import TextInput from "../common/TextInput";
 import PropTypes from "prop-types";
 
-function ManageFenceForm(props) {
+function ManageSchoolForm(props) {
   return (
     <form onSubmit={props.onSubmit}>
       <TextInput
@@ -50,11 +50,11 @@ function ManageFenceForm(props) {
   );
 }
 
-ManageFenceForm.propTypes = {
+ManageSchoolForm.propTypes = {
   fence: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
 };
 
-export default ManageFenceForm;
+export default ManageSchoolForm;

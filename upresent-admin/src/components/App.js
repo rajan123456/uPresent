@@ -10,9 +10,9 @@ import "react-toastify/dist/ReactToastify.css";
 import UsersPage from "./users/UsersPage";
 import CreateUsersPage from "./users/CreateUsersPage";
 import ManageUsersPage from "./users/ManageUsersPage";
-import FencesPage from "./fences/FencesPage";
-import CreateFencesPage from "./fences/CreateFencesPage";
-import ManageFencesPage from "./fences/ManageFencesPage";
+import SchoolPage from "./school/SchoolPage";
+import CreateSchoolPage from "./school/CreateSchoolPage";
+import ManageSchoolPage from "./school/ManageSchoolPage";
 import ModulesPage from "./modules/ModulesPage";
 import CreateModulesPage from "./modules/CreateModulesPage";
 import ManageModulesPage from "./modules/ManageModulesPage";
@@ -30,11 +30,11 @@ function App() {
           <PrivateRoute path="/users" component={UsersPage} />
           <PrivateRoute path="/user/add" exact component={CreateUsersPage} />
           <PrivateRoute path="/user/:username" component={ManageUsersPage} />
-          <PrivateRoute path="/fences" component={FencesPage} />
-          <PrivateRoute path="/fence/add" exact component={CreateFencesPage} />
+          <PrivateRoute path="/schools" component={SchoolPage} />
+          <PrivateRoute path="/school/add" exact component={CreateSchoolPage} />
           <PrivateRoute
-            path="/fence/:universityName"
-            component={ManageFencesPage}
+            path="/school/:universityName"
+            component={ManageSchoolPage}
           />
           <PrivateRoute path="/modules" component={ModulesPage} />
           <PrivateRoute

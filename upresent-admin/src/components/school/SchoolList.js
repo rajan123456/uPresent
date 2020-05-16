@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-function FenceList(props) {
+function SchoolList(props) {
   return (
     <table className="table table-bordered">
       <thead>
@@ -35,7 +35,7 @@ function FenceList(props) {
   );
 }
 
-FenceList.propTypes = {
+SchoolList.propTypes = {
   fences: PropTypes.arrayOf(
     PropTypes.shape({
       universityName: PropTypes.string.isRequired,
@@ -43,4 +43,4 @@ FenceList.propTypes = {
   ).isRequired,
 };
 
-export default FenceList;
+export default SchoolList;

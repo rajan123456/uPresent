@@ -1,7 +1,7 @@
 import { handleResponse, handleError } from "./apiUtils";
-import { baseUrlFenceApi } from "../config/config";
+import { baseUrlSchoolApi } from "../config/config";
 
-const baseUrl = baseUrlFenceApi;
+const baseUrl = baseUrlSchoolApi;
 
 export function getAllFences() {
   return fetch(baseUrl + "/all", {
