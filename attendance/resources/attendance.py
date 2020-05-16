@@ -11,6 +11,7 @@ from resources.user import User
 from resources.producer import publish_message
 from resources.facenet import compare_faces_facenet
 from resources.module import check_module_active
+from resources.school import check_school_active
 import datetime
 import logging
 
@@ -42,7 +43,8 @@ class AllAttendanceApi(Resource):
             body = request.get_json()
             attendance = Attendance(**body)
             self.check_if_attendance_marked(attendance)
-            check_module_active(attendance.moduleId)
+            school = check_school_active(attendance.school)
+            check_module_active(attendance.moduleId, school.get("timeZone"))
             validateVicinity(body)
             user = u.fetchStudent(username=attendance.username)
             if user.get("imageId") is None or len(user.get("imageId")) < 1:
