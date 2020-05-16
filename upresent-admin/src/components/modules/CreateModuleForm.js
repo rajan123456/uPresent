@@ -2,7 +2,7 @@ import React from "react";
 import TextInput from "../common/TextInput";
 import MultiDropDown from "../common/MultiDropDown";
 import PropTypes from "prop-types";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { DatePicker, MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import Grid from "@material-ui/core/Grid";
 
@@ -53,6 +53,30 @@ function CreateModuleForm(props) {
               label="End Date"
               value={props.module.endDate}
               onChange={props.onEndDateChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TimePicker
+              id="startTime"
+              placeholder="HH:mm"
+              ampm={false}
+              format={"HH:mm"}
+              label="Start Time"
+              name="startTime"
+              value={props.module.startTime}
+              onChange={props.onStartTimeChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TimePicker
+              id="endTime"
+              placeholder="HH:mm"
+              ampm={false}
+              format={"HH:mm"}
+              label="End Time"
+              name="endTime"
+              value={props.module.endTime}
+              onChange={props.onEndTimeChange}
             />
           </Grid>
         </MuiPickersUtilsProvider>
