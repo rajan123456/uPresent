@@ -16,8 +16,12 @@ const ManageModulesPage = (props) => {
     endDate: moment(new Date()).format("MM/DD/YYYY"),
     moduleCode: "",
     moduleName: "",
+    schoolCode: "",
+    endTime: new Date(),
+    startTime: new Date(),
     scheduledDays: [],
     studentUsernames: [],
+    schedule: [],
   });
 
   const [students, setStudents] = useState([]);
@@ -112,7 +116,7 @@ const ManageModulesPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="main" style={{padding: '10px'}}>
+      <div className="main" style={{padding: '10px', width:'30%'}}>
         <h2>Manage Module</h2>
         <ManageModuleForm
           errors={errors}

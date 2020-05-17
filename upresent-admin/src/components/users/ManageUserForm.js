@@ -47,7 +47,7 @@ function ManageUserForm(props) {
       />
 
       <input type="submit" value="Save" className="btn btn-primary mr-1" />
-      <input type="reset" value="Delete" className="btn btn-primary" />
+      <input type="reset" value="Delete" className="btn btn-primary"/>
     </form>
   );
 }

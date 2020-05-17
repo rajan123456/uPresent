@@ -1,6 +1,8 @@
 import React from "react";
 import TextInput from "../common/TextInput";
 import PropTypes from "prop-types";
+import MultipleDatePicker from 'react-multiple-datepicker'
+
 
 function CreateSchoolForm(props) {
   return (
@@ -53,6 +55,17 @@ function CreateSchoolForm(props) {
         name="radiusInMeter"
         value={props.fence.radiusInMeter}
         error={props.errors.radiusInMeter}
+        readOnly={false}
+      />
+      <label>Add Holidays</label>
+      <MultipleDatePicker
+        id="holidays"
+        className="form-control"
+        label="Add Holidays"
+        onSubmit={props.onChangeHoliday}
+        name="holidays"
+        value={props.fence.holidays}
+        error={props.errors.holidays}
         readOnly={false}
       />
       <TextInput

@@ -3,13 +3,23 @@ import { getAllFences } from "../../api/fenceApi";
 import SchoolList from "./SchoolList";
 import { Link } from "react-router-dom";
 import Header from "../common/Header";
+import moment from "moment";
+
 
 function SchoolPage() {
   const [fences, setFences] = useState([]);
 
-  // useEffect(() => {
-  //   getAllFences().then((_fences) => setFences(_fences.data));
-  // }, []);
+  useEffect(() => {
+    console.log("api call.. school..all");
+    getAllFences().then((_fences) => setFences(_fences.data));
+    // for (var fence in fences){
+    //   var holidays = "";
+    //   for (var i = 0; i < fence.holidays.length; i++) {
+    //     holidays.concat(moment(fence.holidays[i]).format("MM/DD/YYYY"),",");
+    //   }
+    //   fence.holidays = holidays;
+    // }
+    }, []);
 
   return (
     <div className="container-fluid">

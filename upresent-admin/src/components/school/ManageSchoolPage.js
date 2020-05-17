@@ -8,21 +8,25 @@ const ManageSchoolPage = (props) => {
   const [errors, setErrors] = useState({});
 
   const [fence, setFence] = useState({
-    universityName: "",
+    schoolName: "",
+    schoolCode: "",
     longitude: "",
     latitude: "",
     radiusInMeter: "",
-    username: "",
+    createdBy: "",
+    timeZone: "",
+    geoFenceData:"",
+    holidays: []
   });
 
   useEffect(() => {
-    const universityName = props.match.params.universityName;
-    if (universityName) {
+    const schoolName = props.match.params.universityName;
+    if (schoolName) {
       fenceApi
-        .getFenceByUniversityName(universityName)
+        .getFenceByUniversityName(schoolName)
         .then((_fence) => setFence(_fence.data));
     }
-  }, [props.match.params.universityName]);
+  }, [props.match.params.schoolName]);
 
   function handleChange({ target }) {
     setFence({
@@ -34,8 +38,8 @@ const ManageSchoolPage = (props) => {
   function formIsValid() {
     const _errors = {};
 
-    if (!fence.universityName)
-      _errors.universityName = "University name is required.";
+    if (!fence.schoolName)
+      _errors.schoolName = "University name is required.";
     if (!fence.longitude) _errors.longitude = "Longitude is required";
     if (!fence.latitude) _errors.latitude = "Latitude is required.";
     if (!fence.radiusInMeter) _errors.radiusInMeter = "Radius is required.";

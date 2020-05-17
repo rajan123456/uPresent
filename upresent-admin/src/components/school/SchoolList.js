@@ -7,10 +7,14 @@ function SchoolList(props) {
     <table className="table table-bordered">
       <thead>
         <tr>
-          <th>University</th>
+        <th>School Code</th>
+          <th>School</th>
           <th>Longitude</th>
           <th>Latitude</th>
           <th>Radius (m)</th>
+          <th>Holidays</th>
+          <th>TimeZone</th>
+          <th>CreatedBy</th>
         </tr>
       </thead>
       <tbody>
@@ -18,15 +22,20 @@ function SchoolList(props) {
           props.fences.length > 0 &&
           props.fences.map((fence) => {
             return (
-              <tr key={fence.universityName}>
+              <tr key={fence.schoolCode}>
                 <td>
-                  <Link to={"/fence/" + fence.universityName}>
-                    {fence.universityName}
+                  <Link to={"/school/" + fence.schoolCode}>
+                    {fence.schoolCode}
                   </Link>
                 </td>
-                <td>{fence.longitude}</td>
-                <td>{fence.latitude}</td>
-                <td>{fence.radiusInMeter}</td>
+                <td>{fence.schoolName}</td>
+                <td>{fence.geoFenceData.longitude}</td>
+                <td>{fence.geoFenceData.latitude}</td>
+                <td>{fence.geoFenceData.radiusInMeter}</td>
+                <td>{fence.holidays}</td>
+                <td>{fence.timeZone}</td>
+                <td>{fence.createdBy}</td>
+
               </tr>
             );
           })}
@@ -38,7 +47,7 @@ function SchoolList(props) {
 SchoolList.propTypes = {
   fences: PropTypes.arrayOf(
     PropTypes.shape({
-      universityName: PropTypes.string.isRequired,
+      schoolCode: PropTypes.string.isRequired,
     })
   ).isRequired,
 };

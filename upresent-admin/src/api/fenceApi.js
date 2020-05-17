@@ -15,7 +15,7 @@ export function getAllFences() {
 }
 
 export function getFenceByUniversityName(universityName) {
-  return fetch(baseUrl + "?universityName=" + universityName, {
+  return fetch(baseUrl + "?schoolCode=" + universityName, {
     method: "GET",
     headers: {
       "content-type": "application/json",

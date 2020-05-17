@@ -72,7 +72,7 @@ const ManageUsersPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="main" style={{padding: '10px'}}>
+      <div className="main" style={{padding: '10px', width:'30%'}}>
         <h2>Manage User</h2>
         <ManageUserForm
           errors={errors}
