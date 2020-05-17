@@ -79,7 +79,7 @@ class AllAttendanceApi(Resource):
             log.info("no attendance marked for today")
         else:
             log.error("attendance has already been marked for today")
-            raise Exception("Attendance already marked!")
+            raise Exception("Attendance either marked already or has been revoked")
 
 
 class AttendanceApi(Resource):
@@ -101,12 +101,13 @@ class AttendanceApi(Resource):
             else:
                 user = u.fetchAdmin(username=username)
                 attendance = Attendance.objects.get(id=id)
-                Attendance.objects.get(id=id).delete()
+                attendance.status = "REVOKED"
+                attendance.save()
                 publish_message(
                     data={
-                        "username": username,
-                        "id": id,
-                        "studentId": attendance.username,
+                        "username": attendance.username,
+                        "revokedBy": username,
+                        "moduleId": attendance.moduleId,
                     },
                     recorded=False,
                 )

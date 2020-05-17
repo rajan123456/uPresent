@@ -7,6 +7,7 @@ class Attendance(db.Document):
     location = db.ListField(required=True)
     school = db.StringField(required=True)
     capturedImageId = db.StringField(required=True)
+    status = db.StringField()
     moduleId = db.StringField(required=True)
     date_captured = db.DateTimeField(
         default=datetime.datetime.now().replace(
