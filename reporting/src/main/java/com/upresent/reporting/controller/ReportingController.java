@@ -20,7 +20,7 @@ public class ReportingController {
 	ReportingService reportingService;
 
 	@PostMapping
-	public ResponseEntity<RestResponse<String>> getAttendanceReport(@RequestBody ReportingData reportingData) {
+	public ResponseEntity<RestResponse<String>> createAttendanceEvent(@RequestBody ReportingData reportingData) {
 		return RestUtils.successResponse(reportingService.addReportingData(reportingData));
 	}
 }

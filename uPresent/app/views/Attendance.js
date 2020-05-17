@@ -215,8 +215,13 @@ export class Attendance extends React.Component {
         if (_respAtt.message === 'Not in the right vicinity') {
           Alert.alert('Geofence check failed. Try again later.');
           this.props.navigation.push('HomeRT');
-        } else if (_respAtt.message === 'Attendance already marked!') {
-          Alert.alert('Attendance already submitted, duplicate rejected.');
+        } else if (
+          _respAtt.message ===
+          'Attendance either marked already or has been revoked'
+        ) {
+          Alert.alert(
+            'Either attendance was already submitted, or has been revoked.',
+          );
         } else if (_respAtt.message != null) {
           Alert.alert('Something went wrong. Try again later.');
           this.props.navigation.push('HomeRT');
