@@ -78,6 +78,9 @@ public class AttendanceServiceImpl implements AttendanceService {
 							Gson g = new Gson();
 							Map<String, Object> eventData = g.fromJson(record.getEventData(), HashMap.class);
 							studentAttendance.setStudentUsername((String) eventData.get("username"));
+							studentAttendance.setRecognitionSource((String) eventData.get("recognitionSource"));
+							studentAttendance.setRecognitionConfidence((String) eventData.get("recognitionConfidence"));
+							studentAttendance.setCapturedImageId((String) eventData.get("capturedImageId"));
 							if (dates.contains(attendanceLogDateStr)) {
 								List<StudentAttendanceRecord> existingRecords = attendanceInfoByDate
 										.get(attendanceLogDateStr);
@@ -103,6 +106,9 @@ public class AttendanceServiceImpl implements AttendanceService {
 								&& (record.getEventType().equals(Constants.ATTENDANCE_REVOKED_EVENT_TYPE))) {
 							StudentAttendanceRecord studentAttendance = new StudentAttendanceRecord();
 							studentAttendance.setAttendance("REVOKED");
+							studentAttendance.setRecognitionSource("");
+							studentAttendance.setRecognitionConfidence("");
+							studentAttendance.setCapturedImageId("");
 							studentAttendance.setTimestamp(record.getTimeStamp());
 							Gson g = new Gson();
 							Map<String, Object> eventData = g.fromJson(record.getEventData(), HashMap.class);
@@ -137,6 +143,9 @@ public class AttendanceServiceImpl implements AttendanceService {
 						absentyRecord.setAttendance("ABSENT");
 						absentyRecord.setStudentUsername(absentStudent);
 						absentyRecord.setTimestamp("");
+						absentyRecord.setRecognitionSource("");
+						absentyRecord.setRecognitionConfidence("");
+						absentyRecord.setCapturedImageId("");
 						absentyRecord.setAdminUsername("");
 						existingRecords.add(absentyRecord);
 					});
@@ -148,6 +157,10 @@ public class AttendanceServiceImpl implements AttendanceService {
 					absentyRecord.setAttendance("ABSENT");
 					absentyRecord.setStudentUsername(absentStudent);
 					absentyRecord.setTimestamp("");
+					absentyRecord.setRecognitionSource("");
+					absentyRecord.setRecognitionConfidence("");
+					absentyRecord.setCapturedImageId("");
+					absentyRecord.setAdminUsername("");
 					allStudentsAbsentRecords.add(absentyRecord);
 				});
 				ScheduleRecord[] scheduleRecords;

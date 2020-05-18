@@ -13,6 +13,7 @@ from resources.facenet import compare_faces_facenet
 from resources.module import check_module_active
 from resources.school import check_school_active
 import datetime
+import json
 import logging
 
 log = logging.getLogger("root")
@@ -48,18 +49,23 @@ class AllAttendanceApi(Resource):
             validateVicinity(body)
             user = u.fetchStudent(username=attendance.username)
             if user.get("imageId") is None or len(user.get("imageId")) < 1:
-                compare_faces_facenet(attendance.capturedImageId, attendance.username)
+                attendance.recognitionSource = "facenet"
+                attendance.recognitionConfidence = compare_faces_facenet(
+                    attendance.capturedImageId, attendance.username
+                )
             else:
                 if str(azure_face_enabled) == "1":
-                    compare_faces_azure(
+                    attendance.recognitionSource = "azure"
+                    attendance.recognitionConfidence = compare_faces_azure(
                         attendance.capturedImageId, user.get("imageId")[0]
                     )
                 if str(aws_rekog_enabled) == "1":
-                    compare_faces_rekognition(
+                    attendance.recognitionSource = "aws"
+                    attendance.recognitionConfidence = compare_faces_rekognition(
                         attendance.capturedImageId, user.get("imageId")[0]
                     )
             attendance.save()
-            publish_message(data=body, recorded=True)
+            publish_message(data=json.loads(attendance.to_json()), recorded=True)
         except Exception as ex:
             log.error("error from post attendance method " + str(ex))
             return {"message": str(ex)}, 400
