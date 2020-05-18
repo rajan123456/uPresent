@@ -57,3 +57,5 @@ def compare_faces_azure(targetId, sourceId):
     ]:
         log.error("Image mismatch found in azure face!")
         raise Exception("Image mismatch found!")
+    else:
+        return str(verify_result_same.confidence * 100)

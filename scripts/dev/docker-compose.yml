@@ -287,7 +287,7 @@ services:
     container_name: vault
     restart: always
     ports:
-      - "8200:8200"
+      - "8300:8200"
     environment:
       - VAULT_ADDR=https://0.0.0.0:8200
       #- VAULT_SKIP_VERIFY=true

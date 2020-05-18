@@ -1,4 +1,6 @@
 elastic-data-vol/*
+facenet-data-vol/output/*
+stream-data-vol/*/*.png
 vault-data-vol/data/*
 vault-data-vol/policies/*
 vault-data-vol/certs/*

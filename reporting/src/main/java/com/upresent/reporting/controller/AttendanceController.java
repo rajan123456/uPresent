@@ -21,7 +21,7 @@ public class AttendanceController {
 	AttendanceService attendanceService;
 
 	@GetMapping
-	public ResponseEntity<RestResponse<Map<String, Object>>> addMetricsData(@RequestParam String startDate,
+	public ResponseEntity<RestResponse<Map<String, Object>>> addEventData(@RequestParam String startDate,
 			@RequestParam String endDate, @RequestParam String moduleCode) {
 		return RestUtils.successResponse(attendanceService.getStudentAttendanceRecords(startDate, endDate, moduleCode));
 	}

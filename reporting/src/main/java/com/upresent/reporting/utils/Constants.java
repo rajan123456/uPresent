@@ -6,6 +6,8 @@ public interface Constants {
 	String KAFKA_BOOTSTRAP_ADDRESS = "kafka.bootstrap.address";
 	String REPORTING_SERVICE_SUBSCRIBER = "reporting.subscriber";
 	String ATTENDANCE_SERVICE_SOURCE_ID = "3";
+	String ATTENDANCE_RECORDED_EVENT_TYPE = "attendanceRecorded";
+	String ATTENDANCE_REVOKED_EVENT_TYPE = "attendanceRevoked";
 	String DATE_FORMAT = "MM/dd/yyyy";
 	String REPORTING_TIMESTAMP_FORMAT = "MM/dd/yyyy, HH:mm:ss";
 	String FETCH_MODULE_DETAILS_API_URL = "/manage/module?moduleCode=";

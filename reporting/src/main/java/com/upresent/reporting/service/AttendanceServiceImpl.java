@@ -2,17 +2,11 @@ package com.upresent.reporting.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.upresent.reporting.responsedto.ScheduleRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -60,6 +54,8 @@ public class AttendanceServiceImpl implements AttendanceService {
 			final String baseUrl = managementMSHostName + ":" + managementMSPort
 					+ Constants.FETCH_MODULE_DETAILS_API_URL + moduleId;
 			Map<?, ?> response = restTemplate.getForObject(baseUrl, Map.class);
+			if (response == null)
+				throw new ReportingException(ExceptionResponseCode.MODULE_NOT_FOUND);
 			Map<String, Object> moduleDetails = objectMapper.convertValue(response.get("data"), Map.class);
 			if (moduleDetails != null) {
 				String moduleIdRegexForQuery = QueryUtils.getRegexForModuleId(moduleId);
@@ -73,14 +69,18 @@ public class AttendanceServiceImpl implements AttendanceService {
 						Date date = new SimpleDateFormat(Constants.REPORTING_TIMESTAMP_FORMAT)
 								.parse(record.getTimeStamp());
 						String attendanceLogDateStr = new SimpleDateFormat(Constants.DATE_FORMAT).format(date);
-						if (CommonUtility.checkDateInRange(filterStartDateStr, filterEndDateStr,
-								attendanceLogDateStr)) {
+						if (CommonUtility.checkDateInRange(filterStartDateStr, filterEndDateStr, attendanceLogDateStr)
+								&& (record.getEventType().equals(Constants.ATTENDANCE_RECORDED_EVENT_TYPE))) {
 							StudentAttendanceRecord studentAttendance = new StudentAttendanceRecord();
 							studentAttendance.setAttendance("PRESENT");
+							studentAttendance.setAdminUsername("");
 							studentAttendance.setTimestamp(record.getTimeStamp());
 							Gson g = new Gson();
 							Map<String, Object> eventData = g.fromJson(record.getEventData(), HashMap.class);
 							studentAttendance.setStudentUsername((String) eventData.get("username"));
+							studentAttendance.setRecognitionSource((String) eventData.get("recognitionSource"));
+							studentAttendance.setRecognitionConfidence((String) eventData.get("recognitionConfidence"));
+							studentAttendance.setCapturedImageId((String) eventData.get("capturedImageId"));
 							if (dates.contains(attendanceLogDateStr)) {
 								List<StudentAttendanceRecord> existingRecords = attendanceInfoByDate
 										.get(attendanceLogDateStr);
@@ -97,21 +97,56 @@ public class AttendanceServiceImpl implements AttendanceService {
 						throw new ReportingException(ExceptionResponseCode.DATE_PARSE_ERROR);
 					}
 				});
+				reportingRecords.forEach(record -> {
+					try {
+						Date date = new SimpleDateFormat(Constants.REPORTING_TIMESTAMP_FORMAT)
+								.parse(record.getTimeStamp());
+						String attendanceLogDateStr = new SimpleDateFormat(Constants.DATE_FORMAT).format(date);
+						if (CommonUtility.checkDateInRange(filterStartDateStr, filterEndDateStr, attendanceLogDateStr)
+								&& (record.getEventType().equals(Constants.ATTENDANCE_REVOKED_EVENT_TYPE))) {
+							StudentAttendanceRecord studentAttendance = new StudentAttendanceRecord();
+							studentAttendance.setAttendance("REVOKED");
+							studentAttendance.setRecognitionSource("");
+							studentAttendance.setRecognitionConfidence("");
+							studentAttendance.setCapturedImageId("");
+							studentAttendance.setTimestamp(record.getTimeStamp());
+							Gson g = new Gson();
+							Map<String, Object> eventData = g.fromJson(record.getEventData(), HashMap.class);
+							studentAttendance.setStudentUsername((String) eventData.get("username"));
+							studentAttendance.setAdminUsername((String) eventData.get("revokedBy"));
+							List<StudentAttendanceRecord> existingRecords = attendanceInfoByDate
+									.get(attendanceLogDateStr);
+							Optional<StudentAttendanceRecord> toRemove = existingRecords.stream()
+									.filter(o -> o.getStudentUsername().equals(eventData.get("username"))).findFirst();
+							if (toRemove.isPresent()) {
+								existingRecords.remove(toRemove.get());
+							}
+							existingRecords.add(studentAttendance);
+							attendanceInfoByDate.put(attendanceLogDateStr, existingRecords);
+						}
+					} catch (ParseException e) {
+						throw new ReportingException(ExceptionResponseCode.DATE_PARSE_ERROR);
+					}
+				});
 				List<String> allEnrolledStudentUsernames = (List<String>) moduleDetails.get("studentUsernames");
 				dates.forEach(date -> {
 					List<StudentAttendanceRecord> attendanceInfo = attendanceInfoByDate.get(date);
-					List<String> presentStudentUsernames = new ArrayList<>();
+					List<String> recordedStudentUsernames = new ArrayList<>();
 					attendanceInfo.forEach(studentAttendance -> {
-						presentStudentUsernames.add(studentAttendance.getStudentUsername());
+						recordedStudentUsernames.add(studentAttendance.getStudentUsername());
 					});
 					List<String> absentStudentUsernames = allEnrolledStudentUsernames.stream()
-							.filter(e -> !presentStudentUsernames.contains(e)).collect(Collectors.toList());
+							.filter(e -> !recordedStudentUsernames.contains(e)).collect(Collectors.toList());
 					List<StudentAttendanceRecord> existingRecords = attendanceInfoByDate.get(date);
 					absentStudentUsernames.forEach(absentStudent -> {
 						StudentAttendanceRecord absentyRecord = new StudentAttendanceRecord();
 						absentyRecord.setAttendance("ABSENT");
 						absentyRecord.setStudentUsername(absentStudent);
 						absentyRecord.setTimestamp("");
+						absentyRecord.setRecognitionSource("");
+						absentyRecord.setRecognitionConfidence("");
+						absentyRecord.setCapturedImageId("");
+						absentyRecord.setAdminUsername("");
 						existingRecords.add(absentyRecord);
 					});
 					attendanceInfoByDate.put(date, existingRecords);
@@ -122,16 +157,27 @@ public class AttendanceServiceImpl implements AttendanceService {
 					absentyRecord.setAttendance("ABSENT");
 					absentyRecord.setStudentUsername(absentStudent);
 					absentyRecord.setTimestamp("");
+					absentyRecord.setRecognitionSource("");
+					absentyRecord.setRecognitionConfidence("");
+					absentyRecord.setCapturedImageId("");
+					absentyRecord.setAdminUsername("");
 					allStudentsAbsentRecords.add(absentyRecord);
 				});
-				List<LocalDate> intersectingDates = getIntersectingDates(filterStartDateStr, filterEndDateStr,
-						(String) moduleDetails.get("startDate"), (String) moduleDetails.get("endDate"));
-				List<String> moduleClassesDate = getDatesInAccordanceWithModuleDays(intersectingDates,
-						(List<String>) moduleDetails.get("scheduledDays"));
-				moduleClassesDate.forEach(date -> {
+				ScheduleRecord[] scheduleRecords;
+				try {
+					scheduleRecords = objectMapper.readValue(
+							objectMapper.writeValueAsString(moduleDetails.get("schedule")), ScheduleRecord[].class);
+				} catch (JsonProcessingException e) {
+					throw new ReportingException(ExceptionResponseCode.DATE_PARSE_ERROR);
+				}
+				List<String> moduleDates = Arrays.stream(scheduleRecords).map(e -> e.getDate())
+						.collect(Collectors.toList());
+				List<String> filteredModuleDates = filterModuleDatesWithReportDates(moduleDates, filterStartDateStr,
+						filterEndDateStr);
+				filteredModuleDates.forEach(date -> {
 					attendanceInfoByDate.computeIfAbsent(date, k -> allStudentsAbsentRecords);
 				});
-				responseObj.put("dates", moduleClassesDate);
+				responseObj.put("dates", filteredModuleDates);
 				responseObj.put("attendanceInfo", attendanceInfoByDate);
 				return responseObj;
 			} else {
@@ -142,49 +188,26 @@ public class AttendanceServiceImpl implements AttendanceService {
 		}
 	}
 
-	private List<String> getDatesInAccordanceWithModuleDays(List<LocalDate> commonDates, List<String> daysOfWeek) {
-		daysOfWeek.replaceAll(String::toUpperCase);
-		List<String> scheduledDays = new ArrayList<>();
-		List<LocalDate> moduleScheduledClassesDates = commonDates.stream()
-				.filter(date -> daysOfWeek.contains(date.getDayOfWeek().name())).collect(Collectors.toList());
-		moduleScheduledClassesDates.forEach(date -> {
-			scheduledDays.add(date.format(DateTimeFormatter.ofPattern(Constants.DATE_FORMAT)));
-		});
-		return scheduledDays;
-	}
-
-	private List<LocalDate> getIntersectingDates(String filterStartDateStr, String filterEndDateStr,
-			String moduleStartDateStr, String moduleEndDateStr) {
-		List<LocalDate> intersectingDates = new ArrayList<>();
+	private List<String> filterModuleDatesWithReportDates(List<String> moduleDates, String filterStartDateStr,
+			String filterEndDateStr) {
+		List<String> filteredDates = new ArrayList<>();
 		try {
 			Date filterStartDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(filterStartDateStr);
 			Date filterEndDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(filterEndDateStr);
-			Date moduleStartDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(moduleStartDateStr);
-			Date moduleEndDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(moduleEndDateStr);
-			// check if the two date ranges overlap
-			if ((filterStartDate.compareTo(moduleEndDate) == 0 || filterStartDate.compareTo(moduleEndDate) < 0)
-					&& (moduleStartDate.compareTo(filterEndDate) == 0
-							|| moduleStartDate.compareTo(filterEndDate) < 0)) {
-				String intersectionStartDateStr = filterStartDate.compareTo(moduleStartDate) < 0 ? moduleStartDateStr
-						: filterStartDateStr;
-				String intersectionEndDateStr = filterEndDate.compareTo(moduleEndDate) < 0 ? filterEndDateStr
-						: moduleEndDateStr;
-				DateTimeFormatter dtf = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT);
-				LocalDate start = LocalDate.parse(intersectionStartDateStr, dtf);
-				LocalDate end = LocalDate.parse(intersectionEndDateStr, dtf);
-				long numOfDaysBetween = ChronoUnit.DAYS.between(start, end);
-				intersectingDates = IntStream.iterate(0, i -> i + 1).limit(numOfDaysBetween)
-						.mapToObj(i -> start.plusDays(i)).collect(Collectors.toList());
-				if (!intersectingDates.contains(start)) {
-					intersectingDates.add(start);
+			moduleDates.forEach(moduleDateStr -> {
+				try {
+					Date moduleDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(moduleDateStr);
+					if ((moduleDate.after(filterStartDate) && moduleDate.before(filterEndDate))
+							|| moduleDate.equals(filterStartDate) || moduleDate.equals(filterEndDate))
+						filteredDates.add(moduleDateStr);
+				} catch (ParseException e) {
+					throw new ReportingException(ExceptionResponseCode.DATE_PARSE_ERROR);
 				}
-				if (!intersectingDates.contains(end)) {
-					intersectingDates.add(end);
-				}
-			}
+			});
+			return filteredDates;
 		} catch (ParseException e) {
 			throw new ReportingException(ExceptionResponseCode.DATE_PARSE_ERROR);
 		}
-		return intersectingDates;
 	}
+
 }
