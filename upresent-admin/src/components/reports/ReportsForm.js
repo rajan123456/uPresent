@@ -11,6 +11,7 @@ function ReportsForm(props) {
     <form onSubmit={props.onSubmit}>
       <Grid container spacing={Number(2)}>
         <Grid item xs={12}>
+          <div style={{width:'25%'}}>
           <DropDown
             id="moduleCode"
             name="moduleCode"
@@ -19,7 +20,7 @@ function ReportsForm(props) {
             value={props.report.moduleCode}
             error={props.errors.moduleCode}
             options={props.modules}
-          />
+          /></div>
         </Grid>
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <Grid item xs={12}>

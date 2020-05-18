@@ -3,7 +3,6 @@ import CreateSchoolForm from "./CreateSchoolForm";
 import Header from "../common/Header";
 import * as fenceApi from "../../api/fenceApi";
 import { toast } from "react-toastify";
-import moment from "moment";
 
 const CreateSchoolPage = (props) => {
   const [errors, setErrors] = useState({});

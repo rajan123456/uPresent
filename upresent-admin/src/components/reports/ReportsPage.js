@@ -47,6 +47,26 @@ function ReportsPage() {
     // eslint-disable-next-line
   }, []);
 
+  async function handleSubmit(event) {
+    event.preventDefault();
+    await getAttendanceReport(
+      report.startDate,
+      report.endDate,
+      report.moduleCode
+    ).then(async (_resp) => {
+      if (_resp.message === "ok") {
+        setReportData(_resp.data);
+        await getModuleByModuleCode(report.moduleCode).then((_respMod) => {
+          transformReportDataToAttendance(
+            _resp.data,
+            _respMod.data.studentUsernames
+          );
+        });
+      } else toast.warn("Something went wrong, please try again later.");
+    });
+  }
+
+
   function handleChange({ target }) {
     setReport({
       ...report,
@@ -94,49 +114,32 @@ function ReportsPage() {
     setAttendance(studentDetails);
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    await getAttendanceReport(
-      report.startDate,
-      report.endDate,
-      report.moduleCode
-    ).then(async (_resp) => {
-      if (_resp.message === "ok") {
-        setReportData(_resp.data);
-        await getModuleByModuleCode(report.moduleCode).then((_respMod) => {
-          transformReportDataToAttendance(
-            _resp.data,
-            _respMod.data.studentUsernames
-          );
-        });
-      } else toast.warn("Something went wrong, please try again later.");
-    });
-  }
+
 
   function exportPdf() {
     if (attendance.length === 0) return;
 
-    const unit = "pt";
-    const size = "A4";
-    const orientation = "portrait";
-    const marginLeft = 40;
-    const doc = new jsPDF(orientation, unit, size);
+    // const unit = "pt";
+    // const size = "A4";
+    // const orientation = "portrait";
+    // const marginLeft = 40;
+    // const doc = new jsPDF(orientation, unit, size);
 
-    doc.setFontSize(15);
+    // doc.setFontSize(15);
 
-    const title = "Attendance Report";
-    const headers = [["NAME", reportData.dates.map((date) => date)]];
-    const data = attendance.map((elt) => [elt.key, elt.status]);
+    // const title = "Attendance Report";
+    // const headers = [["NAME", reportData.dates.map((date) => date)]];
+    // const data = attendance.map((elt) => [elt.key, elt.status]);
 
-    let content = {
-      startY: 50,
-      head: headers,
-      body: data,
-    };
+    // let content = {
+    //   startY: 50,
+    //   head: headers,
+    //   body: data,
+    // };
 
-    doc.text(title, marginLeft, 40);
-    doc.autoTable(content);
-    doc.save("Attendance.pdf");
+    // doc.text(title, marginLeft, 40);
+    // doc.autoTable(content);
+    // doc.save("Attendance.pdf");
   }
 
   const classes = useStyles();
@@ -159,7 +162,7 @@ function ReportsPage() {
         <Grid container spacing={Number(2)}>
           {reportData.dates ? (
             <Grid item xs={12}>
-              <TableContainer component={Paper}>
+              <TableContainer component={Paper} className="table table-bordered">
                 <Table
                   className={classes.table}
                   size="small"
@@ -185,10 +188,36 @@ function ReportsPage() {
                           <TableCell component="th" scope="row">
                             {record.key}
                           </TableCell>
-                          {record.status &&
-                            record.status.map((stat) => (
-                              <TableCell align="right">{stat}</TableCell>
-                            ))}
+                          {reportData.dates &&
+                          reportData.dates.map((date) => (
+                          <TableCell align="right">
+                            <div>
+                            <table className="table table-bordered">
+                              <tr>
+                                <th>Image</th>
+                                <th>Confidence</th> 
+                                <th>Timestamp</th>
+                                <th>Status</th>
+                                <th>Revoke</th>
+                              </tr>
+                              <tr>
+                                <td><img style={{width:'100px'}} src={"http://localhost:8084/file?filename="+
+                                reportData.attendanceInfo[date][0].capturedImageId}
+                                alt={reportData.attendanceInfo[date][0].capturedImageId}
+                                ></img></td>
+                                <td>{reportData.attendanceInfo[date][0].recognitionConfidence}</td>
+                                <td>{reportData.attendanceInfo[date][0].timestamp}</td>
+                                <td>{reportData.attendanceInfo[date][0].attendance}</td>
+                                <td>
+                                  <Button type="submit" variant="contained" color="primary">
+                                  Revoke
+                                  </Button>
+                                </td>
+                              </tr>
+                            </table>
+                            </div>
+                            </TableCell>
+                        ))}
                         </TableRow>
                       ))}
                   </TableBody>

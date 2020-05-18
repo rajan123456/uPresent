@@ -30,5 +30,5 @@ export const baseUrlReportingApi =
   //   ?
   //"https://reporting.upresent.ga/attendance";
   //   :
-  "https://dev.upresent.ga/reporting/attendance";
+  "http://localhost:8083/attendance";
 
