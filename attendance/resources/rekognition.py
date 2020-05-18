@@ -37,3 +37,5 @@ def compare_faces_rekognition(targetId, sourceId):
     if similarity == "0":
         log.error("Image mismatch found in aws rekognition!")
         raise Exception("Image mismatch found!")
+    else:
+        return str(similarity)

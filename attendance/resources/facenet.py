@@ -23,8 +23,9 @@ def compare_faces_facenet(targetId, username):
         raise Exception("No data found from face recgnition service")
     else:
         log.info(
-            " Facial recognition with FaceNet username and confidence rating is"
+            "Facial recognition with FaceNet username and confidence rating is "
             + facenetApiData.get("username")
+            + " "
             + str(facenetApiData.get("confidence"))
         )
     if (
@@ -33,4 +34,5 @@ def compare_faces_facenet(targetId, username):
     ):
         log.error("image mismatch found due to low confidence or username")
         raise Exception("Image mismatch found!")
-
+    else:
+        return str(facenetApiData.get("confidence"))
