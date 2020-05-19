@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-config
+  namespace: production
+  labels:
+    k8s-app: vault
+data:
+  vault.json: |-
+    {                                    
+        "listener":  {                     
+            "tcp":  {                        
+                "address":  "0.0.0.0:8200",
+                "tls_cert_file": "/vault/certs/tls.crt",
+                "tls_key_file": "/vault/certs/tls.key",
+                "disable_tls": "false"
+            }
+        },
+        "backend": {                       
+            "file": {                        
+                "path": "/vault/data"          
+            }                                
+        },                                 
+        "default_lease_ttl": "168h",       
+        "max_lease_ttl": "0h",
+        "api_addr": "https://0.0.0.0:8200",
+        "disable_mlock": "true",
+        "ui": "true"
+    }

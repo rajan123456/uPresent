@@ -1,0 +1,29 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: srs
+  namespace: production
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: srs
+    spec:
+      containers:
+        - name: srs
+          image: ossrs/srs:3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 1935
+            - containerPort: 1985
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: /usr/local/srs/conf
+              name: srs-config
+      volumes:
+      - name: srs-config
+        configMap:
+            name: srs-config
