@@ -1,0 +1,58 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: resources-ingress
+  namespace: production
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/acme-challenge-type: "http01"
+spec:
+  tls:
+    - hosts:
+        - admin-hex.upresent.ga
+        - attendance-hex.upresent.ga
+        - kibana-hex.upresent.ga
+        - management-hex.upresent.ga
+        - reporting-hex.upresent.ga
+        - user-hex.upresent.ga
+        - vault-hex.upresent.ga
+      secretName: nginx-tls
+  rules:
+    - host: admin-hex.upresent.ga
+      http:
+        paths:
+          - backend:
+              serviceName: adminui
+              servicePort: 80
+    - host: attendance-hex.upresent.ga
+      http:
+        paths:
+          - backend:
+              serviceName: attendance
+              servicePort: 5000
+    - host: kibana-hex.upresent.ga
+      http:
+        paths:
+          - backend:
+              serviceName: kibana
+              servicePort: 5601
+    - host: management-hex.upresent.ga
+      http:
+        paths:
+          - backend:
+              serviceName: management
+              servicePort: 8080
+    - host: reporting-hex.upresent.ga
+      http:
+        paths:
+          - backend:
+              serviceName: reporting
+              servicePort: 8080
+    - host: user-hex.upresent.ga
+      http:
+        paths:
+          - backend:
+              serviceName: user
+              servicePort: 8080

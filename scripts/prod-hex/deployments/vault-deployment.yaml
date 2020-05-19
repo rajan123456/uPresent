@@ -1,0 +1,43 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: vault
+  namespace: production
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      containers:
+        - name: vault
+          image: vault:1.3.4
+          imagePullPolicy: Always
+          command: ["vault"]
+          args: ["server", "-config", "/vault/config/vault.json"]
+          ports:
+            - containerPort: 8200
+          env:
+          - name: VAULT_ADDR
+            value: "https://0.0.0.0:8200"
+          volumeMounts:
+            - mountPath: /vault/data
+              name: vault-data-vol
+            - mountPath: /vault/certs
+              name: nginx-tls
+            - mountPath: /vault/config
+              name: vault-config
+      volumes:
+      - name: vault-data-vol
+        persistentVolumeClaim:
+          claimName: vault-data-vol-claim
+          readOnly: false
+      - name: nginx-tls
+        secret:
+          secretName: nginx-tls
+      - name: vault-config
+        configMap:
+            name: vault-config
