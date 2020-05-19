@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: srs-config
+  namespace: production
+  labels:
+    k8s-app: srs
+data:
+  srs.conf: |-
+    listen              1935;
+    max_connections     1000;
+    srs_log_tank        file;
+    srs_log_file        ./objs/srs.log;
+    daemon              off;
+    http_api {
+        enabled         on;
+        listen          1985;
+        raw_api {
+            enabled             on;
+            allow_reload        on;
+            allow_query         on;
+            allow_update        on;
+        }
+    }
+    http_server {
+        enabled         on;
+        listen          8080;
+        dir             ./objs/nginx/html;
+    }
+    stats {
+        network         0;
+        disk            sda sdb xvda xvdb;
+    }
+    vhost srs-hex.upresent.ga {
+        hls {
+            enabled     on;
+        }
+        http_remux {
+            enabled     on;
+        }
+        http_hooks {
+            enabled     on;
+            on_publish  http://videoprocessor:5000/api/videoprocessor;
+        }
+    }

@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: videoprocessor
+  namespace: production
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 50%
+  progressDeadlineSeconds: 10
+  template:
+    metadata:
+      labels:
+        app: videoprocessor
+    spec:
+      containers:
+        - image: rajagupt/videoprocessor:latest
+          name: videoprocessor
+          imagePullPolicy: Always
+          ports:
+            - name: videoprocessor
+              containerPort: 5000
+          env:
+            - name: SRS_CLUSTER
+              value: "rtmp://srs-hex.upresent.ga/app/"
