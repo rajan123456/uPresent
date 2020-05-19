@@ -83,8 +83,8 @@ const ManageModulesPage = (props) => {
     const _errors = {};
 
     if (!module.moduleCode) _errors.moduleCode = "Code is required.";
-    if (module.scheduledDays.length === 0)
-      _errors.scheduledDays = "Schedule cannot be empty.";
+    // if (module.scheduledDays.length === 0)
+    //   _errors.scheduledDays = "Schedule cannot be empty.";
 
     setErrors(_errors);
 

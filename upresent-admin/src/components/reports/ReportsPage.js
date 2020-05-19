@@ -28,6 +28,9 @@ function ReportsPage() {
   const [errors] = useState({});
   const [modules, setModules] = useState([]);
   const [reportData, setReportData] = useState({});
+  const [attendanceInfoData, setAttendanceInfoData] = useState({});
+
+
   const [report, setReport] = useState({
     moduleCode: "",
     startDate: moment(new Date()).format("MM/DD/YYYY"),
@@ -56,6 +59,34 @@ function ReportsPage() {
     ).then(async (_resp) => {
       if (_resp.message === "ok") {
         setReportData(_resp.data);
+        console.log("data is ", _resp.data);
+
+        var attendanceInfo = _resp.data.attendanceInfo;
+        console.log("attendanceInfo is ", attendanceInfo);
+        var fr = {};
+        var result = {};
+        for (var key in attendanceInfo) {
+          result = attendanceInfo[key].reduce(function (map, obj) {
+            map[key + obj.studentUsername] = {
+              "studentUsername": obj.studentUsername,
+              "attendance": obj.attendance,
+              "capturedImageId": obj.capturedImageId,
+              "recognitionConfidence": obj.recognitionConfidence,
+              "timestamp": obj.timestamp,
+              "recognitionSource": obj.recognitionSource,
+              "adminUsername": obj.adminUsername
+            };
+            return map;
+          }, {});
+          fr = {
+            ...fr,
+            ...result
+          };
+        }
+        setAttendanceInfoData(fr);
+
+        console.log("final res is ", fr);
+
         await getModuleByModuleCode(report.moduleCode).then((_respMod) => {
           transformReportDataToAttendance(
             _resp.data,
@@ -147,7 +178,7 @@ function ReportsPage() {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="main" style={{padding: '10px'}}>
+      <div className="main" style={{ padding: '10px' }}>
         <h2>Reports</h2>
         <ReportsForm
           report={report}
@@ -173,8 +204,8 @@ function ReportsPage() {
                       {reportData.dates ? (
                         <TableCell>Student/Date</TableCell>
                       ) : (
-                        <TableCell />
-                      )}
+                          <TableCell />
+                        )}
                       {reportData.dates &&
                         reportData.dates.map((date) => (
                           <TableCell align="right">{date}</TableCell>
@@ -189,35 +220,39 @@ function ReportsPage() {
                             {record.key}
                           </TableCell>
                           {reportData.dates &&
-                          reportData.dates.map((date) => (
-                          <TableCell align="right">
-                            <div>
-                            <table className="table table-bordered">
-                              <tr>
-                                <th>Image</th>
-                                <th>Confidence</th> 
-                                <th>Timestamp</th>
-                                <th>Status</th>
-                                <th>Revoke</th>
-                              </tr>
-                              <tr>
-                                <td><img style={{width:'100px'}} src={"http://localhost:8084/file?filename="+
-                                reportData.attendanceInfo[date][0].capturedImageId}
-                                alt={reportData.attendanceInfo[date][0].capturedImageId}
-                                ></img></td>
-                                <td>{reportData.attendanceInfo[date][0].recognitionConfidence}</td>
-                                <td>{reportData.attendanceInfo[date][0].timestamp}</td>
-                                <td>{reportData.attendanceInfo[date][0].attendance}</td>
-                                <td>
-                                  <Button type="submit" variant="contained" color="primary">
-                                  Revoke
-                                  </Button>
-                                </td>
-                              </tr>
-                            </table>
-                            </div>
-                            </TableCell>
-                        ))}
+                            reportData.dates.map((date) => (
+                              <TableCell align="right">
+                                <div>
+                                  <table className="table table-bordered">
+                                    <tr>
+                                      <th>Image</th>
+                                      <th>Confidence</th>
+                                      <th>Timestamp</th>
+                                      <th>Source</th>
+                                      <th>Status</th>
+                                      <th>Revoke</th>
+                                    </tr>
+                                    <tr>
+                                      <td><img style={{ width: '100px' }} src={"http://localhost:8084/file?filename=" +
+                                        attendanceInfoData[date + record.key].capturedImageId}
+                                        alt={attendanceInfoData[date + record.key].capturedImageId}
+                                      ></img></td>
+                                      <td>{attendanceInfoData[date + record.key].recognitionConfidence}</td>
+                                      <td>{attendanceInfoData[date + record.key].timestamp}</td>
+                                      <td>{attendanceInfoData[date + record.key].recognitionSource}</td>
+                                      <td>{attendanceInfoData[date + record.key].attendance}</td>
+                                      {attendanceInfoData[date + record.key].attendance === "REVOKED" ?
+                                        <td>Revoked by {attendanceInfoData[date + record.key].adminUsername}</td>
+                                        : <td>
+                                          <Button type="submit" variant="contained" color="primary">
+                                            Revoke
+                              </Button>
+                                        </td>}
+                                    </tr>
+                                  </table>
+                                </div>
+                              </TableCell>
+                            ))}
                         </TableRow>
                       ))}
                   </TableBody>
@@ -225,15 +260,15 @@ function ReportsPage() {
               </TableContainer>
             </Grid>
           ) : (
-            <Button />
-          )}
+              <Button />
+            )}
           {reportData.dates ? (
             <Grid item xs={12}>
               <Button type="submit" onClick={exportPdf()} />
             </Grid>
           ) : (
-            <Button />
-          )}
+              <Button />
+            )}
         </Grid>
       </div>
     </div>

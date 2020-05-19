@@ -169,7 +169,6 @@ function ManageModuleForm(props) {
 
 ManageModuleForm.propTypes = {
   module: PropTypes.object.isRequired,
-  daysOfWeek: PropTypes.array.isRequired,
   availableStudents: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
   onChangeSelector: PropTypes.func.isRequired,
