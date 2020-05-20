@@ -8,6 +8,7 @@ import {Register} from './app/views/Register';
 import {Attendance} from './app/views/Attendance';
 import {Settings} from './app/views/Settings';
 import {LiveStream} from './app/views/LiveStream';
+import {Records} from './app/views/Records';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,7 @@ export default class App extends React.Component {
           <Stack.Screen name="AttendanceRT" component={Attendance} />
           <Stack.Screen name="SettingsRT" component={Settings} />
           <Stack.Screen name="LiveStreamRT" component={LiveStream} />
+          <Stack.Screen name="RecordsRT" component={Records} />
         </Stack.Navigator>
       </NavigationContainer>
     );

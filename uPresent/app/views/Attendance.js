@@ -71,12 +71,13 @@ export class Attendance extends React.Component {
     if (!this.state.isLoggedIn) {
       Alert.alert('Please log in first!');
       this.props.navigation.goBack();
-    }
-    getModulesOfUser(this.state.loggedUser).then(_resp => {
-      this.setState({
-        modules: _resp.data,
+    } else {
+      getModulesOfUser(this.state.loggedUser).then(_resp => {
+        this.setState({
+          modules: _resp.data,
+        });
       });
-    });
+    }
   }
 
   updateRef(name, ref) {
@@ -251,6 +252,14 @@ export class Attendance extends React.Component {
             <View style={styles.headerViewStyle}>
               <Text style={styles.headerTextStyle}>Attendance</Text>
             </View>
+            <TouchableHighlight style={styles.buttonStyle}>
+              <RaisedTextButton
+                onPress={() => this.props.navigation.navigate('RecordsRT')}
+                title="View Records"
+                color={TextField.defaultProps.tintColor}
+                titleColor="white"
+              />
+            </TouchableHighlight>
             <ModalDropdown
               style={styles.dropdown}
               dropdownStyle={styles.dropdownStyle}
