@@ -32,3 +32,5 @@ export const baseUrlReportingApi =
   //   :
   "http://localhost:8083/attendance";
 
+  export const baseUrlAttendanceApi =
+  "http://localhost:5000/api/attendance"

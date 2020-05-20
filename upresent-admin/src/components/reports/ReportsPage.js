@@ -16,6 +16,7 @@ import moment from "moment";
 import Header from "../common/Header";
 import ReportsForm from "./ReportsForm";
 import { getModules, getModuleByModuleCode } from "../../api/moduleApi";
+import { revokeAttendance } from "../../api/attendanceApi";
 import { getAttendanceReport } from "../../api/reportingApi";
 
 const useStyles = makeStyles({
@@ -57,6 +58,7 @@ function ReportsPage() {
       report.endDate,
       report.moduleCode
     ).then(async (_resp) => {
+      console.log("data is ", _resp);
       if (_resp.message === "ok") {
         setReportData(_resp.data);
         console.log("data is ", _resp.data);
@@ -74,7 +76,8 @@ function ReportsPage() {
               "recognitionConfidence": obj.recognitionConfidence,
               "timestamp": obj.timestamp,
               "recognitionSource": obj.recognitionSource,
-              "adminUsername": obj.adminUsername
+              "adminUsername": obj.adminUsername,
+              "attendanceId": obj.attendanceId
             };
             return map;
           }, {});
@@ -145,8 +148,15 @@ function ReportsPage() {
     setAttendance(studentDetails);
   }
 
-  function revoke() {
-    
+  function revoke(attendanceId) {
+    console.log("attendanceId ", attendanceId);
+    revokeAttendance(attendanceId).then((res) => {
+      //popup
+      window.alert("Attendance has been revoked");
+
+      console.log("revoke response is ", res);
+      // window.location.reload();
+      });
   }
 
 
@@ -246,8 +256,12 @@ function ReportsPage() {
                                       <td>{attendanceInfoData[date + record.key].attendance}</td>
                                       {attendanceInfoData[date + record.key].attendance === "REVOKED" ?
                                         <td>Revoked by {attendanceInfoData[date + record.key].adminUsername}</td>
-                                        : <td>
-                                          <Button type="submit" onClick={revoke()} variant="contained" color="primary">
+                                        : attendanceInfoData[date + record.key].attendance === "ABSENT" ?
+                                        <td>Student is ABSENT</td>
+                                        :
+                                        <td>
+                                          {/* attendanceInfoData[date + record.key].attendanceId */}
+                                          <Button type="submit" onClick={() => revoke(attendanceInfoData[date + record.key].attendanceId)} variant="contained" color="primary">
                                             Revoke
                               </Button>
                                         </td>}

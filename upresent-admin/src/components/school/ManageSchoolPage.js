@@ -70,7 +70,7 @@ const ManageSchoolPage = (props) => {
     <div className="container-fluid">
       <Header />
       <div className="main" style={{padding: '10px'}}>
-        <h2>Manage Geo-Fence</h2>
+        <h2>Manage School</h2>
         <ManageSchoolForm
           errors={errors}
           fence={fence}
