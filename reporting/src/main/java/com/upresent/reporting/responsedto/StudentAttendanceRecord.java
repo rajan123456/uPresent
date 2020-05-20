@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class StudentAttendanceRecord {
+	String attendanceId;
 	String studentUsername;
 	String attendance;
 	String capturedImageId;
