@@ -145,6 +145,9 @@ function ReportsPage() {
     setAttendance(studentDetails);
   }
 
+  function revoke() {
+    
+  }
 
 
   function exportPdf() {
@@ -244,7 +247,7 @@ function ReportsPage() {
                                       {attendanceInfoData[date + record.key].attendance === "REVOKED" ?
                                         <td>Revoked by {attendanceInfoData[date + record.key].adminUsername}</td>
                                         : <td>
-                                          <Button type="submit" variant="contained" color="primary">
+                                          <Button type="submit" onClick={revoke()} variant="contained" color="primary">
                                             Revoke
                               </Button>
                                         </td>}
