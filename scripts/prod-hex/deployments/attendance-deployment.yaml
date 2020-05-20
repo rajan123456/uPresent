@@ -34,7 +34,7 @@ spec:
               containerPort: 5000
           env:
             - name: SAGA_ENABLED
-              value: "1"
+              value: "0"
             - name: REPORT_PUBLISH_API
               value: "http://reporting:8080/reporting"
             - name: FACENET_RECOGNITION_API

@@ -77,6 +77,8 @@ public class AttendanceServiceImpl implements AttendanceService {
 							studentAttendance.setTimestamp(record.getTimeStamp());
 							Gson g = new Gson();
 							Map<String, Object> eventData = g.fromJson(record.getEventData(), HashMap.class);
+							studentAttendance.setAttendanceId(objectMapper
+									.writeValueAsString(eventData.get("_id")).split("\"")[3]);
 							studentAttendance.setStudentUsername((String) eventData.get("username"));
 							studentAttendance.setRecognitionSource((String) eventData.get("recognitionSource"));
 							studentAttendance.setRecognitionConfidence((String) eventData.get("recognitionConfidence"));
@@ -93,7 +95,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 								attendanceInfoByDate.put(attendanceLogDateStr, records);
 							}
 						}
-					} catch (ParseException e) {
+					} catch (ParseException | JsonProcessingException e) {
 						throw new ReportingException(ExceptionResponseCode.DATE_PARSE_ERROR);
 					}
 				});
@@ -106,6 +108,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 								&& (record.getEventType().equals(Constants.ATTENDANCE_REVOKED_EVENT_TYPE))) {
 							StudentAttendanceRecord studentAttendance = new StudentAttendanceRecord();
 							studentAttendance.setAttendance("REVOKED");
+							studentAttendance.setAttendanceId("");
 							studentAttendance.setRecognitionSource("");
 							studentAttendance.setRecognitionConfidence("");
 							studentAttendance.setCapturedImageId("");
@@ -141,6 +144,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 					absentStudentUsernames.forEach(absentStudent -> {
 						StudentAttendanceRecord absentyRecord = new StudentAttendanceRecord();
 						absentyRecord.setAttendance("ABSENT");
+						absentyRecord.setAttendanceId("");
 						absentyRecord.setStudentUsername(absentStudent);
 						absentyRecord.setTimestamp("");
 						absentyRecord.setRecognitionSource("");
@@ -155,6 +159,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 				allEnrolledStudentUsernames.forEach(absentStudent -> {
 					StudentAttendanceRecord absentyRecord = new StudentAttendanceRecord();
 					absentyRecord.setAttendance("ABSENT");
+					absentyRecord.setAttendanceId("");
 					absentyRecord.setStudentUsername(absentStudent);
 					absentyRecord.setTimestamp("");
 					absentyRecord.setRecognitionSource("");

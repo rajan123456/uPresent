@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zookeeper
+  namespace: production
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 10
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+      - image: confluentinc/cp-zookeeper:5.3.1
+        name: zookeeper
+        volumeMounts:
+        - name: zookeeper-data-vol
+          mountPath: /var/lib/zookeeper/data
+        - name: zookeeper-logs-vol
+          mountPath: /var/lib/zookeeper/log
+        env:
+        - name: ZOOKEEPER_CLIENT_PORT
+          value: "2181"
+        - name: ZOOKEEPER_TICK_TIME
+          value: "2000"
+        imagePullPolicy: Always
+        ports:
+        - name: piggy-zookeeper
+          containerPort: 2181
+      volumes:
+      - name: zookeeper-data-vol
+        persistentVolumeClaim:
+          claimName: zookeeper-data-vol-claim
+          readOnly: false
+      - name: zookeeper-logs-vol
+        persistentVolumeClaim:
+          claimName: zookeeper-logs-vol-claim
+          readOnly: false
+status: {}
