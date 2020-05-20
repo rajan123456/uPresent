@@ -124,12 +124,6 @@ class AttendanceApi(Resource):
 
     @swagger.operation()
     def get(self, id):
-        log.info("Inside get attendance method by id ----->>")
-        attendance = Attendance.objects.get(id=id).to_json()
-        return Response(attendance, mimetype="application/json", status=200)
-
-    @swagger.operation()
-    def get(self, username):
         log.info("Inside get attendance method for student by username ----->>")
-        attendance = Attendance.objects.get(username=username).to_json()
+        attendance = Attendance.objects(username=id).to_json()
         return Response(attendance, mimetype="application/json", status=200)
