@@ -16,7 +16,7 @@ const ManageSchoolPage = (props) => {
     createdBy: "",
     timeZone: "",
     geoFenceData:"",
-    holidays: []
+    holidays: [new Date()]
   });
 
   useEffect(() => {
@@ -24,16 +24,42 @@ const ManageSchoolPage = (props) => {
     if (schoolName) {
       fenceApi
         .getFenceByUniversityName(schoolName)
-        .then((_fence) => setFence(_fence.data));
+        .then((_fence) => {
+          var data = _fence.data;
+          data.longitude = _fence.data.geoFenceData.longitude;
+          data.latitude = _fence.data.geoFenceData.latitude;
+          data.radiusInMeter = _fence.data.geoFenceData.radiusInMeter;
+          console.log("imp data is ", data);
+          setFence(data);
+        });
+
     }
   }, []);
 
   function handleChange({ target }) {
+
     setFence({
       ...fence,
       [target.name]: target.value,
     });
   }
+
+  function handleHolidayChange(dates) {
+    console.log("holiday dates... "+dates);
+    setFence({
+      ...fence,
+      ["holidays"]: dates,
+    });
+  }
+  // function handleChangeLong({ target }) {
+  //   console.log("geoFenceData  ",fence.geoFenceData);
+  //   fence.geoFenceData.longitude=target.value;
+  //   setFence({
+  //     ...fence,
+  //     "geoFenceData": fence.geoFenceData,
+  //   });
+  // }
+  
 
   function formIsValid() {
     const _errors = {};
@@ -57,10 +83,14 @@ const ManageSchoolPage = (props) => {
     fence.latitude = parseFloat(fence.latitude);
     fence.radiusInMeter = parseFloat(fence.radiusInMeter);
     fence.username = localStorage.getItem("user");
-
-    fenceApi.saveFence(fence).then((_resp) => {
+    fence.geoFenceData = {
+      "longitude":fence.longitude,
+      "latitude":fence.latitude,
+      "radiusInMeter":fence.radiusInMeter
+    }
+    fenceApi.updateFence(fence).then((_resp) => {
       if (_resp.message === "ok") {
-        props.history.push("/fences");
+        props.history.push("/schools");
         toast.success("Fence updated");
       } else toast.warn("There was an error. Please try again later.");
     });
@@ -74,6 +104,7 @@ const ManageSchoolPage = (props) => {
         <ManageSchoolForm
           errors={errors}
           fence={fence}
+          onChangeHoliday={handleHolidayChange}
           onChange={handleChange}
           onSubmit={handleSubmit}
         />

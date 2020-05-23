@@ -36,3 +36,15 @@ export function saveFence(fence) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function updateFence(fence) {
+  return fetch(baseUrl, {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(fence),
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}

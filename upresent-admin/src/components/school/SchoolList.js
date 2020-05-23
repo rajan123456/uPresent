@@ -1,13 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 function SchoolList(props) {
   return (
     <table className="table table-bordered">
       <thead>
         <tr>
-        <th>School Code</th>
+          <th>School Code</th>
           <th>School</th>
           <th>Longitude</th>
           <th>Latitude</th>
@@ -32,7 +33,13 @@ function SchoolList(props) {
                 <td>{fence.geoFenceData.longitude}</td>
                 <td>{fence.geoFenceData.latitude}</td>
                 <td>{fence.geoFenceData.radiusInMeter}</td>
-                <td>{fence.holidays}</td>
+                <td>{fence.holidays.map((holiday) => {
+                  return (
+                    <label>{moment(holiday).format("MM/DD/YYYY")}&nbsp;&nbsp;</label>
+                  )
+                })
+                }</td>
+
                 <td>{fence.timeZone}</td>
                 <td>{fence.createdBy}</td>
 

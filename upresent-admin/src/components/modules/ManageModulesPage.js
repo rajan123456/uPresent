@@ -37,7 +37,9 @@ const ManageModulesPage = (props) => {
         setModule(_module.data);
         getFenceByUniversityName( _module.data.schoolCode).then((_fences) => {
           setFences(_fences.data);
+          console.log(" _fences.data ", _fences.data);
           var overlap = [];
+          if (_fences.data.holiday !==null) {
           _fences.data.holidays.map(function(holiday) {
             _module.data.schedule.map(function(day) {
               if (day.date === moment(holiday).format("MM/DD/YYYY")) {
@@ -47,8 +49,10 @@ const ManageModulesPage = (props) => {
             });
            
           });
+        }
           setHolidayOverlap(overlap);
         });
+        
       });
     }
     getUsersOfType("STUDENT").then((_students) => {

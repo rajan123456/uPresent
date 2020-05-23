@@ -32,7 +32,7 @@ function ManageSchoolForm(props) {
         label="Longitude"
         onChange={props.onChange}
         name="longitude"
-        value={props.fence.geoFenceData.longitude}
+        value={props.fence.longitude}
         error={props.errors.longitude}
         readOnly={false}
       />
@@ -42,7 +42,7 @@ function ManageSchoolForm(props) {
         label="Latitude"
         onChange={props.onChange}
         name="latitude"
-        value={props.fence.geoFenceData.latitude}
+        value={props.fence.latitude}
         error={props.errors.latitude}
         readOnly={false}
       />
@@ -52,7 +52,7 @@ function ManageSchoolForm(props) {
         label="Radius (m)"
         onChange={props.onChange}
         name="radiusInMeter"
-        value={props.fence.geoFenceData.radiusInMeter}
+        value={props.fence.radiusInMeter}
         error={props.errors.radiusInMeter}
         readOnly={false}
       />
