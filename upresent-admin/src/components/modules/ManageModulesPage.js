@@ -6,9 +6,13 @@ import { getUsersOfType } from "../../api/userApi";
 import { toast } from "react-toastify";
 import { daysOfWeek } from "../../utils/constants";
 import moment from "moment";
+import { getFenceByUniversityName } from "../../api/fenceApi";
+
 
 const ManageModulesPage = (props) => {
   const [errors, setErrors] = useState({});
+  const [fences, setFences] = useState([]);
+  const [holidayOverlap, setHolidayOverlap] = useState([]);
 
   const [module, setModule] = useState({
     createdBy: "",
@@ -31,6 +35,20 @@ const ManageModulesPage = (props) => {
     if (moduleCode) {
       moduleApi.getModuleByModuleCode(moduleCode).then((_module) => {
         setModule(_module.data);
+        getFenceByUniversityName( _module.data.schoolCode).then((_fences) => {
+          setFences(_fences.data);
+          var overlap = [];
+          _fences.data.holidays.map(function(holiday) {
+            _module.data.schedule.map(function(day) {
+              if (day.date === moment(holiday).format("MM/DD/YYYY")) {
+                console.log("holiday is overlapping ", day.date);
+                overlap.push(day.date);
+              }
+            });
+           
+          });
+          setHolidayOverlap(overlap);
+        });
       });
     }
     getUsersOfType("STUDENT").then((_students) => {
@@ -41,6 +59,12 @@ const ManageModulesPage = (props) => {
       setStudents(activeUsers.map((a) => a.username).sort());
     });
   }, [props.match.params.moduleCode]);
+
+
+  function test() {
+
+
+  }
 
   function handleChange({ target }) {
     setModule({
@@ -121,6 +145,7 @@ const ManageModulesPage = (props) => {
         <ManageModuleForm
           errors={errors}
           module={module}
+          holidayOverlap={holidayOverlap}
           daysOfWeek={daysOfWeek}
           availableStudents={students}
           onChange={handleChange}

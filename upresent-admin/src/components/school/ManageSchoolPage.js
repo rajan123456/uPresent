@@ -26,7 +26,7 @@ const ManageSchoolPage = (props) => {
         .getFenceByUniversityName(schoolName)
         .then((_fence) => setFence(_fence.data));
     }
-  }, [props.match.params.schoolName]);
+  }, []);
 
   function handleChange({ target }) {
     setFence({

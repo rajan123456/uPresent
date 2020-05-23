@@ -148,17 +148,14 @@ function ReportsPage() {
     setAttendance(studentDetails);
   }
 
-  function revoke(attendanceId) {
-    console.log("attendanceId ", attendanceId);
-    revokeAttendance(attendanceId).then((res) => {
-      //popup
+  function revoke(attendanceInfo, key) {
+    revokeAttendance(attendanceInfo[key].attendanceId).then((res) => {
       window.alert("Attendance has been revoked");
-
-      console.log("revoke response is ", res);
-      // window.location.reload();
-      });
+      var fr =  attendanceInfoData;
+      fr[key].attendance = "REVOKED";
+      setAttendanceInfoData(fr);
+    });
   }
-
 
   function exportPdf() {
     if (attendance.length === 0) return;
@@ -261,7 +258,7 @@ function ReportsPage() {
                                         :
                                         <td>
                                           {/* attendanceInfoData[date + record.key].attendanceId */}
-                                          <Button type="submit" onClick={() => revoke(attendanceInfoData[date + record.key].attendanceId)} variant="contained" color="primary">
+                                          <Button type="submit" onClick={() => revoke(attendanceInfoData, date + record.key)} variant="contained" color="primary">
                                             Revoke
                               </Button>
                                         </td>}

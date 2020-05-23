@@ -103,6 +103,13 @@ function ManageModuleForm(props) {
             options={props.daysOfWeek}
           />
         </Grid> */}
+        <label>&nbsp;Holiday Clashes observed at:&nbsp;&nbsp;</label>
+
+        {props.holidayOverlap.map((overlap) => {
+            return (
+              <label>{overlap}&nbsp;&nbsp;</label>
+                )})
+                }
     <table className="table table-bordered">
       <thead>
         <tr>

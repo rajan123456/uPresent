@@ -1,10 +1,10 @@
 import { handleResponse, handleError } from "./apiUtils";
-import { baseUrlModuleApi } from "../config/config";
+import { baseUrlAttendanceApi } from "../config/config";
 
-const baseUrl = baseUrlModuleApi;
+const baseUrl = baseUrlAttendanceApi;
 
 export function revokeAttendance(attendanceId) {
-  return fetch("http://localhost:5000/api/attendance" + "/" + attendanceId, {
+  return fetch(baseUrl + "/" + attendanceId, {
     method: "DELETE",
     headers: {
       "content-type": "application/json",
