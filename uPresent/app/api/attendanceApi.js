@@ -15,6 +15,18 @@ export async function saveAttendance(attendance) {
     .catch(handleError);
 }
 
+export async function getAttendanceRecordsOfUser(username) {
+  const baseUrl = await getBaseUrlAttendanceApi();
+  return fetch(baseUrl + '/' + username, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+    },
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
 async function getBaseUrlAttendanceApi() {
   let baseUrl = '';
   await AsyncStorage.getItem('hexagonEnvironment', (errs, result) => {
