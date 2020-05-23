@@ -150,7 +150,7 @@ function ReportsPage() {
 
   function revoke(attendanceInfo, key) {
     revokeAttendance(attendanceInfo[key].attendanceId).then((res) => {
-      window.alert("Attendance has been revoked");
+      // window.alert("Attendance has been revoked");
       var fr =  attendanceInfoData;
       fr[key].attendance = "REVOKED";
       setAttendanceInfoData(fr);
