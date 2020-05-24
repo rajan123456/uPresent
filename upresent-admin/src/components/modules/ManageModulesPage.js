@@ -127,6 +127,17 @@ const ManageModulesPage = (props) => {
     });
   }
 
+  function handleDeleteSchedule(scDays, index) {
+    console.log(" handle schedule .. ",scDays);
+    scDays.splice(index,1);
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["scheduledDays"]: scDays
+    });
+  }
+  
+
   function handleScheduleEndTime(scDays, value, index) {
     console.log(" handle schedule .. ",scDays);
     scDays[index].endTime = value;
@@ -187,6 +198,7 @@ const ManageModulesPage = (props) => {
           onStartDateChange={handleDateChangeStartDate}
           onEndDateChange={handleDateChangeEndDate}
           updateDate={handleScheduleDate}
+          deleteSchedule={handleDeleteSchedule}
           updateEndTime={handleScheduleEndTime}
           updateStartTime={handleScheduleStartTime}
           onSubmit={handleSubmit}
