@@ -107,6 +107,36 @@ const ManageModulesPage = (props) => {
     });
   }
 
+  function handleScheduleDate(scDays, value, index) {
+    console.log(" handle schedule .. ",scDays);
+    scDays[index].date = value;
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["scheduledDays"]: scDays
+    });
+  }
+
+  function handleScheduleStartTime(scDays, value, index) {
+    console.log(" handle schedule .. ",scDays);
+    scDays[index].startTime = value;
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["scheduledDays"]: scDays
+    });
+  }
+
+  function handleScheduleEndTime(scDays, value, index) {
+    console.log(" handle schedule .. ",scDays);
+    scDays[index].endTime = value;
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["scheduledDays"]: scDays
+    });
+  }
+
   function formIsValid() {
     const _errors = {};
 
@@ -156,6 +186,9 @@ const ManageModulesPage = (props) => {
           onChangeSelector={handleChangeSelector}
           onStartDateChange={handleDateChangeStartDate}
           onEndDateChange={handleDateChangeEndDate}
+          updateDate={handleScheduleDate}
+          updateEndTime={handleScheduleEndTime}
+          updateStartTime={handleScheduleStartTime}
           onSubmit={handleSubmit}
           onReset={handleDelete}
         />

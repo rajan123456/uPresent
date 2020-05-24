@@ -123,13 +123,13 @@ function ManageModuleForm(props) {
       <tbody>
         {props.module.schedule &&
           props.module.schedule.length > 0 &&
-          props.module.schedule.map((module) => {
+          props.module.schedule.map((module, index) => {
             return (
               <tr key={module.date}>
                 <td>
                 <TextInput
             type="text"
-            onChange={props.onChange}
+            onChange={(e) => props.updateDate(props.module.schedule, e.target.value, index)}
             name="date"
             value={module.date}
             readOnly={false}
@@ -137,7 +137,7 @@ function ManageModuleForm(props) {
           <td>
                 <TextInput
             type="text"
-            onChange={props.onChange}
+            onChange={(e) => props.updateStartTime(props.module.schedule, e.target.value, index)}
             name="startTime"
             value={module.startTime}
             readOnly={false}
@@ -145,7 +145,7 @@ function ManageModuleForm(props) {
           <td>
             <TextInput
             type="text"
-            onChange={props.onChange}
+            onChange={(e) => props.updateEndTime(props.module.schedule, e.target.value, index)}
             name="endTime"
             value={module.endTime}
             readOnly={false}
