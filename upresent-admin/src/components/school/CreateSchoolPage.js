@@ -62,7 +62,7 @@ const CreateSchoolPage = (props) => {
     fence.createdBy = localStorage.getItem("user");
     fenceApi.saveFence(fence).then(() => {
       props.history.push("/schools");
-      toast.success("Fence saved");
+      toast.success("School saved");
     });
   }
 

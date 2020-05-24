@@ -91,7 +91,7 @@ const ManageSchoolPage = (props) => {
     fenceApi.updateFence(fence).then((_resp) => {
       if (_resp.message === "ok") {
         props.history.push("/schools");
-        toast.success("Fence updated");
+        toast.success("School updated");
       } else toast.warn("There was an error. Please try again later.");
     });
   }
