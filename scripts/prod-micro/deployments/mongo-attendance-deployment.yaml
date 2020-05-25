@@ -27,7 +27,7 @@ spec:
             - mountPath: /data/db
               name: mongo-attendance-data-vol
       volumes:
-        - name: mongo-user-data-vol
+        - name: mongo-attendance-data-vol
           persistentVolumeClaim:
             claimName: mongo-attendance-data-vol-claim
             readOnly: false
