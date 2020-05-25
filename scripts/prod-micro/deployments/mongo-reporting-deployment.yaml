@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mongo-reporting
+  namespace: production
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mongo-reporting
+    spec:
+      containers:
+        - name: mongo-reporting
+          image: mongo:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "root"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "example"
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-reporting-data-vol
+      volumes:
+        - name: mongo-reporting-data-vol
+          persistentVolumeClaim:
+            claimName: mongo-reporting-data-vol-claim
+            readOnly: false

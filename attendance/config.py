@@ -1,7 +1,7 @@
 class Config(object):
     MONGODB_SETTINGS = {
         # "host": "mongodb://root:example@localhost:27017/admin"
-        "host": "mongodb://root:example@mongo:27017/admin"
+        "host": "mongodb://root:example@mongo-attendance:27017/admin"
     }
     # UPLOAD_DIR = (
     #    "C:\\Users\\rajan\\PiggybackIncentives\\uPresent\\scripts\\dev\\user-data-vol\\"
