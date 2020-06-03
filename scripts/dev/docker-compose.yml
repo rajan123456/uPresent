@@ -15,10 +15,8 @@ services:
     depends_on:
       - apm-server
       - broker
-      - facenet
       - management
-      - mongo
-      - reporting
+      - mongo-attendance
       - user
       - vault
   management:
@@ -30,8 +28,7 @@ services:
     depends_on:
       - apm-server
       - broker
-      - mongo
-      - reporting
+      - mongo-management
       - user
   reporting:
     image: rajagupt/reporting:latest
@@ -42,7 +39,7 @@ services:
     depends_on:
       - apm-server
       - broker
-      - mongo
+      - mongo-reporting
   user:
     image: rajagupt/user:latest
     container_name: user
@@ -54,8 +51,99 @@ services:
     depends_on:
       - apm-server
       - broker
-      - mongo
-      - reporting
+      - mongo-user
+  mongo-attendance:
+    image: mongo:latest
+    container_name: mongo-attendance
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-att-data-vol:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+  mongo-express-attendance:
+    image: mongo-express:latest
+    container_name: mongo-express-att
+    restart: always
+    ports:
+      - "8001:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo-attendance
+    depends_on:
+      - mongo-attendance
+  mongo-management:
+    image: mongo:latest
+    container_name: mongo-management
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-mgmt-data-vol:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+  mongo-express-management:
+    image: mongo-express:latest
+    container_name: mongo-express-mgmt
+    restart: always
+    ports:
+      - "8002:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo-management
+    depends_on:
+      - mongo-management
+  mongo-reporting:
+    image: mongo:latest
+    container_name: mongo-reporting
+    restart: always
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongo-rprt-data-vol:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+  mongo-express-reporting:
+    image: mongo-express:latest
+    container_name: mongo-express-rprt
+    restart: always
+    ports:
+      - "8003:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo-reporting
+    depends_on:
+      - mongo-reporting
+  mongo-user:
+    image: mongo:latest
+    container_name: mongo-user
+    restart: always
+    ports:
+      - "27020:27017"
+    volumes:
+      - mongo-user-data-vol:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+  mongo-express-user:
+    image: mongo-express:latest
+    container_name: mongo-express-usr
+    restart: always
+    ports:
+      - "8004:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_SERVER: mongo-user
+    depends_on:
+      - mongo-user
   admin:
     image: rajagupt/upresent-admin:latest
     container_name: admin
@@ -103,28 +191,6 @@ services:
       - apm-server
       - broker
       - srs
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data-vol:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-  mongo-express:
-    image: mongo-express:latest
-    container_name: mongo-express
-    restart: always
-    ports:
-      - "8001:8081"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-    depends_on:
-      - mongo
   zookeeper:
     image: confluentinc/cp-zookeeper:5.3.1
     hostname: zookeeper
@@ -326,7 +392,10 @@ volumes:
   filebeat-data-vol:
   kafka-data-vol:
   metricbeat-data-vol:
-  mongo-data-vol:
+  mongo-att-data-vol:
+  mongo-mgmt-data-vol:
+  mongo-rprt-data-vol:
+  mongo-user-data-vol:
   proxy-data-nginx:
   srs-conf-vol:
   srs-log-vol:
