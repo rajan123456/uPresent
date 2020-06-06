@@ -53,3 +53,4 @@ class Config(object):
     AZURE_FACE_ENDPOINT = "https://eastus.api.cognitive.microsoft.com/"
     AZURE_FACE_ENABLED = 0
     AWS_REKOG_ENABLED = 1
+    FACENET_ENABLED = 1
