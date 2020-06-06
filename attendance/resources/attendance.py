@@ -33,6 +33,7 @@ class AllAttendanceApi(Resource):
             log.info("Inside create attendance method for student ----->>")
             azure_face_enabled = os.getenv("AZURE_FACE_ENABLED")
             aws_rekog_enabled = os.getenv("AWS_REKOG_ENABLED")
+            facenet_enabled = os.getenv("FACENET_ENABLED")
 
             if azure_face_enabled is None:
                 log.info("AZURE_FACE_ENABLED not set, falling back to config")
@@ -40,6 +41,9 @@ class AllAttendanceApi(Resource):
             if aws_rekog_enabled is None:
                 log.info("AWS_REKOG_ENABLED not set, falling back to config")
                 aws_rekog_enabled = current_app.config["AWS_REKOG_ENABLED"]
+            if facenet_enabled is None:
+                log.info("FACENET_ENABLED not set, falling back to config")
+                facenet_enabled = current_app.config["FACENET_ENABLED"]
 
             body = request.get_json()
             attendance = Attendance(**body)
@@ -48,7 +52,9 @@ class AllAttendanceApi(Resource):
             check_module_active(attendance.moduleId, school.get("timeZone"))
             validateVicinity(body)
             user = u.fetchStudent(username=attendance.username)
-            if user.get("imageId") is None or len(user.get("imageId")) < 1:
+            if str(facenet_enabled) == "1" and (
+                user.get("imageId") is None or len(user.get("imageId")) < 1
+            ):
                 attendance.recognitionSource = "facenet"
                 attendance.recognitionConfidence = compare_faces_facenet(
                     attendance.capturedImageId, attendance.username
