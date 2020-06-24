@@ -52,5 +52,5 @@ class Config(object):
     USER_API_FETCH_USER = "http://user:8080/user?username="
     AZURE_FACE_ENDPOINT = "https://eastus.api.cognitive.microsoft.com/"
     AZURE_FACE_ENABLED = 0
-    AWS_REKOG_ENABLED = 1
-    FACENET_ENABLED = 1
+    AWS_REKOG_ENABLED = 0
+    FACENET_ENABLED = 0
