@@ -49,20 +49,20 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: management
-              containerPort: 8083
+              containerPort: 8080
           env:
             - name: sagaEnabled
-            value: "0"
+              value: "0"
             - name: userms.hostname
-            value: "http://hexagon"
+              value: "http://hexagon"
             - name: userms.port
-            value: "8082"
+              value: "8082"
         - image: rajagupt/reporting:latest
           name: reporting
           imagePullPolicy: Always
           ports:
             - name: reporting
-              containerPort: 8084
+              containerPort: 8080
           env:
             - name: managementms.hostname
               value: "http://hexagon"
@@ -73,7 +73,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: user
-              containerPort: 8082
+              containerPort: 8080
           env:
             - name: sagaEnabled
               value: "0"
