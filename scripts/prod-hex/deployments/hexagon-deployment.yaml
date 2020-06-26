@@ -57,6 +57,8 @@ spec:
               value: "http://hexagon"
             - name: userms.port
               value: "8082"
+            - name: reporting.publisher.api
+              value: "http://hexagon:8084/reporting"
         - image: rajagupt/reporting:latest
           name: reporting
           imagePullPolicy: Always
@@ -77,3 +79,5 @@ spec:
           env:
             - name: sagaEnabled
               value: "0"
+            - name: reporting.publisher.api
+              value: "http://hexagon:8084/reporting"
