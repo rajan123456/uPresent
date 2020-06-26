@@ -22,14 +22,14 @@ def validateVicinity(attendanceBody):
     )
     if managementResponseData is None:
         raise Exception("No data found for School")
-    distance = geodesic(
-        attendanceBody.get("location"),
-        [
-            managementResponseData.get("latitude"),
-            managementResponseData.get("longitude"),
-        ],
-    ).m
-    log.info("distance calculated: " + str(distance))
+    # distance = geodesic(
+    #    attendanceBody.get("location"),
+    #    [
+    #        managementResponseData.get("latitude"),
+    #        managementResponseData.get("longitude"),
+    #    ],
+    # ).m
+    distance = 0.0
     if distance > managementResponseData.get("radiusInMeter"):
         log.info(
             "validate vicinity check failed as distance is "
