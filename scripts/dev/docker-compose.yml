@@ -9,7 +9,8 @@ services:
       - "5000:5000"
     environment:
       AZURE_FACE_ENABLED: "0"
-      AWS_REKOG_ENABLED: "1"
+      AWS_REKOG_ENABLED: "0"
+      FACENET_ENABLED: "0"
     volumes:
       - ./user-data-vol:/app/resources/images:ro
     depends_on:
