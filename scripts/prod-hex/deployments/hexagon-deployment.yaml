@@ -49,7 +49,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: management
-              containerPort: 8080
+              containerPort: 8083
           env:
             - name: sagaEnabled
               value: "0"
@@ -62,7 +62,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: reporting
-              containerPort: 8080
+              containerPort: 8084
           env:
             - name: managementms.hostname
               value: "http://hexagon"
@@ -73,7 +73,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: user
-              containerPort: 8080
+              containerPort: 8082
           env:
             - name: sagaEnabled
               value: "0"

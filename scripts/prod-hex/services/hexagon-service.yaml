@@ -14,13 +14,13 @@ spec:
       name: attendance
     - protocol: TCP
       port: 8082
-      targetPort: 8080
+      targetPort: 8082
       name: user
     - protocol: TCP
       port: 8083
-      targetPort: 8080
+      targetPort: 8083
       name: management
     - protocol: TCP
       port: 8084
-      targetPort: 8080
+      targetPort: 8084
       name: reporting
