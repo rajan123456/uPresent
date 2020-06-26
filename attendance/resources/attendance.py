@@ -28,7 +28,7 @@ class AllAttendanceApi(Resource):
 
     @swagger.operation()
     def post(self):
-        # u = User()
+        u = User()
         try:
             log.info("Inside create attendance method for student ----->>")
             azure_face_enabled = os.getenv("AZURE_FACE_ENABLED")
@@ -51,7 +51,7 @@ class AllAttendanceApi(Resource):
             school = check_school_active(attendance.school)
             check_module_active(attendance.moduleId, school.get("timeZone"))
             validateVicinity(body)
-            # user = u.fetchStudent(username=attendance.username)
+            user = u.fetchStudent(username=attendance.username)
             if str(facenet_enabled) == "1" and (
                 user.get("imageId") is None or len(user.get("imageId")) < 1
             ):
