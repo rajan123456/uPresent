@@ -52,11 +52,11 @@ spec:
               containerPort: 8083
           env:
             - name: sagaEnabled
-            value: "0"
+              value: "0"
             - name: userms.hostname
-            value: "http://hexagon"
+              value: "http://hexagon"
             - name: userms.port
-            value: "8082"
+              value: "8082"
         - image: rajagupt/reporting:latest
           name: reporting
           imagePullPolicy: Always

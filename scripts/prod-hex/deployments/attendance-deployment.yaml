@@ -42,7 +42,7 @@ spec:
             - name: MODULE_API_FETCH_DETAILS
               value: "http://management:8080/manage/module?moduleCode="
             - name: MANAGEMENT_API_GEO_FENCE
-              value: "http://management:8080/manage/school/geo-fence?universityName="
+              value: "http://management:8080/manage/school/geo-fence?schoolCode="
             - name: MANAGEMENT_API_SCHOOL
               value: "http://management:8080/manage/school?schoolCode="
             - name: USER_API_FETCH_USER

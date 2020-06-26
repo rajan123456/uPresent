@@ -27,8 +27,8 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">100</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">10</stringProp>
+        <stringProp name="ThreadGroup.num_threads">20</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">20</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">900</stringProp>
         <stringProp name="ThreadGroup.delay">0</stringProp>
@@ -54,8 +54,8 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">8084</stringProp>
+          <stringProp name="HTTPSampler.domain">35.240.229.244</stringProp>
+          <stringProp name="HTTPSampler.port">8080</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/user</stringProp>
@@ -121,8 +121,8 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">8084</stringProp>
+          <stringProp name="HTTPSampler.domain">35.240.229.244</stringProp>
+          <stringProp name="HTTPSampler.port">8080</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/auth</stringProp>
@@ -182,19 +182,19 @@
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
   &quot;createdBy&quot;: &quot;admin&quot;,&#xd;
-  &quot;endDate&quot;: &quot;06/06/2020&quot;,&#xd;
+  &quot;endDate&quot;: &quot;06/26/2020&quot;,&#xd;
   &quot;moduleCode&quot;: &quot;${__RandomString(15,abcdefghijklmnopqrstuvwxyz0123456780,MODULE_CODE)}&quot;,&#xd;
   &quot;moduleName&quot;: &quot;string&quot;,&#xd;
   &quot;schedule&quot;: [&#xd;
     {&#xd;
       &quot;createdBy&quot;: &quot;admin&quot;,&#xd;
-      &quot;date&quot;: &quot;06/06/2020&quot;,&#xd;
+      &quot;date&quot;: &quot;06/26/2020&quot;,&#xd;
       &quot;endTime&quot;: &quot;23:00&quot;,&#xd;
-      &quot;startTime&quot;: &quot;17:00&quot;&#xd;
+      &quot;startTime&quot;: &quot;11:00&quot;&#xd;
     }&#xd;
   ],&#xd;
   &quot;schoolCode&quot;: &quot;NUS&quot;,&#xd;
-  &quot;startDate&quot;: &quot;06/06/2020&quot;,&#xd;
+  &quot;startDate&quot;: &quot;06/26/2020&quot;,&#xd;
   &quot;studentUsernames&quot;: [&#xd;
   	&quot;${USERNAME}&quot;&#xd;
   ]&#xd;
@@ -203,8 +203,8 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">8082</stringProp>
+          <stringProp name="HTTPSampler.domain">34.87.90.191</stringProp>
+          <stringProp name="HTTPSampler.port">8080</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/manage/module</stringProp>
@@ -273,7 +273,7 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.domain">35.198.225.2</stringProp>
           <stringProp name="HTTPSampler.port">5000</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -352,8 +352,8 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">8083</stringProp>
+          <stringProp name="HTTPSampler.domain">34.87.109.16</stringProp>
+          <stringProp name="HTTPSampler.port">8080</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/attendance</stringProp>
