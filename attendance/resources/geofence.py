@@ -29,6 +29,7 @@ def validateVicinity(attendanceBody):
             managementResponseData.get("longitude"),
         ],
     ).m
+    log.info("distance calculated: " + str(distance))
     if distance > managementResponseData.get("radiusInMeter"):
         log.info(
             "validate vicinity check failed as distance is "
