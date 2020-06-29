@@ -35,11 +35,11 @@ spec:
           env:
           - name: sagaEnabled
             value: "1"
-          volumeMounts:
-          - mountPath: /app/resources/images
-            name: user-data-vol
-      volumes:
-      - name: user-data-vol
-        persistentVolumeClaim:
-          claimName: user-data-vol-claim
-          readOnly: false
+#          volumeMounts:
+#          - mountPath: /app/resources/images
+#            name: user-data-vol
+#      volumes:
+#      - name: user-data-vol
+#        persistentVolumeClaim:
+#          claimName: user-data-vol-claim
+#          readOnly: false

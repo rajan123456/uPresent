@@ -11,33 +11,33 @@ metadata:
 spec:
   tls:
     - hosts:
-        - admin.upresent.ga
+#       - admin.upresent.ga
         - attendance.upresent.ga
-        - kibana.upresent.ga
+#        - kibana.upresent.ga
         - management.upresent.ga
         - reporting.upresent.ga
         - user.upresent.ga
-        - vault.upresent.ga
+#        - vault.upresent.ga
       secretName: nginx-tls
   rules:
-    - host: admin.upresent.ga
-      http:
-        paths:
-          - backend:
-              serviceName: adminui
-              servicePort: 80
+#    - host: admin.upresent.ga
+#      http:
+#        paths:
+#          - backend:
+#              serviceName: adminui
+#              servicePort: 80
     - host: attendance.upresent.ga
       http:
         paths:
           - backend:
               serviceName: attendance
               servicePort: 5000
-    - host: kibana.upresent.ga
-      http:
-        paths:
-          - backend:
-              serviceName: kibana
-              servicePort: 5601
+#    - host: kibana.upresent.ga
+#      http:
+#        paths:
+#          - backend:
+#              serviceName: kibana
+#              servicePort: 5601
     - host: management.upresent.ga
       http:
         paths:
