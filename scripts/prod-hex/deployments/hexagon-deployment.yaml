@@ -44,6 +44,9 @@ spec:
               value: "1"
             - name: FACENET_ENABLED
               value: "0"
+          volumeMounts:
+            - mountPath: /app/resources/images
+              name: user-data-vol
         - image: rajagupt/management:latest
           name: management
           imagePullPolicy: Always
@@ -81,3 +84,8 @@ spec:
               value: "0"
             - name: reporting.publisher.api
               value: "http://hexagon:8084/reporting"
+      volumes:
+        - name: user-data-vol
+          persistentVolumeClaim:
+            claimName: user-data-vol-claim
+            readOnly: false
