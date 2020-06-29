@@ -41,7 +41,7 @@ spec:
             - name: AZURE_FACE_ENABLED
               value: "0"
             - name: AWS_REKOG_ENABLED
-              value: "0"
+              value: "1"
             - name: FACENET_ENABLED
               value: "0"
         - image: rajagupt/management:latest
