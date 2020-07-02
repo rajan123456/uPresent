@@ -17,7 +17,7 @@ import com.upresent.reporting.exception.ReportingException;
 import com.upresent.reporting.service.ReportingService;
 
 @Service
-@ConditionalOnProperty(prefix = "feature.toggle", name = "kafkaConsumerEnabled", havingValue="true")
+@ConditionalOnProperty(name = "saga.enabled", havingValue = "1")
 public class KafkaReceiver {
 
 	@Autowired
@@ -25,7 +25,7 @@ public class KafkaReceiver {
 
 	private static final Logger LOG = LoggerFactory.getLogger(KafkaReceiver.class);
 
-	@KafkaListener(topics = {"managementEvents" , "userEvents", "attendanceEvents"})
+	@KafkaListener(topics = { "managementEvents", "userEvents", "attendanceEvents" })
 	public void listen(@Payload String message) {
 		LOG.info("received message='{}'", message);
 		reportingService.addReportingData(constructReportingData(message));

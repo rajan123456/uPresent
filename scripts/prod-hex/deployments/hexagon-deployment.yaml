@@ -73,6 +73,8 @@ spec:
               value: "http://hexagon"
             - name: managementms.port
               value: "8083"
+            - name: SAGA_ENABLED
+              value: "0"
         - image: rajagupt/user:latest
           name: user
           imagePullPolicy: Always

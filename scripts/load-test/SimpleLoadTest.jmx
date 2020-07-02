@@ -42,7 +42,9 @@
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-  &quot;imageId&quot;: [],&#xd;
+  &quot;imageId&quot;: [&#xd;
+  &quot;${__Random(1,744,IMAGE_ID)}a.jpg&quot;&#xd;
+  ],&#xd;
   &quot;isActive&quot;: 1,&#xd;
   &quot;name&quot;: &quot;string&quot;,&#xd;
   &quot;password&quot;: &quot;string&quot;,&#xd;
@@ -54,9 +56,9 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">35.240.229.244</stringProp>
-          <stringProp name="HTTPSampler.port">8080</stringProp>
-          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.domain">user.upresent.ga</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/user</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -121,9 +123,9 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">35.240.229.244</stringProp>
-          <stringProp name="HTTPSampler.port">8080</stringProp>
-          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.domain">user.upresent.ga</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/auth</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -182,19 +184,19 @@
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
   &quot;createdBy&quot;: &quot;admin&quot;,&#xd;
-  &quot;endDate&quot;: &quot;06/26/2020&quot;,&#xd;
+  &quot;endDate&quot;: &quot;06/29/2020&quot;,&#xd;
   &quot;moduleCode&quot;: &quot;${__RandomString(15,abcdefghijklmnopqrstuvwxyz0123456780,MODULE_CODE)}&quot;,&#xd;
   &quot;moduleName&quot;: &quot;string&quot;,&#xd;
   &quot;schedule&quot;: [&#xd;
     {&#xd;
       &quot;createdBy&quot;: &quot;admin&quot;,&#xd;
-      &quot;date&quot;: &quot;06/26/2020&quot;,&#xd;
-      &quot;endTime&quot;: &quot;23:00&quot;,&#xd;
+      &quot;date&quot;: &quot;06/29/2020&quot;,&#xd;
+      &quot;endTime&quot;: &quot;23:59&quot;,&#xd;
       &quot;startTime&quot;: &quot;11:00&quot;&#xd;
     }&#xd;
   ],&#xd;
   &quot;schoolCode&quot;: &quot;NUS&quot;,&#xd;
-  &quot;startDate&quot;: &quot;06/26/2020&quot;,&#xd;
+  &quot;startDate&quot;: &quot;06/29/2020&quot;,&#xd;
   &quot;studentUsernames&quot;: [&#xd;
   	&quot;${USERNAME}&quot;&#xd;
   ]&#xd;
@@ -203,9 +205,9 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">34.87.90.191</stringProp>
-          <stringProp name="HTTPSampler.port">8080</stringProp>
-          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.domain">management.upresent.ga</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/manage/module</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -266,16 +268,16 @@
         &quot;username&quot;: &quot;${USERNAME}&quot;,&#xd;
         &quot;location&quot;: [1.317, 103.763],&#xd;
         &quot;moduleId&quot;: &quot;${MODULE_CODE}&quot;,&#xd;
-        &quot;capturedImageId&quot;:&quot;abcd.jpg&quot;,&#xd;
+        &quot;capturedImageId&quot;:&quot;${IMAGE_ID}b.jpg&quot;,&#xd;
         &quot;school&quot;:&quot;NUS&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">35.198.225.2</stringProp>
-          <stringProp name="HTTPSampler.port">5000</stringProp>
-          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.domain">attendance.upresent.ga</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/api/attendance</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -352,9 +354,9 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">34.87.109.16</stringProp>
-          <stringProp name="HTTPSampler.port">8080</stringProp>
-          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.domain">reporting.upresent.ga</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/attendance</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
