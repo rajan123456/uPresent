@@ -22,9 +22,11 @@ spec:
           imagePullPolicy: Always
           ports:
             - name: reporting
-              containerPort: 8080
+              containerPort: 8084
           env:
-          - name: managementms.hostname
-            value: "http://management"
-          - name: managementms.port
-            value: "8080"
+            - name: managementms.hostname
+              value: "http://management"
+            - name: managementms.port
+              value: "8080"
+            - name: SAGA_ENABLED
+              value: "1"

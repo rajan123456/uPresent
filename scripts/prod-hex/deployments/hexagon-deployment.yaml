@@ -1,0 +1,93 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hexagon
+  namespace: production
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 50%
+  progressDeadlineSeconds: 10
+  template:
+    metadata:
+      labels:
+        app: hexagon
+    spec:
+      containers:
+        - image: rajagupt/attendance:latest
+          name: attendance
+          imagePullPolicy: Always
+          ports:
+            - name: attendance
+              containerPort: 5000
+          env:
+            - name: SAGA_ENABLED
+              value: "0"
+            - name: REPORT_PUBLISH_API
+              value: "http://hexagon:8084/reporting"
+            - name: FACENET_RECOGNITION_API
+              value: "http://facenet:5000/api/face/"
+            - name: MODULE_API_FETCH_DETAILS
+              value: "http://hexagon:8083/manage/module?moduleCode="
+            - name: MANAGEMENT_API_GEO_FENCE
+              value: "http://hexagon:8083/manage/school/geo-fence?schoolCode="
+            - name: MANAGEMENT_API_SCHOOL
+              value: "http://hexagon:8083/manage/school?schoolCode="
+            - name: USER_API_FETCH_USER
+              value: "http://hexagon:8082/user?username="
+            - name: AZURE_FACE_ENABLED
+              value: "0"
+            - name: AWS_REKOG_ENABLED
+              value: "1"
+            - name: FACENET_ENABLED
+              value: "0"
+          volumeMounts:
+            - mountPath: /app/resources/images
+              name: user-data-vol
+        - image: rajagupt/management:latest
+          name: management
+          imagePullPolicy: Always
+          ports:
+            - name: management
+              containerPort: 8083
+          env:
+            - name: sagaEnabled
+              value: "0"
+            - name: userms.hostname
+              value: "http://hexagon"
+            - name: userms.port
+              value: "8082"
+            - name: reporting.publisher.api
+              value: "http://hexagon:8084/reporting"
+        - image: rajagupt/reporting:latest
+          name: reporting
+          imagePullPolicy: Always
+          ports:
+            - name: reporting
+              containerPort: 8084
+          env:
+            - name: managementms.hostname
+              value: "http://hexagon"
+            - name: managementms.port
+              value: "8083"
+            - name: SAGA_ENABLED
+              value: "0"
+        - image: rajagupt/user:latest
+          name: user
+          imagePullPolicy: Always
+          ports:
+            - name: user
+              containerPort: 8082
+          env:
+            - name: sagaEnabled
+              value: "0"
+            - name: reporting.publisher.api
+              value: "http://hexagon:8084/reporting"
+      volumes:
+        - name: user-data-vol
+          persistentVolumeClaim:
+            claimName: user-data-vol-claim
+            readOnly: false

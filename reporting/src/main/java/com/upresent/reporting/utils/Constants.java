@@ -13,4 +13,5 @@ public interface Constants {
 	String FETCH_MODULE_DETAILS_API_URL = "/manage/module?moduleCode=";
 	String MANAGEMENT_MS_HOSTNAME_ENV_VARIABLE = "managementms.hostname";
 	String MANAGEMENT_MS_PORT_ENV_VARIABLE = "managementms.port";
+	String KAFKA_ENABLED_ENV_VARIABLE = "saga.enabled";
 }

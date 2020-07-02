@@ -16,30 +16,30 @@ spec:
       labels:
         app: user
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                - ip-192-168-33-3.us-east-2.compute.internal
+      #      affinity:
+      #        nodeAffinity:
+      #          requiredDuringSchedulingIgnoredDuringExecution:
+      #            nodeSelectorTerms:
+      #            - matchExpressions:
+      #              - key: kubernetes.io/hostname
+      #                operator: In
+      #                values:
+      #                - ip-192-168-33-3.us-east-2.compute.internal
       containers:
         - image: rajagupt/user:latest
           name: user
           imagePullPolicy: Always
           ports:
             - name: user
-              containerPort: 8080
+              containerPort: 8082
           env:
-          - name: sagaEnabled
-            value: "1"
-          volumeMounts:
-          - mountPath: /app/resources/images
-            name: user-data-vol
-      volumes:
-      - name: user-data-vol
-        persistentVolumeClaim:
-          claimName: user-data-vol-claim
-          readOnly: false
+            - name: sagaEnabled
+              value: "1"
+#          volumeMounts:
+#          - mountPath: /app/resources/images
+#            name: user-data-vol
+#      volumes:
+#      - name: user-data-vol
+#        persistentVolumeClaim:
+#          claimName: user-data-vol-claim
+#          readOnly: false
