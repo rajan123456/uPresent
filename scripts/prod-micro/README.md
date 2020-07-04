@@ -255,11 +255,19 @@ kubectl get svc --namespace production
 
 - Deploying Vault Data
 
-#TBA
+1. Copy the contents of the zip file provided offline into vault's volume:
+
+```
+kubectl cp -namespace production /local_path/vault/data <vault-pod-name>:/vault
+```
 
 - Deploying User Data
 
-#TBA
+1. Copy the contents of the user-data-vol folder in the scripts/dev folder into user's volume:
+
+```
+kubectl cp -namespace production /local_path/scripts/user-data-vol <attendance-pod-name>:/app/resources/images
+```
 
 - Applying Horizontal Pod Autoscalers
 
