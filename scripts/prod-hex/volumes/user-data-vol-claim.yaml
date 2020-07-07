@@ -5,7 +5,8 @@ metadata:
   namespace: production
 spec:
   accessModes:
-    - ReadWriteOnce
+    #- ReadWriteOnce
+    - ReadOnlyMany
   resources:
     requests:
       storage: 10Gi
