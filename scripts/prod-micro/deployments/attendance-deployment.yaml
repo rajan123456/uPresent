@@ -16,18 +16,25 @@ spec:
       labels:
         app: attendance
     spec:
-            #      affinity:
-            #nodeAffinity:
-            #requiredDuringSchedulingIgnoredDuringExecution:
-            #nodeSelectorTerms:
-            #  - matchExpressions:
-            #      - key: kubernetes.io/hostname
-            #        operator: In
-            #        values:
-            #          - ip-192-168-33-3.us-east-2.compute.internal
+      #      affinity:
+      #        nodeAffinity:
+      #          requiredDuringSchedulingIgnoredDuringExecution:
+      #            nodeSelectorTerms:
+      #              - matchExpressions:
+      #                  - key: kubernetes.io/hostname
+      #                      operator: In
+      #                      values:
+      #                        - ip-192-168-33-3.us-east-2.compute.internal
       containers:
         - image: rajagupt/attendance:latest
           name: attendance
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "150m"
+            limits:
+              memory: "1200Mi"
+              cpu: "300m"
           imagePullPolicy: Always
           ports:
             - name: attendance
@@ -54,8 +61,8 @@ spec:
             - name: FACENET_ENABLED
               value: "0"
           volumeMounts:
-          - mountPath: /app/resources/images
-            name: user-data-vol
+            - mountPath: /app/resources/images
+              name: user-data-vol
       volumes:
         - name: user-data-vol
           persistentVolumeClaim:

@@ -16,8 +16,8 @@ spec:
       labels:
         app: hexagon
     spec:
-      nodeSelector:
-        affinity: hexagon
+      #nodeSelector:
+      #  affinity: hexagon
       containers:
         - image: rajagupt/attendance:latest
           name: attendance
@@ -27,7 +27,7 @@ spec:
               cpu: "150m"
             limits:
               memory: "1200Mi"
-              cpu: "300m"     
+              cpu: "300m"
           imagePullPolicy: Always
           ports:
             - name: attendance
