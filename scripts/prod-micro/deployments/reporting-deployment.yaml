@@ -19,6 +19,13 @@ spec:
       containers:
         - image: rajagupt/reporting:latest
           name: reporting
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "150m"
+            limits:
+              memory: "1200Mi"
+              cpu: "300m"
           imagePullPolicy: Always
           ports:
             - name: reporting

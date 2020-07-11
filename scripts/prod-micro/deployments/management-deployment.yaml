@@ -19,6 +19,13 @@ spec:
       containers:
         - image: rajagupt/management:latest
           name: management
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "150m"
+            limits:
+              memory: "1200Mi"
+              cpu: "300m"
           imagePullPolicy: Always
           ports:
             - name: management

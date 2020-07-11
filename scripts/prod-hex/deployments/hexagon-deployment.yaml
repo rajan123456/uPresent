@@ -16,9 +16,18 @@ spec:
       labels:
         app: hexagon
     spec:
+      #nodeSelector:
+      #  affinity: hexagon
       containers:
         - image: rajagupt/attendance:latest
           name: attendance
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "150m"
+            limits:
+              memory: "1200Mi"
+              cpu: "300m"
           imagePullPolicy: Always
           ports:
             - name: attendance
@@ -49,6 +58,13 @@ spec:
               name: user-data-vol
         - image: rajagupt/management:latest
           name: management
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "150m"
+            limits:
+              memory: "1200Mi"
+              cpu: "300m"
           imagePullPolicy: Always
           ports:
             - name: management
@@ -64,6 +80,13 @@ spec:
               value: "http://hexagon:8084/reporting"
         - image: rajagupt/reporting:latest
           name: reporting
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "150m"
+            limits:
+              memory: "1200Mi"
+              cpu: "300m"
           imagePullPolicy: Always
           ports:
             - name: reporting
@@ -77,6 +100,13 @@ spec:
               value: "0"
         - image: rajagupt/user:latest
           name: user
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "150m"
+            limits:
+              memory: "1200Mi"
+              cpu: "300m"
           imagePullPolicy: Always
           ports:
             - name: user

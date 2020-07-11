@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     app: vault
-  type: ClusterIP
+  type: LoadBalancer
   ports:
   - protocol: TCP
     port: 443
