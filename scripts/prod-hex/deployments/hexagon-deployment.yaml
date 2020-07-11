@@ -120,4 +120,4 @@ spec:
         - name: user-data-vol
           persistentVolumeClaim:
             claimName: user-data-vol-claim
-            readOnly: true
+            readOnly: false
