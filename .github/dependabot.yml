@@ -1,0 +1,77 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/videoprocessor"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect
+- package-ecosystem: npm
+  directory: "/upresent-admin"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+- package-ecosystem: npm
+  directory: "/uPresent"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+- package-ecosystem: pip
+  directory: "/training-watchdog"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect
+- package-ecosystem: pip
+  directory: "/streamProcessor"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect
+- package-ecosystem: pip
+  directory: "/facenet"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect
+- package-ecosystem: maven
+  directory: "/user"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+- package-ecosystem: maven
+  directory: "/reporting"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+- package-ecosystem: maven
+  directory: "/management"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+- package-ecosystem: pip
+  directory: "/attendance"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect
