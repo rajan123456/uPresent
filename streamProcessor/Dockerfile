@@ -6,7 +6,7 @@ RUN apt-get update \
     && apt-get clean
 
 RUN cd /usr/ \
-    && wget "https://downloads.apache.org/spark/spark-2.4.5/spark-2.4.5-bin-hadoop2.7.tgz" \
+    && wget "http://archive.apache.org/dist/spark/spark-2.4.5/spark-2.4.5-bin-hadoop2.7.tgz" \
     && tar xzf spark-2.4.5-bin-hadoop2.7.tgz \
     && rm spark-2.4.5-bin-hadoop2.7.tgz \
     && mv spark-2.4.5-bin-hadoop2.7 spark
