@@ -19,6 +19,7 @@ addons:
 script:
   #Build Attendance Service
   - cd attendance/
+  - sonar-scanner
   - openssl aes-256-cbc -k "$ATTENDANCE_KEY" -in attendance.pem.enc -out attendance.pem -d -md sha256
   - openssl aes-256-cbc -k "$ATTENDANCE_KEY" -in key.pem.enc -out key.pem -d -md sha256
   - docker build -t rajagupt/attendance .
@@ -32,10 +33,12 @@ script:
   - docker build -t rajagupt/reporting .
   #Build Stream Processor
   - cd ../streamProcessor/
+  - sonar-scanner
   - docker build -t rajagupt/streamprocessor .
   - docker build -t rajagupt/streamprocessor-kub -f Dockerfile_Prod .
   #Build Admin UI
   - cd ../upresent-admin/
+  - sonar-scanner
   - docker build -t rajagupt/upresent-admin .
   #Build User Service
   - cd ../user/
@@ -43,13 +46,19 @@ script:
   - docker build -t rajagupt/user .
   #Build Video Processor Service
   - cd ../videoprocessor/
+  - sonar-scanner
   - docker build -t rajagupt/videoprocessor .
   #Build Facenet
   - cd ../facenet/
+  - sonar-scanner
   - docker build -t rajagupt/facenet .
   #Build training-watchdog
   - cd ../training-watchdog/
+  - sonar-scanner
   - docker build -t rajagupt/training-watchdog .
+  #Analyze uPresent
+  - cd ../uPresent/
+  - sonar-scanner
   - cd ..
   #Push Images to Docker Hub
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
