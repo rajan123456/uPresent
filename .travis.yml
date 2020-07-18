@@ -14,48 +14,48 @@ script:
   - cd attendance/
   - openssl aes-256-cbc -k "$ATTENDANCE_KEY" -in attendance.pem.enc -out attendance.pem -d -md sha256
   - openssl aes-256-cbc -k "$ATTENDANCE_KEY" -in key.pem.enc -out key.pem -d -md sha256
-  - docker build -t rajagupt/attendance .
+  - docker build -t rajagupt/attendance:1.0.0 .
   #Build Management Service
   - cd ../management/
   - mvn clean verify
-  - docker build -t rajagupt/management .
+  - docker build -t rajagupt/management:1.0.0 .
   #Build Reporting Service
   - cd ../reporting/
   - mvn clean verify
-  - docker build -t rajagupt/reporting .
+  - docker build -t rajagupt/reporting:1.0.0 .
   #Build Stream Processor
   - cd ../streamProcessor/
-  - docker build -t rajagupt/streamprocessor .
-  - docker build -t rajagupt/streamprocessor-kub -f Dockerfile_Prod .
+  - docker build -t rajagupt/streamprocessor:1.0.0 .
+  - docker build -t rajagupt/streamprocessor-kub:1.0.0 -f Dockerfile_Prod .
   #Build Admin UI
   - cd ../upresent-admin/
-  - docker build -t rajagupt/upresent-admin .
+  - docker build -t rajagupt/upresent-admin:1.0.0-rc1 .
   #Build User Service
   - cd ../user/
   - mvn clean verify
-  - docker build -t rajagupt/user .
+  - docker build -t rajagupt/user:1.0.0 .
   #Build Video Processor Service
   - cd ../videoprocessor/
-  - docker build -t rajagupt/videoprocessor .
+  - docker build -t rajagupt/videoprocessor:1.0.0 .
   #Build Facenet
   - cd ../facenet/
-  - docker build -t rajagupt/facenet .
+  - docker build -t rajagupt/facenet:1.0.0 .
   #Build training-watchdog
   - cd ../training-watchdog/
-  - docker build -t rajagupt/training-watchdog .
+  - docker build -t rajagupt/training-watchdog:1.0.0 .
   - cd ..
   #Push Images to Docker Hub
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push rajagupt/attendance
-  - docker push rajagupt/management
-  - docker push rajagupt/reporting
-  - docker push rajagupt/streamprocessor
-  - docker push rajagupt/streamprocessor-kub
-  - docker push rajagupt/upresent-admin
-  - docker push rajagupt/user
-  - docker push rajagupt/videoprocessor
-  - docker push rajagupt/facenet
-  - docker push rajagupt/training-watchdog
+  - docker push rajagupt/attendance:1.0.0
+  - docker push rajagupt/management:1.0.0
+  - docker push rajagupt/reporting:1.0.0
+  - docker push rajagupt/streamprocessor:1.0.0
+  - docker push rajagupt/streamprocessor-kub:1.0.0
+  - docker push rajagupt/upresent-admin:1.0.0-rc1
+  - docker push rajagupt/user:1.0.0
+  - docker push rajagupt/videoprocessor:1.0.0
+  - docker push rajagupt/facenet:1.0.0
+  - docker push rajagupt/training-watchdog:1.0.0
   #Deploy on AWS EC2 from Master
   # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256; fi
   # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then chmod 400 iss-dev-upresent.pem; fi
