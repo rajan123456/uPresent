@@ -3,11 +3,18 @@ language: java
 cache:
   directories:
     - "$HOME/.m2"
+    - "$HOME/.sonar/cache"
 
 services:
   - docker
 
 install: skip
+
+addons:
+  sonarcloud:
+    organization: "rajan123456"
+    token:
+      secure: "kZKkd5hRhLX/Hspt1ZzNPRzYZOieZYkwWP7o4e7TdibGdjNVlGyG5b14Xv/Rw9X32DgBxcgqAa2R961ar/zlpH5Sro++dBq+C2vhUmjAgg/Y4w17MlaeWfqrpnMB7mjQEjJVgRRVZdmwoHGhw5qJXdliRy/zBCP34f/0owT1/0vBHfpQB5NFok02ypV0TFvbOTFML1YYsVilXID0FVE4jbnKRvEPbVmt3DoApBauxqlIsGWIlZthg4DWRq5Y/UsE3I0oTy8legKEVZiYjE1DuRAZ2jrBefl3o8AjGIxq/YYUhJmBjAT4UMf/OUC0DZLMkqinYecxzQUItbD5wWHpXFBa9p1Id2cLliAI9oCP/Ob7sg4dBj+jPZaHjh2kExPFULQ/0e1ooanz1J6V9JtV3ZAgnKD5qKuMp1DXCGAqeqnpFHtb1mMXMmEMSh4hlSl3p1nUnOLKV/T1PEi33425/+cifazD5oYKieZvta5flUG2nMZ1oNekAoT17tolKMkmSXJrde4n7pby27ub3mbPsPq5YJLoRLq6CJD8G/R6vu74cY6YfWEjkFm4IxhPcDFDXVPnpit89Q2coRlPgxhuVnsOIwCoU3s9UFsZo/3Fe5oGAmqbKN3QWP/44DMEln3WoWY200XrFXi4A+HVZWGuKSV6do3+i8oXyV/Udn6N+Vw="
 
 script:
   #Build Attendance Service
@@ -17,11 +24,11 @@ script:
   - docker build -t rajagupt/attendance .
   #Build Management Service
   - cd ../management/
-  - mvn clean verify
+  - mvn clean verify -B sonar:sonar -Dsonar.projectKey=rajan123456_uPresent_management
   - docker build -t rajagupt/management .
   #Build Reporting Service
   - cd ../reporting/
-  - mvn clean verify
+  - mvn clean verify -B sonar:sonar -Dsonar.projectKey=rajan123456_uPresent_reporting
   - docker build -t rajagupt/reporting .
   #Build Stream Processor
   - cd ../streamProcessor/
@@ -32,7 +39,7 @@ script:
   - docker build -t rajagupt/upresent-admin .
   #Build User Service
   - cd ../user/
-  - mvn clean verify
+  - mvn clean verify -B sonar:sonar -Dsonar.projectKey=rajan123456_uPresent_user
   - docker build -t rajagupt/user .
   #Build Video Processor Service
   - cd ../videoprocessor/
