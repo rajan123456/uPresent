@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>io.confluent</groupId>
 			<artifactId>monitoring-interceptors</artifactId>
-			<version>5.3.1</version>
+			<version>5.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
