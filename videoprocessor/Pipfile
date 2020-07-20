@@ -6,12 +6,14 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-flask-restful-swagger = "*"
-opencv-python = "*"
-elastic-apm = {extras = ["flask"],version = "*"}
-psutil = "*"
-Flask = "*"
-Flask-RESTful = "*"
+bson = "0.5.10"
+elastic-apm = {extras = ["flask"],version = "5.8.1"}
+flask = "1.1.2"
+flask-restful = "0.3.8"
+flask-restful-swagger = "0.20.2"
+kafka-python = "2.0.1"
+opencv-python = "4.3.0.36"
+psutil = "5.7.2"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"

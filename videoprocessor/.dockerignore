@@ -2,3 +2,4 @@ Dockerfile
 .gitignore
 sonar-project.properties
 README.md
+.scannerwork

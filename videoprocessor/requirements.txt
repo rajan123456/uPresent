@@ -1,8 +1,0 @@
-bson
-kafka-python
-flask
-flask-restful
-flask_restful_swagger
-opencv-python
-elastic-apm[flask]
-psutil
