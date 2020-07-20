@@ -21,6 +21,7 @@ RUN mkdir -p /usr/spark/work/ \
 WORKDIR /app
 COPY . /app
 
-RUN pip install -r requirements.txt
+RUN pip install pipenv
+RUN pipenv install --deploy --ignore-pipfile
 
 CMD ["/usr/spark/bin/spark-submit", "--jars", "spark-streaming-kafka-0-8-assembly.jar", "videoStreamCollector.py"]
