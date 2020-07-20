@@ -4,21 +4,16 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "*"
 
 [packages]
-flask-mongoengine = "*"
-geopy = "*"
-boto3 = "*"
 elastic-apm = {extras = ["flask"],version = "*"}
-psutil = "*"
+flask = "*"
+flask-restful = "*"
 flask-restful-swagger = "*"
-kafka-python = "*"
-Flask = "*"
-Flask-RESTful = "*"
-numpy = "*"
 imutils = "*"
+numpy = "*"
 opencv-python = "*"
+psutil = "*"
 sklearn = "*"
 
 [requires]
