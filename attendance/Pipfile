@@ -4,20 +4,20 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "*"
+pylint = "2.5.3"
 
 [packages]
-flask-mongoengine = "*"
-geopy = "*"
-boto3 = "*"
-elastic-apm = {extras = ["flask"],version = "*"}
-psutil = "*"
-flask-restful-swagger = "*"
-kafka-python = "*"
-Flask = "*"
-Flask-RESTful = "*"
-flask-cors = "*"
-azure-cognitiveservices-vision-face = "*"
+flask-mongoengine = "0.9.5"
+geopy = "2.0.0"
+boto3 = "1.14.23"
+elastic-apm = {extras = ["flask"],version = "5.8.1"}
+psutil = "5.7.2"
+flask-restful-swagger = "0.20.2"
+kafka-python = "2.0.1"
+Flask = "1.1.2"
+Flask-RESTful = "0.3.8"
+flask-cors = "3.0.8"
+azure-cognitiveservices-vision-face = "0.4.1"
 
 [requires]
 python_version = "3.8"

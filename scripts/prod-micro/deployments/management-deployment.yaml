@@ -19,14 +19,21 @@ spec:
       containers:
         - image: rajagupt/management:latest
           name: management
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "150m"
+            limits:
+              memory: "1200Mi"
+              cpu: "300m"
           imagePullPolicy: Always
           ports:
             - name: management
-              containerPort: 8080
+              containerPort: 8083
           env:
-          - name: sagaEnabled
-            value: "1"
-          - name: userms.hostname
-            value: "http://user"
-          - name: userms.port
-            value: "8080"
+            - name: sagaEnabled
+              value: "1"
+            - name: userms.hostname
+              value: "http://user"
+            - name: userms.port
+              value: "8080"

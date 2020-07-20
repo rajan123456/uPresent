@@ -19,6 +19,8 @@ spec:
           mountPath: /var/lib/zookeeper/data
         - name: zookeeper-logs-vol
           mountPath: /var/lib/zookeeper/log
+       #- name: kafka-data-vol
+         #mountPath: /kafka
         env:
         - name: ZOOKEEPER_CLIENT_PORT
           value: "2181"
@@ -37,4 +39,8 @@ spec:
         persistentVolumeClaim:
           claimName: zookeeper-logs-vol-claim
           readOnly: false
+     #- name: kafka-data-vol
+       #persistentVolumeClaim:
+         #claimName: kafka-data-vol-claim
+         #readOnly: false
 status: {}

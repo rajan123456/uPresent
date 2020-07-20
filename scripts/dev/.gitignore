@@ -4,4 +4,3 @@ stream-data-vol/*/*.png
 vault-data-vol/data/*
 vault-data-vol/policies/*
 vault-data-vol/certs/*
-user-data-vol/*

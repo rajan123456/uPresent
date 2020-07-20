@@ -4,6 +4,7 @@ import com.upresent.reporting.utils.Constants;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 @EnableKafka
 @Configuration
+@ConditionalOnProperty(name = "saga.enabled", havingValue = "1")
 public class KafkaReceiverConfig {
 
     @Autowired
@@ -32,7 +34,8 @@ public class KafkaReceiverConfig {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, Constants.REPORTING_SERVICE_SUBSCRIBER);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor");
+        props.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG,
+                "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor");
         return props;
     }
 

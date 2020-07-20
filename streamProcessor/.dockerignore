@@ -1,0 +1,6 @@
+sonar-project.properties
+README.md
+.gitignore
+Dockerfile
+Dockerfile_Prod
+.scannerwork

@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.upresent.reporting.exception.ReportingException;
 import com.upresent.reporting.service.ReportingService;
 
 @Service
+@ConditionalOnProperty(name = "saga.enabled", havingValue = "1")
 public class KafkaReceiver {
 
 	@Autowired
@@ -23,7 +25,7 @@ public class KafkaReceiver {
 
 	private static final Logger LOG = LoggerFactory.getLogger(KafkaReceiver.class);
 
-	@KafkaListener(topics = {"managementEvents" , "userEvents", "attendanceEvents"})
+	@KafkaListener(topics = { "managementEvents", "userEvents", "attendanceEvents" })
 	public void listen(@Payload String message) {
 		LOG.info("received message='{}'", message);
 		reportingService.addReportingData(constructReportingData(message));

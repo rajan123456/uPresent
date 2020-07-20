@@ -6,7 +6,7 @@ RUN apt-get update \
     && apt-get clean
 
 RUN cd /usr/ \
-    && wget "https://downloads.apache.org/spark/spark-2.4.5/spark-2.4.5-bin-hadoop2.7.tgz" \
+    && wget "http://archive.apache.org/dist/spark/spark-2.4.5/spark-2.4.5-bin-hadoop2.7.tgz" \
     && tar xzf spark-2.4.5-bin-hadoop2.7.tgz \
     && rm spark-2.4.5-bin-hadoop2.7.tgz \
     && mv spark-2.4.5-bin-hadoop2.7 spark
@@ -21,6 +21,7 @@ RUN mkdir -p /usr/spark/work/ \
 WORKDIR /app
 COPY . /app
 
-RUN pip install -r requirements.txt
+RUN pip install pipenv
+RUN pipenv install --deploy --ignore-pipfile
 
 CMD ["/usr/spark/bin/spark-submit", "--jars", "spark-streaming-kafka-0-8-assembly.jar", "videoStreamCollector.py"]

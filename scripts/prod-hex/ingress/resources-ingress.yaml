@@ -11,48 +11,48 @@ metadata:
 spec:
   tls:
     - hosts:
-        - admin-hex.upresent.ga
-        - attendance-hex.upresent.ga
-        - kibana-hex.upresent.ga
-        - management-hex.upresent.ga
-        - reporting-hex.upresent.ga
-        - user-hex.upresent.ga
-        - vault-hex.upresent.ga
+#        - admin-hex.upresent.ga
+        - attendance.upresent.ga
+#        - kibana-hex.upresent.ga
+        - management.upresent.ga
+        - reporting.upresent.ga
+        - user.upresent.ga
+#        - vault-hex.upresent.ga
       secretName: nginx-tls
   rules:
-    - host: admin-hex.upresent.ga
+#    - host: admin-hex.upresent.ga
+#      http:
+#        paths:
+#          - backend:
+#              serviceName: adminui
+#              servicePort: 80
+    - host: attendance.upresent.ga
       http:
         paths:
           - backend:
-              serviceName: adminui
-              servicePort: 80
-    - host: attendance-hex.upresent.ga
-      http:
-        paths:
-          - backend:
-              serviceName: attendance
+              serviceName: hexagon
               servicePort: 5000
-    - host: kibana-hex.upresent.ga
+#    - host: kibana-hex.upresent.ga
+#      http:
+#        paths:
+#          - backend:
+#              serviceName: kibana
+#              servicePort: 5601
+    - host: management.upresent.ga
       http:
         paths:
           - backend:
-              serviceName: kibana
-              servicePort: 5601
-    - host: management-hex.upresent.ga
+              serviceName: hexagon
+              servicePort: 8083
+    - host: reporting.upresent.ga
       http:
         paths:
           - backend:
-              serviceName: management
-              servicePort: 8080
-    - host: reporting-hex.upresent.ga
+              serviceName: hexagon
+              servicePort: 8084
+    - host: user.upresent.ga
       http:
         paths:
           - backend:
-              serviceName: reporting
-              servicePort: 8080
-    - host: user-hex.upresent.ga
-      http:
-        paths:
-          - backend:
-              serviceName: user
-              servicePort: 8080
+              serviceName: hexagon
+              servicePort: 8082

@@ -3,63 +3,81 @@ language: java
 cache:
   directories:
     - "$HOME/.m2"
+    - "$HOME/.sonar/cache"
 
 services:
   - docker
 
 install: skip
 
+addons:
+  sonarcloud:
+    organization: "rajan123456"
+    token:
+      secure: "SjspoCYx/NpoZqhjWV7jS2pXP52BHrByrj4lTMsI7qD0xyrqLbKO3dtmt8R3CjGVOj4Umzoj1JcnWvI2/1WDqU8/a+fUe+mNkuUBDY/tk/zgeAElhOLaoD5jD373uQ0oAwE4ZwgD4zWyzjNjT9vhZ18oSa+B7yNj3xts7VvNUpv//zfUq8S8C3Po3mf9u/D2D6N8XNN1MW0jK6TPLh2ZY8zI7NIITPskx2aMjpxp93fh9LT68ItCcDLwuFoFsiR2OeWYlhPYOID7ndQ7iH5chx9jd3FQKcaqAh/7YvL+ziVNaz5dDABgvsZfSDGec3D3TjFXFvtos7FXopu+V4NWm5xer+LyDQ5mQdKsZdlhLwy52qgHMBWLZD8dbWLD3VQ35sRZe8BJk33ey99Dtt6CC20oATtk+BHu4XZOklYXIz1sG1syTf5Rgc3v5sq4hUAgzLU700Ln/RcZjkmnpZV9k7m6hHc5wKXNwdJKvCYZ5ZXsOufh3l2yc1gnw5ka3A9uyqMBHaPn4Wa4R6q7oOPUkO7SEsEvBMHUZs+EqS3SsnMaGOkmK6fb/kOdwEIdyd74Kec2NVUaLy62iML842Dway1zwPwkeKBuePXbf1wFdMjG35y+n2Ikr6+O43edXhA0VDd5sJUwRhsMyOalBpvG9akIYaQhlVXh4/L+Pqp237I="
+
 script:
   #Build Attendance Service
   - cd attendance/
+  - sonar-scanner
   - openssl aes-256-cbc -k "$ATTENDANCE_KEY" -in attendance.pem.enc -out attendance.pem -d -md sha256
   - openssl aes-256-cbc -k "$ATTENDANCE_KEY" -in key.pem.enc -out key.pem -d -md sha256
   - docker build -t rajagupt/attendance .
   #Build Management Service
   - cd ../management/
-  - mvn clean verify
+  - mvn clean verify -B sonar:sonar -Dsonar.projectKey=rajan123456_uPresent_management
   - docker build -t rajagupt/management .
   #Build Reporting Service
   - cd ../reporting/
-  - mvn clean verify
+  - mvn clean verify -B sonar:sonar -Dsonar.projectKey=rajan123456_uPresent_reporting
   - docker build -t rajagupt/reporting .
   #Build Stream Processor
   - cd ../streamProcessor/
+  - sonar-scanner
   - docker build -t rajagupt/streamprocessor .
   - docker build -t rajagupt/streamprocessor-kub -f Dockerfile_Prod .
   #Build Admin UI
   - cd ../upresent-admin/
+  - sonar-scanner
   - docker build -t rajagupt/upresent-admin .
   #Build User Service
   - cd ../user/
-  - mvn clean verify
+  - mvn clean verify -B sonar:sonar -Dsonar.projectKey=rajan123456_uPresent_user
   - docker build -t rajagupt/user .
   #Build Video Processor Service
   - cd ../videoprocessor/
+  - sonar-scanner
   - docker build -t rajagupt/videoprocessor .
   #Build Facenet
   - cd ../facenet/
+  - sonar-scanner
   - docker build -t rajagupt/facenet .
   #Build training-watchdog
   - cd ../training-watchdog/
+  - sonar-scanner
   - docker build -t rajagupt/training-watchdog .
+  #Analyze uPresent
+  - cd ../uPresent/
+  - sonar-scanner
   - cd ..
   #Push Images to Docker Hub
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push rajagupt/attendance
-  - docker push rajagupt/management
-  - docker push rajagupt/reporting
-  - docker push rajagupt/streamprocessor
-  - docker push rajagupt/streamprocessor-kub
-  - docker push rajagupt/upresent-admin
-  - docker push rajagupt/user
-  - docker push rajagupt/videoprocessor
-  - docker push rajagupt/facenet
-  - docker push rajagupt/training-watchdog
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then
+      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin;
+      docker push rajagupt/attendance;
+      docker push rajagupt/management;
+      docker push rajagupt/reporting;
+      docker push rajagupt/streamprocessor;
+      docker push rajagupt/streamprocessor-kub;
+      docker push rajagupt/upresent-admin;
+      docker push rajagupt/user;
+      docker push rajagupt/videoprocessor;
+      docker push rajagupt/facenet;
+      docker push rajagupt/training-watchdog;
+    fi
   #Deploy on AWS EC2 from Master
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then chmod 400 iss-dev-upresent.pem; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent/scripts/dev && docker-compose down"; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent/scripts/dev && docker image prune -a -f"; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent && sudo git pull"; fi
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent/scripts/dev && docker-compose up -d"; fi
+  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256; fi
+  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then chmod 400 iss-dev-upresent.pem; fi
+  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent/scripts/dev && docker-compose down"; fi
+  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent/scripts/dev && docker image prune -a -f"; fi
+  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent && sudo git pull"; fi
+  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent/scripts/dev && docker-compose up -d"; fi

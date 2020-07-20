@@ -9,7 +9,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: "io1"
-  selector:
-    matchExpressions:
-      - {key: kubernetes.io/hostname, operator: In, values: [ip-192-168-33-3.us-east-2.compute.internal]}
+      #  storageClassName: "io1"
+      #selector:
+      #matchExpressions:
+      #- {key: kubernetes.io/hostname, operator: In, values: [ip-192-168-33-3.us-east-2.compute.internal]}

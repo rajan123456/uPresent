@@ -16,18 +16,25 @@ spec:
       labels:
         app: attendance
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                      - ip-192-168-33-3.us-east-2.compute.internal
+      #      affinity:
+      #        nodeAffinity:
+      #          requiredDuringSchedulingIgnoredDuringExecution:
+      #            nodeSelectorTerms:
+      #              - matchExpressions:
+      #                  - key: kubernetes.io/hostname
+      #                      operator: In
+      #                      values:
+      #                        - ip-192-168-33-3.us-east-2.compute.internal
       containers:
         - image: rajagupt/attendance:latest
           name: attendance
+          resources:
+            requests:
+              memory: "600Mi"
+              cpu: "150m"
+            limits:
+              memory: "1200Mi"
+              cpu: "300m"
           imagePullPolicy: Always
           ports:
             - name: attendance
@@ -42,7 +49,7 @@ spec:
             - name: MODULE_API_FETCH_DETAILS
               value: "http://management:8080/manage/module?moduleCode="
             - name: MANAGEMENT_API_GEO_FENCE
-              value: "http://management:8080/manage/school/geo-fence?universityName="
+              value: "http://management:8080/manage/school/geo-fence?schoolCode="
             - name: MANAGEMENT_API_SCHOOL
               value: "http://management:8080/manage/school?schoolCode="
             - name: USER_API_FETCH_USER
@@ -51,6 +58,8 @@ spec:
               value: "0"
             - name: AWS_REKOG_ENABLED
               value: "1"
+            - name: FACENET_ENABLED
+              value: "0"
           volumeMounts:
             - mountPath: /app/resources/images
               name: user-data-vol
