@@ -15,7 +15,7 @@ const CreateSchoolPage = (props) => {
     radiusInMeter: "",
     createdBy: "",
     timeZone: "",
-    holidays: [new Date()]
+    holidays: [new Date()],
   });
 
   function handleChange({ target }) {
@@ -26,7 +26,6 @@ const CreateSchoolPage = (props) => {
   }
 
   function handleHolidayChange(dates) {
-    console.log("holiday dates... "+dates);
     setFence({
       ...fence,
       ["holidays"]: dates,
@@ -35,8 +34,8 @@ const CreateSchoolPage = (props) => {
 
   function formIsValid() {
     const _errors = {};
-    if (!fence.schoolCode) _errors.schoolCode = "University code is required.";
-    if (!fence.schoolName) _errors.schoolName = "University name is required.";
+    if (!fence.schoolCode) _errors.schoolCode = "School Code is required.";
+    if (!fence.schoolName) _errors.schoolName = "School Name is required.";
     if (!fence.longitude) _errors.longitude = "Longitude is required";
     if (!fence.latitude) _errors.latitude = "Latitude is required.";
     if (!fence.radiusInMeter) _errors.radiusInMeter = "Radius is required.";
@@ -50,15 +49,10 @@ const CreateSchoolPage = (props) => {
     event.preventDefault();
     if (!formIsValid()) return;
     fence.geoFenceData = {
-      "latitude": parseFloat(fence.latitude),
-      "longitude": parseFloat(fence.longitude),
-      "radiusInMeter": parseFloat(fence.radiusInMeter)
-    }
-    // var holidays = [];
-    // for (var i = 0; i < fence.holidays.length; i++) {
-    //   holidays.push(moment(fence.holidays[i]).format("MM/DD/YYYY"));
-    // }
-    // fence.holidays = holidays;
+      latitude: parseFloat(fence.latitude),
+      longitude: parseFloat(fence.longitude),
+      radiusInMeter: parseFloat(fence.radiusInMeter),
+    };
     fence.createdBy = localStorage.getItem("user");
     fenceApi.saveFence(fence).then(() => {
       props.history.push("/schools");
@@ -69,7 +63,7 @@ const CreateSchoolPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="main" style={{padding: '10px', width:'30%'}}>
+      <div className="main" style={{ padding: "10px", width: "30%" }}>
         <h2>Add School</h2>
         <CreateSchoolForm
           errors={errors}

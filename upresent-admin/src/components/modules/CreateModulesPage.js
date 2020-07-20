@@ -37,7 +37,6 @@ const CreateModulesPage = (props) => {
   }, []);
 
   function handleChange({ target }) {
-    console.log("target value ", target);
     setModule({
       ...module,
       [target.name]: target.value,
@@ -78,7 +77,7 @@ const CreateModulesPage = (props) => {
     setModule({
       ...module,
       // eslint-disable-next-line
-      ["endTime"]: time
+      ["endTime"]: time,
     });
   }
 
@@ -86,23 +85,31 @@ const CreateModulesPage = (props) => {
     setModule({
       ...module,
       // eslint-disable-next-line
-      ["startTime"]: time
+      ["startTime"]: time,
     });
   }
 
   function getDates() {
     var currentDate = new Date(module.startDate);
     var stopDate = new Date(module.endDate);
-    var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    var days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
     var schedule = [];
     while (currentDate <= stopDate) {
       if (module.scheduledDays.includes(days[currentDate.getDay()])) {
         var temp = {
-          "createdBy": module.createdBy,
-          "date": moment(currentDate).format("MM/DD/YYYY"),
-          "endTime": moment(module.endTime).format("HH:mm"),
-          "startTime": moment(module.startTime).format("HH:mm")
-        }
+          createdBy: module.createdBy,
+          date: moment(currentDate).format("MM/DD/YYYY"),
+          endTime: moment(module.endTime).format("HH:mm"),
+          startTime: moment(module.startTime).format("HH:mm"),
+        };
         schedule.push(temp);
       }
       currentDate.setDate(currentDate.getDate() + 1);
@@ -113,8 +120,6 @@ const CreateModulesPage = (props) => {
       [schedule]: schedule,
     });
     module.schedule = schedule;
-    console.log("schedule var ",schedule);
-    console.log("module schedule var ",module.schedule);
   }
 
   function formIsValid() {
@@ -145,7 +150,7 @@ const CreateModulesPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="main" style={{padding: '10px', width:'30%'}}>
+      <div className="main" style={{ padding: "10px", width: "30%" }}>
         <h2>Add Module</h2>
         <CreateModuleForm
           errors={errors}

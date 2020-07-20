@@ -2,7 +2,11 @@ import React from "react";
 import TextInput from "../common/TextInput";
 import MultiDropDown from "../common/MultiDropDown";
 import PropTypes from "prop-types";
-import { DatePicker, MuiPickersUtilsProvider, TimePicker } from "@material-ui/pickers";
+import {
+  DatePicker,
+  MuiPickersUtilsProvider,
+  TimePicker,
+} from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -20,7 +24,7 @@ function ManageModuleForm(props) {
             name="schoolCode"
             value={props.module.schoolCode}
             error={props.errors.schoolCode}
-            readOnly={false}
+            readOnly={true}
           />
         </Grid>
         <Grid item xs={12}>
@@ -32,7 +36,7 @@ function ManageModuleForm(props) {
             name="moduleCode"
             value={props.module.moduleCode}
             error={props.errors.moduleCode}
-            readOnly={false}
+            readOnly={true}
           />
         </Grid>
         <Grid item xs={12}>
@@ -68,51 +72,12 @@ function ManageModuleForm(props) {
               onChange={props.onEndDateChange}
             />
           </Grid>
-          {/* <Grid item xs={12}>
-            <TimePicker
-              id="startTime"
-              placeholder="HH:mm"
-              ampm={false}
-              format={"HH:mm"}
-              label="Start Time"
-              name="startTime"
-              value={props.module.startTime}
-              onChange={props.onStartTimeChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TimePicker
-              id="endTime"
-              placeholder="HH:mm"
-              ampm={false}
-              format={"HH:mm"}
-              label="End Time"
-              name="endTime"
-              value={props.module.endTime}
-              onChange={props.onEndTimeChange}
-            />
-          </Grid> */}
         </MuiPickersUtilsProvider>
-        {/* <Grid item xs={12}>
-          <MultiDropDown
-            id="scheduledDays"
-            name="scheduledDays"
-            label="Scheduled Days"
-            onChange={props.onChangeSelector}
-            values={props.module.scheduledDays}
-            error={props.errors.scheduledDays}
-            options={props.daysOfWeek}
-          />
-        </Grid> */}
-        <div style={{ background: 'yellow' }}>
+        <div style={{ background: "yellow" }}>
           <label>&nbsp;Holiday Clashes observed at:&nbsp;&nbsp;</label>
-
           {props.holidayOverlap.map((overlap) => {
-            return (
-              <label>{overlap}&nbsp;&nbsp;</label>
-            )
-          })
-          }
+            return <label>{overlap}&nbsp;&nbsp;</label>;
+          })}
         </div>
         <table className="table table-bordered">
           <thead>
@@ -132,29 +97,57 @@ function ManageModuleForm(props) {
                     <td>
                       <TextInput
                         type="text"
-                        onChange={(e) => props.updateDate(props.module.schedule, e.target.value, index)}
+                        onChange={(e) =>
+                          props.updateDate(
+                            props.module.schedule,
+                            e.target.value,
+                            index
+                          )
+                        }
                         name="date"
                         value={module.date}
                         readOnly={false}
-                      /></td>
+                      />
+                    </td>
                     <td>
                       <TextInput
                         type="text"
-                        onChange={(e) => props.updateStartTime(props.module.schedule, e.target.value, index)}
+                        onChange={(e) =>
+                          props.updateStartTime(
+                            props.module.schedule,
+                            e.target.value,
+                            index
+                          )
+                        }
                         name="startTime"
                         value={module.startTime}
                         readOnly={false}
-                      /></td>
+                      />
+                    </td>
                     <td>
                       <TextInput
                         type="text"
-                        onChange={(e) => props.updateEndTime(props.module.schedule, e.target.value, index)}
+                        onChange={(e) =>
+                          props.updateEndTime(
+                            props.module.schedule,
+                            e.target.value,
+                            index
+                          )
+                        }
                         name="endTime"
                         value={module.endTime}
                         readOnly={false}
-                      /></td>
+                      />
+                    </td>
                     <td>
-                      <Button type="submit" onClick={() => props.deleteSchedule(props.module.schedule, index)} variant="contained" color="primary">
+                      <Button
+                        type="submit"
+                        onClick={() =>
+                          props.deleteSchedule(props.module.schedule, index)
+                        }
+                        variant="contained"
+                        color="primary"
+                      >
                         Delete
                       </Button>
                     </td>
@@ -163,8 +156,6 @@ function ManageModuleForm(props) {
               })}
           </tbody>
         </table>
-
-
 
         <Grid item xs={12}>
           <MultiDropDown

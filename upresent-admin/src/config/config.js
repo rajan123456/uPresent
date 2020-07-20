@@ -13,6 +13,12 @@ export const baseUrlAuthApi =
   //"https://user.upresent.ga/auth";
   //   :
   "http://localhost:8084/auth";
+export const baseUrlFileApi =
+  // environmentVariable === "prod"
+  //   ?
+  //"https://user.upresent.ga/file";
+  //   :
+  "http://localhost:8084/file";
 export const baseUrlSchoolApi =
   // environmentVariable === "prod"
   //   ?
@@ -32,5 +38,4 @@ export const baseUrlReportingApi =
   //   :
   "http://localhost:8083/attendance";
 
-  export const baseUrlAttendanceApi =
-  "http://localhost:5000/api/attendance"
+export const baseUrlAttendanceApi = "http://localhost:5000/api/attendance";

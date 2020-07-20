@@ -8,10 +8,8 @@ import { daysOfWeek } from "../../utils/constants";
 import moment from "moment";
 import { getFenceByUniversityName } from "../../api/fenceApi";
 
-
 const ManageModulesPage = (props) => {
   const [errors, setErrors] = useState({});
-  const [fences, setFences] = useState([]);
   const [holidayOverlap, setHolidayOverlap] = useState([]);
 
   const [module, setModule] = useState({
@@ -35,24 +33,19 @@ const ManageModulesPage = (props) => {
     if (moduleCode) {
       moduleApi.getModuleByModuleCode(moduleCode).then((_module) => {
         setModule(_module.data);
-        getFenceByUniversityName( _module.data.schoolCode).then((_fences) => {
-          setFences(_fences.data);
-          console.log(" _fences.data ", _fences.data);
+        getFenceByUniversityName(_module.data.schoolCode).then((_fences) => {
           var overlap = [];
-          if (_fences.data.holiday !==null) {
-          _fences.data.holidays.map(function(holiday) {
-            _module.data.schedule.map(function(day) {
-              if (day.date === moment(holiday).format("MM/DD/YYYY")) {
-                console.log("holiday is overlapping ", day.date);
-                overlap.push(day.date);
-              }
+          if (_fences.data.holiday !== null) {
+            _fences.data.holidays.map(function (holiday) {
+              _module.data.schedule.map(function (day) {
+                if (day.date === moment(holiday).format("MM/DD/YYYY")) {
+                  overlap.push(day.date);
+                }
+              });
             });
-           
-          });
-        }
+          }
           setHolidayOverlap(overlap);
         });
-        
       });
     }
     getUsersOfType("STUDENT").then((_students) => {
@@ -63,12 +56,6 @@ const ManageModulesPage = (props) => {
       setStudents(activeUsers.map((a) => a.username).sort());
     });
   }, [props.match.params.moduleCode]);
-
-
-  function test() {
-
-
-  }
 
   function handleChange({ target }) {
     setModule({
@@ -108,43 +95,38 @@ const ManageModulesPage = (props) => {
   }
 
   function handleScheduleDate(scDays, value, index) {
-    console.log(" handle schedule .. ",scDays);
     scDays[index].date = value;
     setModule({
       ...module,
       // eslint-disable-next-line
-      ["scheduledDays"]: scDays
+      ["scheduledDays"]: scDays,
     });
   }
 
   function handleScheduleStartTime(scDays, value, index) {
-    console.log(" handle schedule .. ",scDays);
     scDays[index].startTime = value;
     setModule({
       ...module,
       // eslint-disable-next-line
-      ["scheduledDays"]: scDays
+      ["scheduledDays"]: scDays,
     });
   }
 
   function handleDeleteSchedule(scDays, index) {
-    console.log(" handle schedule .. ",scDays);
-    scDays.splice(index,1);
+    scDays.splice(index, 1);
     setModule({
       ...module,
       // eslint-disable-next-line
-      ["scheduledDays"]: scDays
+      ["scheduledDays"]: scDays,
     });
   }
-  
 
   function handleScheduleEndTime(scDays, value, index) {
-    console.log(" handle schedule .. ",scDays);
     scDays[index].endTime = value;
     setModule({
       ...module,
       // eslint-disable-next-line
-      ["scheduledDays"]: scDays
+      ["scheduledDays"]: scDays,
     });
   }
 
@@ -152,8 +134,8 @@ const ManageModulesPage = (props) => {
     const _errors = {};
 
     if (!module.moduleCode) _errors.moduleCode = "Code is required.";
-    // if (module.scheduledDays.length === 0)
-    //   _errors.scheduledDays = "Schedule cannot be empty.";
+    if (module.scheduledDays.length === 0)
+      _errors.scheduledDays = "Schedule cannot be empty.";
 
     setErrors(_errors);
 
@@ -185,7 +167,7 @@ const ManageModulesPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="main" style={{padding: '10px', width:'30%'}}>
+      <div className="main" style={{ padding: "10px", width: "30%" }}>
         <h2>Manage Module</h2>
         <ManageModuleForm
           errors={errors}

@@ -33,7 +33,7 @@ function App() {
           <PrivateRoute path="/schools" component={SchoolPage} />
           <PrivateRoute path="/school/add" exact component={CreateSchoolPage} />
           <PrivateRoute
-            path="/school/:universityName"
+            path="/school/:schoolCode"
             component={ManageSchoolPage}
           />
           <PrivateRoute path="/modules" component={ModulesPage} />
