@@ -2,11 +2,7 @@ import React from "react";
 import TextInput from "../common/TextInput";
 import MultiDropDown from "../common/MultiDropDown";
 import PropTypes from "prop-types";
-import {
-  DatePicker,
-  MuiPickersUtilsProvider,
-  TimePicker,
-} from "@material-ui/pickers";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
