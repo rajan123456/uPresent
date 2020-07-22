@@ -23,7 +23,7 @@ deployment:
       # cpu: 200m
   containerPort:
     enabled: true
-    portNumbers: 
+    portNumbers:
       - 5000
   # env:
     # ENV_NAME: ENV_VAL
