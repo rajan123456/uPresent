@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{.Chart.Name}}
+        app.kubernetes.io/component: {{.Chart.Name}}
     spec:
       containers:
         - image: {{.Values.deployment.image.repository}}:{{.Values.deployment.image.tag}}
