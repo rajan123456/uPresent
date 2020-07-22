@@ -11,6 +11,5 @@ spec:
     name: {{.Chart.Name}}
   minReplicas: {{.Values.autoscaler.minReplicas}}
   maxReplicas: {{.Values.autoscaler.maxReplicas}}
-  # prettier-ignore
   targetCPUUtilizationPercentage: {{.Values.autoscaler.targetCPUUtilizationPercentage}}
 {{- end }}

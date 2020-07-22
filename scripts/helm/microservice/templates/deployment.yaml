@@ -10,9 +10,11 @@ spec:
       app.kubernetes.io/component: {{.Chart.Name}}
   strategy:
     type: {{.Values.deployment.strategy}}
+    {{- if eq .Values.deployment.strategy "RollingUpdate" }}
     rollingUpdate:
       maxSurge: {{.Values.deployment.rollingUpdate.maxSurge}}
       maxUnavailable: {{.Values.deployment.rollingUpdate.maxUnavailable}}
+    {{- end }}
   progressDeadlineSeconds: {{.Values.deployment.progressDeadlineSeconds}}
   template:
     metadata:
@@ -22,22 +24,23 @@ spec:
       containers:
         - image: {{.Values.deployment.image.repository}}:{{.Values.deployment.image.tag}}
           name: {{.Chart.Name}}
-          resources:
-            requests:
-              memory: {{.Values.deployment.resources.requests.memory | quote}}
-              cpu: {{.Values.deployment.resources.requests.cpu | quote}}
-            limits:
-              memory: {{.Values.deployment.resources.limits.memory | quote}}
-              cpu: {{.Values.deployment.resources.limits.cpu | quote}}
-          imagePullPolicy: Always
+          {{- if .Values.deployment.resources }}
+          resources: {{- toYaml .Values.deployment.resources | nindent 12 }}
+          {{- end }}
+          imagePullPolicy: {{.Values.deployment.imagePullPolicy}}
+          {{- if .Values.deployment.containerPort.enabled }}
           ports:
-            - name: {{.Chart.Name}}
-              containerPort: {{.Values.deployment.containerPort}}
+            {{- range .Values.deployment.containerPort.portNumbers }}
+            - containerPort: {{ . }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.deployment.env }}
           env:
             {{- range $key, $val := .Values.deployment.env }}
             - name: {{ $key }}
               value: {{ $val | quote }}
             {{- end }}
+          {{- end }}
           {{- if .Values.deployment.volumeMounts.enabled }}
           volumeMounts:
           {{- range $val := .Values.deployment.volumeMounts.mountDetails }}
