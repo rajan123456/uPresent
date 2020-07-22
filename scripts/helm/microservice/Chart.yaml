@@ -1,0 +1,6 @@
+apiVersion: v2
+name: microservice
+appVersion: "1.0.0"
+description: Generic Helm chart for uPresent microservice deployment
+version: 1.0.0
+type: application

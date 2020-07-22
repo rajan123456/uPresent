@@ -1,0 +1,13 @@
+{{- if .Values.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{.Values.persistence.claimName}}
+  namespace: {{.Values.global.namespaceOverride}}
+spec:
+  accessModes:
+    - {{.Values.persistence.accessMode}}
+  resources:
+    requests:
+      storage: {{.Values.persistence.storage}}
+{{- end }}
