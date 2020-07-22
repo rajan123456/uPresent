@@ -7,7 +7,7 @@ spec:
   replicas: {{.Values.deployment.replicaCount}}
   selector:
     matchLabels:
-      name: {{.Chart.Name}}
+      app.kubernetes.io/component: {{.Chart.Name}}
   strategy:
     type: {{.Values.deployment.strategy}}
     rollingUpdate:
@@ -17,7 +17,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{.Chart.Name}}
+        app.kubernetes.io/component: {{.Chart.Name}}
     spec:
       containers:
         - image: {{.Values.deployment.image.repository}}:{{.Values.deployment.image.tag}}
@@ -40,13 +40,17 @@ spec:
             {{- end }}
           {{- if .Values.deployment.volumeMounts.enabled }}
           volumeMounts:
-            - mountPath: {{.Values.deployment.volumeMounts.mountPath}}
-              name: {{.Values.deployment.volumeMounts.name}}
+          {{- range $val := .Values.deployment.volumeMounts.mountDetails }}
+            - mountPath: {{$val.mountPath}}
+              name: {{$val.name}}
+          {{- end }}
           {{- end }}
       {{- if .Values.deployment.volumeMounts.enabled }}
       volumes:
-        - name: {{.Values.deployment.volumeMounts.name}}
+      {{- range $val := .Values.deployment.volumeMounts.mountDetails }}
+        - name: {{$val.name}}
           persistentVolumeClaim:
-            claimName: {{.Values.deployment.volumeMounts.claimName}}
-            readOnly: {{.Values.deployment.volumeMounts.readOnly}}
+            claimName: {{$val.claimName}}
+            readOnly: {{$val.readOnly}}
+      {{- end }}
       {{- end }}

@@ -1,4 +1,4 @@
-##Defaults to uPresent Attendance Service
+## Defaults to uPresent Attendance Service
 
 global:
   namespaceOverride: default
@@ -34,13 +34,14 @@ deployment:
     FACENET_ENABLED: 1
   volumeMounts:
     enabled: true
-    mountPath: /app/resources/images
-    name: user-data-vol
-    readOnly: true
-    claimName: user-data-vol-claim
+    mountDetails:
+      - mountPath: /app/resources/images
+        name: user-data-vol
+        readOnly: true
+        claimName: user-data-vol-claim
 
 persistence:
-  enabled: false
+  enabled: true
   accessMode: ReadWriteOnce
   name: user-data-vol
   claimName: user-data-vol-claim
@@ -53,12 +54,14 @@ autoscaler:
   targetCPUUtilizationPercentage: 60
 
 service:
+  enabled: true
   type: ClusterIP
   protocol: TCP
   port: 5000
   targetPort: 5000
 
 ingress:
+  enabled: true
   annotations:
     ingressClass: nginx
     tlsAcme: true
