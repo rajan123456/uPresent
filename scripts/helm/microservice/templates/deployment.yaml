@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Chart.Name}}
+  namespace: {{.Values.global.namespaceOverride}}
+spec:
+  replicas: {{.Values.deployment.replicaCount}}
+  selector:
+    matchLabels:
+      name: {{.Chart.Name}}
+  strategy:
+    type: {{.Values.deployment.strategy}}
+    rollingUpdate:
+      maxSurge: {{.Values.deployment.rollingUpdate.maxSurge}}
+      maxUnavailable: {{.Values.deployment.rollingUpdate.maxUnavailable}}
+  progressDeadlineSeconds: {{.Values.deployment.progressDeadlineSeconds}}
+  template:
+    metadata:
+      labels:
+        app: {{.Chart.Name}}
+    spec:
+      containers:
+        - image: {{.Values.deployment.image.repository}}:{{.Values.deployment.image.tag}}
+          name: {{.Chart.Name}}
+          resources:
+            requests:
+              memory: {{.Values.deployment.resources.requests.memory | quote}}
+              cpu: {{.Values.deployment.resources.requests.cpu | quote}}
+            limits:
+              memory: {{.Values.deployment.resources.limits.memory | quote}}
+              cpu: {{.Values.deployment.resources.limits.cpu | quote}}
+          imagePullPolicy: Always
+          ports:
+            - name: {{.Chart.Name}}
+              containerPort: {{.Values.deployment.containerPort}}
+          env:
+            {{- range $key, $val := .Values.deployment.env }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+            {{- end }}
+          {{- if .Values.deployment.volumeMounts.enabled }}
+          volumeMounts:
+            - mountPath: {{.Values.deployment.volumeMounts.mountPath}}
+              name: {{.Values.deployment.volumeMounts.name}}
+          {{- end }}
+      {{- if .Values.deployment.volumeMounts.enabled }}
+      volumes:
+        - name: {{.Values.deployment.volumeMounts.name}}
+          persistentVolumeClaim:
+            claimName: {{.Values.deployment.volumeMounts.claimName}}
+            readOnly: {{.Values.deployment.volumeMounts.readOnly}}
+      {{- end }}
