@@ -1,6 +1,12 @@
 version: 2
 updates:
 - package-ecosystem: docker
+  directory: "/spark-base"
+  schedule:
+    interval: daily
+    time: "21:00"
+  open-pull-requests-limit: 10
+- package-ecosystem: docker
   directory: "/videoprocessor"
   schedule:
     interval: daily
