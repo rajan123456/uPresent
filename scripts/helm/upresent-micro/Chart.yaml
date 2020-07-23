@@ -19,7 +19,8 @@ dependencies:
   - name: filebeat
     version: 7.8.0
     repository: https://helm.elastic.co
-  - name: kafka # contains zookeeper as well
+  # contains zookeeper as well
+  - name: kafka
     version: 11.5.1
     repository: https://charts.bitnami.com/bitnami
   - name: kibana
