@@ -13,11 +13,13 @@ spec:
   {{- if .Values.service.headless}}
   clusterIP: None
   {{- end }}
-  {{- if not .Values.service.headless}}
+  {{- if .Values.service.ports }}
   ports:
-    - protocol: {{.Values.service.protocol}}
-      port: {{.Values.service.port}}
-      targetPort: {{.Values.service.targetPort}}
-      name: {{.Chart.Name}}
+    {{- range .Values.service.ports }}
+    - protocol: {{ .protocol }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort }}
+      name: {{ .portName }}
+    {{- end}}
   {{- end}}
 {{- end }}

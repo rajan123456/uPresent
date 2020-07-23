@@ -32,7 +32,8 @@ deployment:
   volumeMounts:
     enabled: true
     mountDetails:
-      - mountPath: /app/resources/images
+      - type: persistentVolumeClaim
+        mountPath: /app/resources/images
         name: user-data-vol
         readOnly: true
         claimName: user-data-vol-claim
@@ -55,9 +56,15 @@ service:
   headless: false
   nameOverride: attendance
   type: ClusterIP
-  protocol: TCP
-  port: 5000
-  targetPort: 5000
+  ports: 
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+    portName: port-1
+  - protocol: TCP
+    port: 6000
+    targetPort: 6000
+    portName: port-2
 
 ingress:
   enabled: true
