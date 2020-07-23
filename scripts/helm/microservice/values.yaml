@@ -56,7 +56,7 @@ service:
   headless: false
   nameOverride: attendance
   type: ClusterIP
-  ports: 
+  ports:
   - protocol: TCP
     port: 5000
     targetPort: 5000
@@ -77,3 +77,9 @@ ingress:
   hostName: attendance.upresent.ga
   tls:
     secretName: nginx-tls
+
+configmap:
+  enabled: false
+  # configData:
+  #   app.properties: |
+  #     listen              1935;
