@@ -1,0 +1,95 @@
+apiVersion: v2
+name: upresent-micro
+appVersion: "1.0.0"
+home: https://github.com/rajan123456/uPresent
+description: Helm chart for uPresent Distributed Deployment
+version: 1.0.0
+type: application
+maintainers:
+  - name: rajan123456
+sources:
+  - https://github.com/rajan123456/uPresent
+dependencies:
+  - name: apm-server
+    version: 7.8.0
+    repository: https://helm.elastic.co
+  - name: elasticsearch
+    version: 7.8.0
+    repository: https://helm.elastic.co
+  - name: filebeat
+    version: 7.8.0
+    repository: https://helm.elastic.co
+  - name: kafka # contains zookeeper as well
+    version: 11.5.1
+    repository: https://charts.bitnami.com/bitnami
+  - name: kibana
+    version: 7.8.0
+    repository: https://helm.elastic.co
+  - name: metricbeat
+    version: 7.8.0
+    repository: https://helm.elastic.co
+  - name: microservice
+    alias: admin
+    version: 3.0.0
+    repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  - name: microservice
+    alias: attendance
+    version: 1.0.0
+    repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  - name: microservice
+    alias: facenet
+    version: 1.1.1
+    repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  - name: microservice
+    alias: management
+    version: 1.0.0
+    repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  - name: microservice
+    alias: reporting
+    version: 1.0.0
+    repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  - name: microservice
+    alias: srs
+    version: 3.0.0
+    repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  - name: microservice
+    alias: streamprocessor
+    version: 2.1.0
+    repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  - name: microservice
+    version: 2.1.0
+    repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+    alias: training-watchdog
+  - name: microservice
+    version: 1.0.0
+    repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+    alias: user
+  - name: microservice
+    version: 2.1.0
+    repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+    alias: videoprocessor
+  - name: mongodb
+    alias: mongo-attendance
+    version: 8.1.1
+    repository: https://charts.bitnami.com/bitnami
+  - name: mongodb
+    alias: mongo-management
+    version: 8.1.1
+    repository: https://charts.bitnami.com/bitnami
+  - name: mongodb
+    alias: mongo-reporting
+    version: 8.1.1
+    repository: https://charts.bitnami.com/bitnami
+  - name: mongodb
+    alias: mongo-user
+    version: 8.1.1
+    repository: https://charts.bitnami.com/bitnami
+  - name: nginx-ingress
+    version: 1.41.1
+    repository: https://kubernetes-charts.storage.googleapis.com
+  - name: spark
+    version: 2.0.0
+    repository: https://charts.bitnami.com/bitnami
+  - name: vault
+    version: 0.6.0
+    repository: https://helm.releases.hashicorp.com
