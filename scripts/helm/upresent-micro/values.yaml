@@ -457,10 +457,12 @@ user:
       sagaEnabled: 1
     volumeMounts:
       enabled: true
-      mountPath: /app/resources/images
-      name: user-data-vol
-      readOnly: false
-      claimName: user-data-vol-claim
+      mountDetails:
+        - type: persistentVolumeClaim
+          mountPath: /app/resources/images
+          name: user-data-vol
+          readOnly: false
+          claimName: user-data-vol-claim
   persistence:
     enabled: true
     accessMode: ReadWriteOnce
