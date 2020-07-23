@@ -53,7 +53,8 @@ admin:
   configmap:
     enabled: false
 
-# apm-server:
+apm-server:
+  fullnameOverride: apm-server
 
 attendance:
   deployment:
