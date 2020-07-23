@@ -60,7 +60,10 @@ attendance:
     image:
       repository: rajagupt/attendance
       tag: 1.0.0
-    containerPort: 5000
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 5000
     env:
       SAGA_ENABLED: 1
       REPORT_PUBLISH_API: http://reporting:8080/reporting
@@ -81,10 +84,14 @@ attendance:
   persistence:
     enabled: false
   service:
+    enabled: true
+    headless: false
     type: ClusterIP
-    protocol: TCP
-    port: 5000
-    targetPort: 5000
+    ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      portName: attendance
   ingress:
     servicePort: 5000
     hostName: attendance.upresent.ga
@@ -102,15 +109,20 @@ facenet:
     image:
       repository: rajagupt/facenet
       tag: 1.0.0
-    containerPort: 5000
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 5000
     volumeMounts:
       enabled: true
       mountDetails:
-        - mountPath: /app/resources/images
+        - type: persistentVolumeClaim
+          mountPath: /app/resources/images
           name: user-data-vol
           readOnly: true
           claimName: user-data-vol-claim
-        - mountPath: /app/facenet/resources
+        - type: persistentVolumeClaim
+          mountPath: /app/facenet/resources
           name: facenet-data-vol
           readOnly: true
           claimName: facenet-data-vol-claim
@@ -121,10 +133,14 @@ facenet:
     claimName: facenet-data-vol-claim
     storage: 10Gi
   service:
+    enabled: true
+    headless: false
     type: ClusterIP
-    protocol: TCP
-    port: 5000
-    targetPort: 5000
+    ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      portName: facenet
   ingress:
     enabled: false
 
@@ -152,7 +168,10 @@ management:
     image:
       repository: rajagupt/management
       tag: 1.0.0
-    containerPort: 8083
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 8083
     env:
       sagaEnabled: 1
       userms.hostname: http://user
@@ -162,10 +181,14 @@ management:
   persistence:
     enabled: false
   service:
+    enabled: true
+    headless: false
     type: ClusterIP
-    protocol: TCP
-    port: 8080
-    targetPort: 8083
+    ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8083
+      portName: management
   ingress:
     servicePort: 8080
     hostName: management.upresent.ga
@@ -218,7 +241,10 @@ reporting:
     image:
       repository: rajagupt/reporting
       tag: 1.0.0
-    containerPort: 8084
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 8084
     env:
       SAGA_ENABLED: 1
       managementms.hostname: http://management
@@ -228,10 +254,14 @@ reporting:
   persistence:
     enabled: false
   service:
+    enabled: true
+    headless: false
     type: ClusterIP
-    protocol: TCP
-    port: 8080
-    targetPort: 8084
+    ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8084
+      portName: reporting
   ingress:
     servicePort: 8080
     hostName: reporting.upresent.ga
@@ -357,7 +387,8 @@ streamprocessor:
     volumeMounts:
       enabled: true
       mountDetails:
-        - mountPath: /training-data/images/
+        - type: persistentVolumeClaim
+          mountPath: /training-data/images/
           name: stream-data-vol
           readOnly: false
           claimName: stream-data-vol-claim
@@ -393,11 +424,13 @@ training-watchdog:
     volumeMounts:
       enabled: true
       mountDetails:
-        - mountPath: /training-data/images
+        - type: persistentVolumeClaim
+          mountPath: /training-data/images
           name: stream-data-vol
           readOnly: true
           claimName: stream-data-vol-claim
-        - mountPath: /app/facenet/resources
+        - type: persistentVolumeClaim
+          mountPath: /app/facenet/resources
           name: facenet-data-vol
           readOnly: false
           claimName: facenet-data-vol-claim
@@ -415,7 +448,10 @@ user:
     image:
       repository: rajagupt/user
       tag: 1.0.0
-    containerPort: 8082
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 8082
     env:
       sagaEnabled: 1
     volumeMounts:
@@ -431,13 +467,17 @@ user:
     claimName: user-data-vol-claim
     storage: 10Gi
   service:
+    enabled: true
+    headless: false
     type: ClusterIP
-    protocol: TCP
-    port: 8080
-    targetPort: 8084
+    ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8082
+      portName: user
   ingress:
     servicePort: 8080
-    hostName: reporting.upresent.ga
+    hostName: user.upresent.ga
     tls:
       secretName: nginx-tls
 
@@ -471,9 +511,11 @@ videoprocessor:
     enabled: true
     headless: false
     type: ClusterIP
-    protocol: TCP
-    port: 5000
-    targetPort: 5000
+    ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      portName: videoprocessor
   ingress:
     enabled: false
 

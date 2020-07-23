@@ -19,34 +19,34 @@ dependencies:
   version: 7.8.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.0.0
+  version: 4.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.0.0
+  version: 4.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.0.0
+  version: 4.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.0.0
+  version: 4.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.0.0
+  version: 4.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.0.0
+  version: 4.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.0.0
+  version: 4.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.0.0
+  version: 4.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.0.0
+  version: 4.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.0.0
+  version: 4.0.0
 - name: mongodb
   repository: https://charts.bitnami.com/bitnami
   version: 8.1.1
@@ -68,5 +68,5 @@ dependencies:
 - name: vault
   repository: https://helm.releases.hashicorp.com
   version: 0.6.0
-digest: sha256:e7d0198a1f748b92910ab187cb8d3ea0236597c3b35fc0d529024c6da7452fbb
-generated: "2020-07-24T01:10:51.6258139+08:00"
+digest: sha256:169aec5fcc83465cfaa8dd4b56ca94591058dc35470788c47797d0963ac9473f
+generated: "2020-07-24T01:20:58.6523283+08:00"
