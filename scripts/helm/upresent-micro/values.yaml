@@ -358,7 +358,7 @@ srs:
 
 streamprocessor:
   global:
-    namespaceOverride: production  
+    namespaceOverride: production
   deployment:
     replicaCount: 1
     strategy: Recreate
@@ -378,7 +378,7 @@ streamprocessor:
     resources:
       requests: {}
       limits: {}
-    containerPort: 
+    containerPort:
       enabled: false
     volumeMounts:
       enabled: true
@@ -394,7 +394,7 @@ streamprocessor:
     claimName: stream-data-vol-claim
     storage: 10Gi
   autoscaler:
-    enabled: false  
+    enabled: false
   service:
     enabled: true
     nameOverride: streamprocessor-headless
