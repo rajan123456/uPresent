@@ -13,25 +13,20 @@ deployment:
   image:
     repository: rajagupt/attendance
     tag: 1.0.0
+  imagePullPolicy: Always
   resources:
-    requests:
-      memory: 128Mi
-      cpu: 100m
-    limits:
-      memory: 256Mi
-      cpu: 200m
-  containerPort: 5000
-  env:
-    SAGA_ENABLED: 1
-    REPORT_PUBLISH_API: http://reporting:8080/reporting
-    FACENET_RECOGNITION_API: http://facenet:5000/api/face/
-    MODULE_API_FETCH_DETAILS: http://management:8080/manage/module?moduleCode=
-    MANAGEMENT_API_GEO_FENCE: http://management:8080/manage/school/geo-fence?schoolCode=
-    MANAGEMENT_API_SCHOOL: http://management:8080/manage/school?schoolCode=
-    USER_API_FETCH_USER: http://user:8080/user?username=
-    AZURE_FACE_ENABLED: 0
-    AWS_REKOG_ENABLED: 0
-    FACENET_ENABLED: 1
+    requests: {}
+      # memory: 128Mi
+      # cpu: 100m
+    limits: {}
+      # memory: 256Mi
+      # cpu: 200m
+  containerPort:
+    enabled: true
+    portNumbers:
+      - 5000
+  # env:
+    # ENV_NAME: ENV_VAL
   volumeMounts:
     enabled: true
     mountDetails:
@@ -55,6 +50,8 @@ autoscaler:
 
 service:
   enabled: true
+  headless: false
+  nameOverride: attendance
   type: ClusterIP
   protocol: TCP
   port: 5000
