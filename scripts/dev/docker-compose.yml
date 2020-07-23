@@ -345,6 +345,8 @@ services:
     image: rajagupt/streamprocessor:latest
     container_name: streamprocessor
     restart: always
+    environment:
+      - MASTER=spark://spark:7077
     volumes:
       - ./stream-data-vol:/training-data/images/
     depends_on:

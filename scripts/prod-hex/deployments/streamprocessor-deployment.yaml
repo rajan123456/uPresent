@@ -16,19 +16,29 @@ spec:
       labels:
         app: streamprocessor
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: kubernetes.io/hostname
-                    operator: In
-                    values:
-                      - ip-192-168-33-3.us-east-2.compute.internal
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #         - matchExpressions:
+      #             - key: kubernetes.io/hostname
+      #               operator: In
+      #               values:
+      #                 - ip-192-168-33-3.us-east-2.compute.internal
       containers:
-        - image: rajagupt/streamprocessor-kub:latest
+        - image: rajagupt/streamprocessor:latest
           name: streamprocessor
           imagePullPolicy: Always
+          env:
+            - name: MASTER
+              value: "spark://spark-master-svc:7077"
+          command:
+            - "/usr/spark/bin/spark-submit"
+            - "--jars"
+            - "spark-streaming-kafka-0-8-assembly.jar"
+            - "--conf"
+            - "spark.driver.host=streamprocessor-headless"
+            - "videoStreamCollector.py"
           volumeMounts:
             - mountPath: /training-data/images/
               name: stream-data-vol
