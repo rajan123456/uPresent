@@ -1,0 +1,14 @@
+{{- if .Values.configmap.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Chart.Name}}-config
+  namespace: {{.Values.global.namespaceOverride}}
+  labels:
+    app.kubernetes.io/component: {{.Chart.Name}}
+data:
+{{- range $path, $config := .Values.configmap.configData }}
+{{ $path | indent 2 }}: |
+{{ $config | indent 4 }}
+{{- end -}}
+{{- end }}
