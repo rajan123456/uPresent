@@ -31,15 +31,15 @@ deployment:
     mountDetails:
       - type: persistentVolumeClaim
         mountPath: /app/resources/images
-        name: user-data-vol
+        name: micro-data-vol
         readOnly: true
-        claimName: user-data-vol-claim
+        claimName: micro-data-vol-claim
 
 persistence:
   enabled: true
   accessMode: ReadWriteOnce
-  name: user-data-vol
-  claimName: user-data-vol-claim
+  name: micro-data-vol
+  claimName: micro-data-vol-claim
   storage: 10Gi
 
 autoscaler:
@@ -51,7 +51,7 @@ autoscaler:
 service:
   enabled: true
   headless: false
-  nameOverride: attendance
+  nameOverride: microservice
   type: ClusterIP
   ports:
   - protocol: TCP
@@ -71,7 +71,7 @@ ingress:
     clusterIssuer: letsencrypt-prod
     acmeChallengeType: http01
   servicePort: 5000
-  hostName: attendance.upresent.ga
+  hostName: microservice.upresent.ga
   tls:
     secretName: nginx-tls
 
