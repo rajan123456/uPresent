@@ -524,9 +524,4 @@ videoprocessor:
     enabled: false
 
 zookeeper:
-  fullnameOverride: zookeeper
-  metrics:
-    enabled: true
-  persistence:
-    size: 10Gi
   replicaCount: 3
