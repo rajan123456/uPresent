@@ -19,13 +19,7 @@ dependencies:
   version: 7.8.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 3.0.0
-- name: microservice
-  repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
   version: 1.0.0
-- name: microservice
-  repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 1.1.1
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
   version: 1.0.0
@@ -34,19 +28,25 @@ dependencies:
   version: 1.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 3.0.0
-- name: microservice
-  repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 2.1.0
-- name: microservice
-  repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 2.1.0
+  version: 1.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
   version: 1.0.0
 - name: microservice
   repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
-  version: 2.1.0
+  version: 1.0.0
+- name: microservice
+  repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  version: 1.0.0
+- name: microservice
+  repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  version: 1.0.0
+- name: microservice
+  repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  version: 1.0.0
+- name: microservice
+  repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
+  version: 1.0.0
 - name: mongodb
   repository: https://charts.bitnami.com/bitnami
   version: 8.1.1
@@ -68,5 +68,5 @@ dependencies:
 - name: vault
   repository: https://helm.releases.hashicorp.com
   version: 0.6.0
-digest: sha256:db51083225325ee0b172e0f72170565e2468850f4e2cf6706d52d809a80b63bd
-generated: "2020-07-23T23:40:12.0990962+08:00"
+digest: sha256:e7d0198a1f748b92910ab187cb8d3ea0236597c3b35fc0d529024c6da7452fbb
+generated: "2020-07-24T01:10:51.6258139+08:00"
