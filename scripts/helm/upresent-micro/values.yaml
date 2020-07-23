@@ -100,7 +100,7 @@ attendance:
       secretName: nginx-tls
 
 elasticsearch:
-  masterService: elasticsearch-master 
+  masterService: elasticsearch-master
   volumeClaimTemplate:
     resources:
       requests:
