@@ -2,6 +2,9 @@ chart-dirs:
     - scripts/helm
 chart-repos:
     - rajan=https://raw.githubusercontent.com/rajan123456/helm-charts/master
+    - elastic=https://helm.elastic.co
+    - bitnami=https://charts.bitnami.com/bitnami
+    - hashicorp=https://helm.releases.hashicorp.com
 debug: true
 #  excluded-charts:
 #    - common
