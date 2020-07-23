@@ -485,7 +485,9 @@ user:
     tls:
       secretName: nginx-tls
 
-# vault:
+vault:
+  readinessProbe:
+    enabled: false
 
 videoprocessor:
   deployment:
