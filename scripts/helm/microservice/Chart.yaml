@@ -3,7 +3,7 @@ name: microservice
 home: https://github.com/rajan123456/uPresent
 appVersion: "1.0.0"
 description: Generic Helm chart for uPresent microservice deployment
-version: 2.1.0
+version: 3.0.0
 type: application
 maintainers:
   - name: rajan123456

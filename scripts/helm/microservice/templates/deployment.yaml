@@ -56,10 +56,16 @@ spec:
           {{- end }}
       {{- if .Values.deployment.volumeMounts.enabled }}
       volumes:
-      {{- range $val := .Values.deployment.volumeMounts.mountDetails }}
-        - name: {{$val.name}}
+      {{- range .Values.deployment.volumeMounts.mountDetails }}
+        - name: {{.name}}
+          {{- if eq .type "persistentVolumeClaim" }}
           persistentVolumeClaim:
-            claimName: {{$val.claimName}}
-            readOnly: {{$val.readOnly}}
+            claimName: {{.claimName}}
+            readOnly: {{.readOnly}}
+          {{- end }}
+          {{- if eq .type "configMap" }}
+          configMap:
+            name: {{ .name }}
+          {{- end }}
       {{- end }}
       {{- end }}
