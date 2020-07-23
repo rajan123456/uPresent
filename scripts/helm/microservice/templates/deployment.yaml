@@ -41,6 +41,12 @@ spec:
               value: {{ $val | quote }}
             {{- end }}
           {{- end }}
+          {{- if .Values.deployment.command }}
+          command:
+            {{- range .Values.deployment.command }}
+            - {{ . | quote }}
+            {{- end }}
+          {{- end }}
           {{- if .Values.deployment.volumeMounts.enabled }}
           volumeMounts:
           {{- range $val := .Values.deployment.volumeMounts.mountDetails }}

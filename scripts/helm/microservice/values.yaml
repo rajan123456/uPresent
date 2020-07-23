@@ -27,6 +27,8 @@ deployment:
       - 5000
   # env:
     # ENV_NAME: ENV_VAL
+  # command:
+  #   - "bin/bash"
   volumeMounts:
     enabled: true
     mountDetails:
