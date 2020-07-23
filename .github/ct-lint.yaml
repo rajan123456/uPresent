@@ -1,10 +1,11 @@
 chart-dirs:
     - scripts/helm
 chart-repos:
-    - rajan=https://raw.githubusercontent.com/rajan123456/helm-charts/master
-    - elastic=https://helm.elastic.co
     - bitnami=https://charts.bitnami.com/bitnami
+    - elastic=https://helm.elastic.co
     - hashicorp=https://helm.releases.hashicorp.com
+    - rajan=https://raw.githubusercontent.com/rajan123456/helm-charts/master
+    - stable=https://kubernetes-charts.storage.googleapis.com
 check-version-increment: true
 debug: true
 remote: origin
