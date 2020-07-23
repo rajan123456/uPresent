@@ -1,7 +1,5 @@
 FROM rajagupt/spark-base:2.4.5-py3.6-java8
 
-ENV MASTER=spark://spark:7077
-
 RUN mkdir -p /usr/spark/work/ && chmod -R 777 /usr/spark/work/
 
 WORKDIR /app

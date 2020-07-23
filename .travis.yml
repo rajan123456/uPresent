@@ -35,7 +35,6 @@ script:
   - cd ../streamProcessor/
   - sonar-scanner
   - docker build -t rajagupt/streamprocessor .
-  - docker build -t rajagupt/streamprocessor-kub -f Dockerfile_Prod .
   #Build Admin UI
   - cd ../upresent-admin/
   - sonar-scanner
@@ -62,22 +61,14 @@ script:
   - cd ..
   #Push Images to Docker Hub
   - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then
-      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin;
-      docker push rajagupt/attendance;
-      docker push rajagupt/management;
-      docker push rajagupt/reporting;
-      docker push rajagupt/streamprocessor;
-      docker push rajagupt/streamprocessor-kub;
-      docker push rajagupt/upresent-admin;
-      docker push rajagupt/user;
-      docker push rajagupt/videoprocessor;
-      docker push rajagupt/facenet;
-      docker push rajagupt/training-watchdog;
+    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin;
+    docker push rajagupt/attendance;
+    docker push rajagupt/management;
+    docker push rajagupt/reporting;
+    docker push rajagupt/streamprocessor;
+    docker push rajagupt/upresent-admin;
+    docker push rajagupt/user;
+    docker push rajagupt/videoprocessor;
+    docker push rajagupt/facenet;
+    docker push rajagupt/training-watchdog;
     fi
-  #Deploy on AWS EC2 from Master
-  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then openssl aes-256-cbc -k "$DECRYPT_KEY" -in iss-dev-upresent.pem.enc -out iss-dev-upresent.pem -d -md sha256; fi
-  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then chmod 400 iss-dev-upresent.pem; fi
-  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent/scripts/dev && docker-compose down"; fi
-  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent/scripts/dev && docker image prune -a -f"; fi
-  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent && sudo git pull"; fi
-  # - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_EVENT_TYPE == "push" ]; then ssh -o StrictHostKeyChecking=no -i iss-dev-upresent.pem $EC2_INSTANCE "cd uPresent/scripts/dev && docker-compose up -d"; fi
