@@ -51,7 +51,6 @@ autoscaler:
 service:
   enabled: true
   headless: false
-  nameOverride: microservice
   type: ClusterIP
   ports:
   - protocol: TCP
