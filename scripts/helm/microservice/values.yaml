@@ -1,8 +1,5 @@
 ## Defaults to uPresent Attendance Service
 
-global:
-  namespaceOverride: default
-
 deployment:
   replicaCount: 2
   strategy: RollingUpdate

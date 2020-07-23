@@ -1,6 +1,4 @@
 admin:
-  global:
-    namespaceOverride: production
   deployment:
     replicaCount: 2
     strategy: RollingUpdate
@@ -58,8 +56,6 @@ admin:
 # apm-server:
 
 attendance:
-  global:
-    namespaceOverride: production
   deployment:
     image:
       repository: rajagupt/attendance
@@ -102,8 +98,6 @@ elasticsearch:
         storage: 10Gi
 
 facenet:
-  global:
-    namespaceOverride: production
   deployment:
     image:
       repository: rajagupt/facenet
@@ -137,8 +131,6 @@ facenet:
 # filebeat:
 
 kafka:
-  global:
-    namespaceOverride: production
   defaultReplicationFactor: 3
   fullnameOverride: broker
   metrics:
@@ -156,8 +148,6 @@ kafka:
 # kibana:
 
 management:
-  global:
-    namespaceOverride: production
   deployment:
     image:
       repository: rajagupt/management
@@ -185,8 +175,6 @@ management:
 # metricbeat:
 
 mongo-attendance:
-  global:
-    namespaceOverride: production
   auth:
     rootPassword: example
   fullnameOverride: mongo-attendance
@@ -195,8 +183,6 @@ mongo-attendance:
   useStatefulSet: true
 
 mongo-management:
-  global:
-    namespaceOverride: production
   auth:
     rootPassword: example
   fullnameOverride: mongo-management
@@ -205,8 +191,6 @@ mongo-management:
   useStatefulSet: true
 
 mongo-reporting:
-  global:
-    namespaceOverride: production
   auth:
     rootPassword: example
   fullnameOverride: mongo-reporting
@@ -215,8 +199,6 @@ mongo-reporting:
   useStatefulSet: true
 
 mongo-user:
-  global:
-    namespaceOverride: production
   auth:
     rootPassword: example
   fullnameOverride: mongo-user
@@ -232,8 +214,6 @@ nginx-ingress:
     maxReplicas: 5
 
 reporting:
-  global:
-    namespaceOverride: production
   deployment:
     image:
       repository: rajagupt/reporting
@@ -259,16 +239,12 @@ reporting:
       secretName: nginx-tls
 
 spark:
-  global:
-    namespaceOverride: production
   fullnameOverride: spark
   worker:
     autoscaling:
       enabled: true
 
 srs:
-  global:
-    namespaceOverride: production
   deployment:
     replicaCount: 1
     strategy: Recreate
@@ -357,8 +333,6 @@ srs:
         }
 
 streamprocessor:
-  global:
-    namespaceOverride: production
   deployment:
     replicaCount: 1
     strategy: Recreate
@@ -403,8 +377,6 @@ streamprocessor:
     enabled: false
 
 training-watchdog:
-  global:
-    namespaceOverride: production
   deployment:
     replicaCount: 1
     strategy: Recreate
@@ -439,8 +411,6 @@ training-watchdog:
     enabled: false
 
 user:
-  global:
-    namespaceOverride: production
   deployment:
     image:
       repository: rajagupt/user
@@ -474,8 +444,6 @@ user:
 # vault:
 
 videoprocessor:
-  global:
-    namespaceOverride: production
   deployment:
     replicaCount: 1
     strategy: Recreate
@@ -510,8 +478,6 @@ videoprocessor:
     enabled: false
 
 zookeeper:
-  global:
-    namespaceOverride: production
   fullnameOverride: zookeeper
   metrics:
     enabled: true

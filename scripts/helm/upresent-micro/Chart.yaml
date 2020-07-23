@@ -31,7 +31,7 @@ dependencies:
     repository: https://helm.elastic.co
   - name: microservice
     alias: admin
-    version: 3.0.0
+    version: 1.0.0
     repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
   - name: microservice
     alias: attendance
@@ -39,7 +39,7 @@ dependencies:
     repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
   - name: microservice
     alias: facenet
-    version: 1.1.1
+    version: 1.0.0
     repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
   - name: microservice
     alias: management
@@ -51,14 +51,14 @@ dependencies:
     repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
   - name: microservice
     alias: srs
-    version: 3.0.0
+    version: 1.0.0
     repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
   - name: microservice
     alias: streamprocessor
-    version: 2.1.0
+    version: 1.0.0
     repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
   - name: microservice
-    version: 2.1.0
+    version: 1.0.0
     repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
     alias: training-watchdog
   - name: microservice
@@ -66,7 +66,7 @@ dependencies:
     repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
     alias: user
   - name: microservice
-    version: 2.1.0
+    version: 1.0.0
     repository: https://raw.githubusercontent.com/rajan123456/helm-charts/master
     alias: videoprocessor
   - name: mongodb
