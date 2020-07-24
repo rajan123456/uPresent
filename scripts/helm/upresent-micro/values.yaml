@@ -516,6 +516,7 @@ videoprocessor:
   service:
     enabled: true
     headless: false
+    nameOverride: videoprocessor
     type: ClusterIP
     ports:
     - protocol: TCP
