@@ -36,7 +36,9 @@ const ManageModulesPage = (props) => {
         getFenceByUniversityName(_module.data.schoolCode).then((_fences) => {
           var overlap = [];
           if (_fences.data.holiday !== null) {
+            // eslint-disable-next-line
             _fences.data.holidays.map(function (holiday) {
+              // eslint-disable-next-line
               _module.data.schedule.map(function (day) {
                 if (day.date === moment(holiday).format("MM/DD/YYYY")) {
                   overlap.push(day.date);

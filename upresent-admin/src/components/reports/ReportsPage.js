@@ -63,6 +63,7 @@ function ReportsPage() {
         var fr = {};
         var result = {};
         for (var key in attendanceInfo) {
+          // eslint-disable-next-line
           result = attendanceInfo[key].reduce(function (map, obj) {
             map[key + obj.studentUsername] = {
               studentUsername: obj.studentUsername,
@@ -182,8 +183,8 @@ function ReportsPage() {
                       {reportData.dates ? (
                         <TableCell>Student/Date</TableCell>
                       ) : (
-                        <TableCell />
-                      )}
+                          <TableCell />
+                        )}
                       {reportData.dates &&
                         reportData.dates.map((date) => (
                           <TableCell align="right">{date}</TableCell>
@@ -254,34 +255,34 @@ function ReportsPage() {
                                       </td>
                                       {attendanceInfoData[date + record.key]
                                         .attendance === "REVOKED" ? (
-                                        <td>
-                                          Revoked by{" "}
-                                          {
-                                            attendanceInfoData[
-                                              date + record.key
-                                            ].adminUsername
-                                          }
-                                        </td>
-                                      ) : attendanceInfoData[date + record.key]
-                                          .attendance === "ABSENT" ? (
-                                        <td>Student is ABSENT</td>
-                                      ) : (
-                                        <td>
-                                          <Button
-                                            type="submit"
-                                            onClick={() =>
-                                              revoke(
-                                                attendanceInfoData,
+                                          <td>
+                                            Revoked by{" "}
+                                            {
+                                              attendanceInfoData[
                                                 date + record.key
-                                              )
+                                              ].adminUsername
                                             }
-                                            variant="contained"
-                                            color="primary"
-                                          >
-                                            Revoke
+                                          </td>
+                                        ) : attendanceInfoData[date + record.key]
+                                          .attendance === "ABSENT" ? (
+                                            <td>Student is ABSENT</td>
+                                          ) : (
+                                            <td>
+                                              <Button
+                                                type="submit"
+                                                onClick={() =>
+                                                  revoke(
+                                                    attendanceInfoData,
+                                                    date + record.key
+                                                  )
+                                                }
+                                                variant="contained"
+                                                color="primary"
+                                              >
+                                                Revoke
                                           </Button>
-                                        </td>
-                                      )}
+                                            </td>
+                                          )}
                                     </tr>
                                   </table>
                                 </div>
@@ -294,15 +295,15 @@ function ReportsPage() {
               </TableContainer>
             </Grid>
           ) : (
-            <Button />
-          )}
+              <Button />
+            )}
           {reportData.dates ? (
             <Grid item xs={12}>
               <Button type="submit" />
             </Grid>
           ) : (
-            <Button />
-          )}
+              <Button />
+            )}
         </Grid>
       </div>
     </div>

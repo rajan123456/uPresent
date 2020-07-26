@@ -30,7 +30,7 @@ const ManageSchoolPage = (props) => {
         setFence(data);
       });
     }
-  }, []);
+  }, [props.match.params.schoolCode]);
 
   function handleChange({ target }) {
     setFence({
@@ -42,6 +42,7 @@ const ManageSchoolPage = (props) => {
   function handleHolidayChange(dates) {
     setFence({
       ...fence,
+      // eslint-disable-next-line
       ["holidays"]: dates,
     });
   }

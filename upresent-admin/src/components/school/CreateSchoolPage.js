@@ -28,6 +28,7 @@ const CreateSchoolPage = (props) => {
   function handleHolidayChange(dates) {
     setFence({
       ...fence,
+      // eslint-disable-next-line
       ["holidays"]: dates,
     });
   }
