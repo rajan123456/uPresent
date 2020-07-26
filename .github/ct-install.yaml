@@ -1,0 +1,8 @@
+chart-dirs:
+    - scripts/helm
+chart-repos:
+    - rajan=https://raw.githubusercontent.com/rajan123456/helm-charts/master
+debug: true
+#  excluded-charts:
+#    - common
+remote: origin

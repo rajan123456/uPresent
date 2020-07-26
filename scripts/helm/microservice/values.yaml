@@ -1,0 +1,85 @@
+## Defaults to uPresent Attendance Service
+
+global:
+  namespaceOverride: default
+
+deployment:
+  replicaCount: 2
+  strategy: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 50%
+  progressDeadlineSeconds: 10
+  image:
+    repository: rajagupt/attendance
+    tag: 1.0.0
+  imagePullPolicy: Always
+  resources:
+    requests: {}
+      # memory: 128Mi
+      # cpu: 100m
+    limits: {}
+      # memory: 256Mi
+      # cpu: 200m
+  containerPort:
+    enabled: true
+    portNumbers:
+      - 5000
+  # env:
+    # ENV_NAME: ENV_VAL
+  # command:
+  #   - "bin/bash"
+  volumeMounts:
+    enabled: true
+    mountDetails:
+      - type: persistentVolumeClaim
+        mountPath: /app/resources/images
+        name: user-data-vol
+        readOnly: true
+        claimName: user-data-vol-claim
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  name: user-data-vol
+  claimName: user-data-vol-claim
+  storage: 10Gi
+
+autoscaler:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 60
+
+service:
+  enabled: true
+  headless: false
+  nameOverride: attendance
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+    portName: port-1
+  - protocol: TCP
+    port: 6000
+    targetPort: 6000
+    portName: port-2
+
+ingress:
+  enabled: true
+  annotations:
+    ingressClass: nginx
+    tlsAcme: true
+    clusterIssuer: letsencrypt-prod
+    acmeChallengeType: http01
+  servicePort: 5000
+  hostName: attendance.upresent.ga
+  tls:
+    secretName: nginx-tls
+
+configmap:
+  enabled: false
+  # configData:
+  #   app.properties: |
+  #     listen              1935;

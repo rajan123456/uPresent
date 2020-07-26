@@ -1,0 +1,25 @@
+{{- if .Values.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "microservice.serviceName" . }}
+  namespace: {{.Values.global.namespaceOverride}}
+  labels:
+    app.kubernetes.io/component: {{.Chart.Name}}
+spec:
+  selector:
+    app.kubernetes.io/component: {{.Chart.Name}}
+  type: {{.Values.service.type}}
+  {{- if .Values.service.headless}}
+  clusterIP: None
+  {{- end }}
+  {{- if .Values.service.ports }}
+  ports:
+    {{- range .Values.service.ports }}
+    - protocol: {{ .protocol }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort }}
+      name: {{ .portName }}
+    {{- end}}
+  {{- end}}
+{{- end }}
