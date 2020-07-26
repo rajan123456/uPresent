@@ -1,6 +1,6 @@
 admin:
   deployment:
-    replicaCount: 2
+    replicaCount: 1
     strategy: RollingUpdate
     rollingUpdate:
       maxSurge: 1
@@ -26,10 +26,10 @@ admin:
   persistence:
     enabled: false
   autoscaler:
-    enabled: true
-    minReplicas: 2
-    maxReplicas: 5
-    targetCPUUtilizationPercentage: 60
+    enabled: false
+    # minReplicas: 2
+    # maxReplicas: 5
+    # targetCPUUtilizationPercentage: 50
   service:
     enabled: true
     headless: false
@@ -58,6 +58,12 @@ apm-server:
 
 attendance:
   deployment:
+    replicaCount: 1
+    strategy: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 50%
+    progressDeadlineSeconds: 10
     image:
       repository: rajagupt/attendance
       tag: 1.0.0
@@ -84,6 +90,11 @@ attendance:
       claimName: user-data-vol-claim
   persistence:
     enabled: false
+  autoscaler:
+    enabled: false
+    # minReplicas: 2
+    # maxReplicas: 5
+    # targetCPUUtilizationPercentage: 50
   service:
     enabled: true
     headless: false
@@ -100,7 +111,14 @@ attendance:
       secretName: nginx-tls
 
 elasticsearch:
-  masterService: elasticsearch-master
+  fullnameOverride: elasticsearch-master
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
   volumeClaimTemplate:
     resources:
       requests:
@@ -151,14 +169,18 @@ facenet:
 kafka:
   defaultReplicationFactor: 3
   fullnameOverride: broker
-  metrics:
-    jmx:
-      enabled: true
-    kafka:
-      enabled: true
+  # metrics:
+  #   jmx:
+  #     enabled: true
+  #   kafka:
+  #     enabled: true
   offsetsTopicReplicationFactor: 3
+  livenessProbe:
+    enabled: false
   persistence:
-    size: 20Gi
+    size: 10Gi
+  readinessProbe:
+    enabled: false
   replicaCount: 3
   transactionStateLogMinIsr: 3
   transactionStateLogReplicationFactor: 3
