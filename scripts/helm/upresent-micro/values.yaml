@@ -310,7 +310,8 @@ spark:
   image:
     tag: 2
   replicaCount: 1
-  # worker:
+  worker:
+    replicaCount: 1
   #   autoscaling:
   #     enabled: true
 
