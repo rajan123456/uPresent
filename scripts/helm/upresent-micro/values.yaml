@@ -126,6 +126,7 @@ elasticsearch:
 
 facenet:
   deployment:
+    replicaCount: 1
     image:
       repository: rajagupt/facenet
       tag: 1.0.0
@@ -152,6 +153,8 @@ facenet:
     name: facenet-data-vol
     claimName: facenet-data-vol-claim
     storage: 10Gi
+  autoscaler:
+    enabled: false
   service:
     enabled: true
     headless: false
@@ -189,6 +192,7 @@ kafka:
 
 management:
   deployment:
+    replicaCount: 1
     image:
       repository: rajagupt/management
       tag: 1.0.0
@@ -203,6 +207,8 @@ management:
     volumeMounts:
       enabled: false
   persistence:
+    enabled: false
+  autoscaler:
     enabled: false
   service:
     enabled: true
@@ -253,15 +259,16 @@ mongo-user:
     size: 10Gi
   useStatefulSet: true
 
-nginx-ingress:
-  controller:
-    autoscaling:
-      enabled: true
-    minReplicas: 2
-    maxReplicas: 5
+# nginx-ingress:
+  # controller:
+  #   autoscaling:
+  #     enabled: true
+  #   minReplicas: 2
+  #   maxReplicas: 5
 
 reporting:
   deployment:
+    replicaCount: 1
     image:
       repository: rajagupt/reporting
       tag: 1.0.0
@@ -276,6 +283,8 @@ reporting:
     volumeMounts:
       enabled: false
   persistence:
+    enabled: false
+  autoscaler:
     enabled: false
   service:
     enabled: true
@@ -294,9 +303,9 @@ reporting:
 
 spark:
   fullnameOverride: spark
-  worker:
-    autoscaling:
-      enabled: true
+  # worker:
+  #   autoscaling:
+  #     enabled: true
 
 srs:
   deployment:
@@ -469,6 +478,7 @@ training-watchdog:
 
 user:
   deployment:
+    replicaCount: 1
     image:
       repository: rajagupt/user
       tag: 1.0.0
@@ -492,6 +502,8 @@ user:
     name: user-data-vol
     claimName: user-data-vol-claim
     storage: 10Gi
+  autoscaler:
+    enabled: false
   service:
     enabled: true
     headless: false
