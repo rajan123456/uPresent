@@ -528,10 +528,9 @@ user:
       secretName: nginx-tls
 
 vault:
-  livenessProbe:
-    enabled: false
-  readinessProbe:
-    enabled: false
+  server:
+    readinessProbe:
+      enabled: false
 
 videoprocessor:
   deployment:
