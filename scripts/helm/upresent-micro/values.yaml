@@ -307,6 +307,8 @@ reporting:
 
 spark:
   fullnameOverride: spark
+  image:
+    tag: 2
   replicaCount: 1
   # worker:
   #   autoscaling:
