@@ -410,16 +410,17 @@ streamprocessor:
     progressDeadlineSeconds: 10
     image:
       repository: rajagupt/streamprocessor
-      tag: 1.0.0
+      tag: 1.1.0
     env:
       MASTER: spark://spark-master-svc:7077
+      BROKER_INFO: broker:9092
     command:
-      - "/usr/spark/bin/spark-submit"
-      - "--jars"
-      - "spark-streaming-kafka-0-8-assembly.jar"
-      - "--conf"
-      - "spark.driver.host=streamprocessor-headless"
-      - "videoStreamCollector.py"
+      - /usr/spark/bin/spark-submit
+      - --jars
+      - spark-streaming-kafka-0-8-assembly.jar
+      - --conf
+      - spark.driver.host=streamprocessor-headless
+      - videoStreamCollector.py
     resources:
       requests: {}
       limits: {}
@@ -527,10 +528,10 @@ user:
     tls:
       secretName: nginx-tls
 
-vault:
-  server:
-    readinessProbe:
-      enabled: false
+# vault:
+#   server:
+#     readinessProbe:
+#       enabled: false
 
 videoprocessor:
   deployment:
