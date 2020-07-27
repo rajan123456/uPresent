@@ -7,6 +7,6 @@ chart-repos:
     - rajan=https://raw.githubusercontent.com/rajan123456/helm-charts/master
     - stable=https://kubernetes-charts.storage.googleapis.com
 debug: true
-charts:
-    - microservice
+excluded-charts:
+    - upresent-micro
 remote: origin
