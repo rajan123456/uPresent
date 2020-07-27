@@ -53,7 +53,7 @@ spec:
               name: {{$val.name}}
           {{- end }}
           {{- end }}
-      {{- if .Values.deployment.volumeMounts.enabled }}
+      {{- if .Values.persistence.enabled }}
       volumes:
       {{- range .Values.deployment.volumeMounts.mountDetails }}
         - name: {{.name}}

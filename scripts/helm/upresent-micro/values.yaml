@@ -112,6 +112,8 @@ attendance:
 
 elasticsearch:
   fullnameOverride: elasticsearch-master
+  replicas: 1
+  minimumMasterNodes: 1
   resources:
     requests:
       cpu: "250m"
@@ -170,23 +172,23 @@ facenet:
 # filebeat:
 
 kafka:
-  defaultReplicationFactor: 3
+  # defaultReplicationFactor: 3
   fullnameOverride: broker
   # metrics:
   #   jmx:
   #     enabled: true
   #   kafka:
   #     enabled: true
-  offsetsTopicReplicationFactor: 3
+  # offsetsTopicReplicationFactor: 3
   livenessProbe:
     enabled: false
   persistence:
     size: 10Gi
   readinessProbe:
     enabled: false
-  replicaCount: 3
-  transactionStateLogMinIsr: 3
-  transactionStateLogReplicationFactor: 3
+  # replicaCount: 3
+  # transactionStateLogMinIsr: 3
+  # transactionStateLogReplicationFactor: 3
 
 # kibana:
 
@@ -303,6 +305,7 @@ reporting:
 
 spark:
   fullnameOverride: spark
+  replicaCount: 1
   # worker:
   #   autoscaling:
   #     enabled: true
