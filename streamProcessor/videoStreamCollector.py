@@ -66,7 +66,10 @@ def process(rdd, sc):
 def main():
     sc, ssc = init_spark()
     topic = config.Config.TOPIC
-    brokers = config.Config.BROKER_INFO
+
+    brokers = os.getenv("BROKER_INFO")
+    if brokers is None:
+        brokers = config.Config.BROKER_INFO
 
     # Creating spark DStreams
     stream = KafkaUtils.createDirectStream(
