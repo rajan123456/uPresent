@@ -116,13 +116,13 @@ elasticsearch:
   fullnameOverride: elasticsearch-master
   replicas: 1
   minimumMasterNodes: 1
-  resources:
-    requests:
-      cpu: "250m"
-      memory: "512Mi"
-    limits:
-      cpu: "500m"
-      memory: "1Gi"
+  # resources:
+  #   requests:
+  #     cpu: "250m"
+  #     memory: "512Mi"
+  #   limits:
+  #     cpu: "500m"
+  #     memory: "1Gi"
   volumeClaimTemplate:
     resources:
       requests:
