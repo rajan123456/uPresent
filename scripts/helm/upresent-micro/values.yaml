@@ -84,10 +84,12 @@ attendance:
       FACENET_ENABLED: 1
     volumeMounts:
       enabled: true
-      mountPath: /app/resources/images
-      name: user-data-vol
-      readOnly: true
-      claimName: user-data-vol-claim
+      mountDetails:
+        - type: persistentVolumeClaim
+          mountPath: /app/resources/images
+          name: user-data-vol
+          readOnly: true
+          claimName: user-data-vol-claim
   persistence:
     enabled: false
   autoscaler:
