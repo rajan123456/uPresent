@@ -1,8 +1,12 @@
 chart-dirs:
     - scripts/helm
 chart-repos:
+    - bitnami=https://charts.bitnami.com/bitnami
+    - elastic=https://helm.elastic.co
+    - hashicorp=https://helm.releases.hashicorp.com
     - rajan=https://raw.githubusercontent.com/rajan123456/helm-charts/master
+    - stable=https://kubernetes-charts.storage.googleapis.com
 debug: true
-#  excluded-charts:
-#    - common
+excluded-charts:
+    - upresent-micro
 remote: origin

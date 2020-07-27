@@ -1,0 +1,574 @@
+admin:
+  deployment:
+    replicaCount: 1
+    strategy: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 50%
+    progressDeadlineSeconds: 10
+    image:
+      repository: rajagupt/upresent-admin
+      tag: 1.0.0-rc1
+    imagePullPolicy: Always
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 256Mi
+        cpu: 200m
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 80
+    volumeMounts:
+      enabled: false
+  persistence:
+    enabled: false
+  autoscaler:
+    enabled: false
+    # minReplicas: 2
+    # maxReplicas: 5
+    # targetCPUUtilizationPercentage: 50
+  service:
+    enabled: true
+    headless: false
+    type: ClusterIP
+    ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      portName: admin
+  ingress:
+    enabled: true
+    annotations:
+      ingressClass: nginx
+      tlsAcme: true
+      clusterIssuer: letsencrypt-prod
+      acmeChallengeType: http01
+    servicePort: 80
+    hostName: admin.upresent.ga
+    tls:
+      secretName: nginx-tls
+  configmap:
+    enabled: false
+
+apm-server:
+  fullnameOverride: apm-server
+
+attendance:
+  deployment:
+    replicaCount: 1
+    strategy: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 50%
+    progressDeadlineSeconds: 10
+    image:
+      repository: rajagupt/attendance
+      tag: 1.0.0
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 5000
+    env:
+      SAGA_ENABLED: 1
+      REPORT_PUBLISH_API: http://reporting:8080/reporting
+      FACENET_RECOGNITION_API: http://facenet:5000/api/face/
+      MODULE_API_FETCH_DETAILS: http://management:8080/manage/module?moduleCode=
+      MANAGEMENT_API_GEO_FENCE: http://management:8080/manage/school/geo-fence?schoolCode=
+      MANAGEMENT_API_SCHOOL: http://management:8080/manage/school?schoolCode=
+      USER_API_FETCH_USER: http://user:8080/user?username=
+      AZURE_FACE_ENABLED: 0
+      AWS_REKOG_ENABLED: 0
+      FACENET_ENABLED: 1
+    volumeMounts:
+      enabled: true
+      mountDetails:
+        - type: persistentVolumeClaim
+          mountPath: /app/resources/images
+          name: user-data-vol
+          readOnly: true
+          claimName: user-data-vol-claim
+  persistence:
+    enabled: false
+  autoscaler:
+    enabled: false
+    # minReplicas: 2
+    # maxReplicas: 5
+    # targetCPUUtilizationPercentage: 50
+  service:
+    enabled: true
+    headless: false
+    type: ClusterIP
+    ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      portName: attendance
+  ingress:
+    servicePort: 5000
+    hostName: attendance.upresent.ga
+    tls:
+      secretName: nginx-tls
+
+elasticsearch:
+  fullnameOverride: elasticsearch-master
+  replicas: 1
+  minimumMasterNodes: 1
+  # resources:
+  #   requests:
+  #     cpu: "250m"
+  #     memory: "512Mi"
+  #   limits:
+  #     cpu: "500m"
+  #     memory: "1Gi"
+  volumeClaimTemplate:
+    resources:
+      requests:
+        storage: 10Gi
+
+facenet:
+  deployment:
+    replicaCount: 1
+    image:
+      repository: rajagupt/facenet
+      tag: 1.0.0
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 5000
+    volumeMounts:
+      enabled: true
+      mountDetails:
+        - type: persistentVolumeClaim
+          mountPath: /app/resources/images
+          name: user-data-vol
+          readOnly: true
+          claimName: user-data-vol-claim
+        - type: persistentVolumeClaim
+          mountPath: /app/facenet/resources
+          name: facenet-data-vol
+          readOnly: true
+          claimName: facenet-data-vol-claim
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    name: facenet-data-vol
+    claimName: facenet-data-vol-claim
+    storage: 10Gi
+  autoscaler:
+    enabled: false
+  service:
+    enabled: true
+    headless: false
+    type: ClusterIP
+    ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      portName: facenet
+  ingress:
+    enabled: false
+
+# filebeat:
+
+kafka:
+  # defaultReplicationFactor: 3
+  fullnameOverride: broker
+  # metrics:
+  #   jmx:
+  #     enabled: true
+  #   kafka:
+  #     enabled: true
+  # offsetsTopicReplicationFactor: 3
+  livenessProbe:
+    enabled: false
+  persistence:
+    size: 10Gi
+  readinessProbe:
+    enabled: false
+  # replicaCount: 3
+  # transactionStateLogMinIsr: 3
+  # transactionStateLogReplicationFactor: 3
+
+# kibana:
+
+management:
+  deployment:
+    replicaCount: 1
+    image:
+      repository: rajagupt/management
+      tag: 1.0.0
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 8083
+    env:
+      sagaEnabled: 1
+      userms.hostname: http://user
+      userms.port: 8080
+    volumeMounts:
+      enabled: false
+  persistence:
+    enabled: false
+  autoscaler:
+    enabled: false
+  service:
+    enabled: true
+    headless: false
+    type: ClusterIP
+    ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8083
+      portName: management
+  ingress:
+    servicePort: 8080
+    hostName: management.upresent.ga
+    tls:
+      secretName: nginx-tls
+
+# metricbeat:
+
+mongo-attendance:
+  auth:
+    rootPassword: example
+  fullnameOverride: mongo-attendance
+  persistence:
+    size: 10Gi
+  useStatefulSet: true
+
+mongo-management:
+  auth:
+    rootPassword: example
+  fullnameOverride: mongo-management
+  persistence:
+    size: 10Gi
+  useStatefulSet: true
+
+mongo-reporting:
+  auth:
+    rootPassword: example
+  fullnameOverride: mongo-reporting
+  persistence:
+    size: 10Gi
+  useStatefulSet: true
+
+mongo-user:
+  auth:
+    rootPassword: example
+  fullnameOverride: mongo-user
+  persistence:
+    size: 10Gi
+  useStatefulSet: true
+
+# nginx-ingress:
+  # controller:
+  #   autoscaling:
+  #     enabled: true
+  #   minReplicas: 2
+  #   maxReplicas: 5
+
+reporting:
+  deployment:
+    replicaCount: 1
+    image:
+      repository: rajagupt/reporting
+      tag: 1.0.0
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 8084
+    env:
+      SAGA_ENABLED: 1
+      managementms.hostname: http://management
+      managementms.port: 8080
+    volumeMounts:
+      enabled: false
+  persistence:
+    enabled: false
+  autoscaler:
+    enabled: false
+  service:
+    enabled: true
+    headless: false
+    type: ClusterIP
+    ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8084
+      portName: reporting
+  ingress:
+    servicePort: 8080
+    hostName: reporting.upresent.ga
+    tls:
+      secretName: nginx-tls
+
+spark:
+  fullnameOverride: spark
+  image:
+    tag: 2
+  replicaCount: 1
+  worker:
+    replicaCount: 1
+  #   autoscaling:
+  #     enabled: true
+
+srs:
+  deployment:
+    replicaCount: 1
+    strategy: Recreate
+    progressDeadlineSeconds: 10
+    image:
+      repository: ossrs/srs
+      tag: 3
+    imagePullPolicy: Always
+    resources:
+      requests: {}
+      limits: {}
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 1935
+        - 1985
+        - 8080
+    volumeMounts:
+      enabled: true
+      mountDetails:
+        - type: configMap
+          name: srs-config
+          mountPath: /usr/local/srs/conf
+  persistence:
+    enabled: false
+  autoscaler:
+    enabled: false
+  service:
+    enabled: true
+    headless: false
+    type: LoadBalancer
+    ports:
+      - protocol: TCP
+        port: 1935
+        targetPort: 1935
+        portName: rtmp
+      - protocol: TCP
+        port: 1985
+        targetPort: 1985
+        portName: rtmp-conn
+      - protocol: TCP
+        port: 8080
+        targetPort: 8080
+        portName: rtmp-ui
+  ingress:
+    enabled: false
+  configmap:
+    enabled: true
+    configData:
+      srs.conf: |
+        listen              1935;
+        max_connections     1000;
+        srs_log_tank        file;
+        srs_log_file        ./objs/srs.log;
+        daemon              off;
+        http_api {
+            enabled         on;
+            listen          1985;
+            raw_api {
+                enabled             on;
+                allow_reload        on;
+                allow_query         on;
+                allow_update        on;
+            }
+        }
+        http_server {
+            enabled         on;
+            listen          8080;
+            dir             ./objs/nginx/html;
+        }
+        stats {
+            network         0;
+            disk            sda sdb xvda xvdb;
+        }
+        vhost srs.upresent.ga {
+            hls {
+                enabled     on;
+            }
+            http_remux {
+                enabled     on;
+            }
+            http_hooks {
+                enabled     on;
+                on_publish  http://videoprocessor:5000/api/videoprocessor;
+            }
+        }
+
+streamprocessor:
+  deployment:
+    replicaCount: 1
+    strategy: Recreate
+    progressDeadlineSeconds: 10
+    image:
+      repository: rajagupt/streamprocessor
+      tag: 1.1.0
+    env:
+      MASTER: spark://spark-master-svc:7077
+      BROKER_INFO: broker:9092
+    command:
+      - /usr/spark/bin/spark-submit
+      - --jars
+      - spark-streaming-kafka-0-8-assembly.jar
+      - --conf
+      - spark.driver.host=streamprocessor-headless
+      - videoStreamCollector.py
+    resources:
+      requests: {}
+      limits: {}
+    containerPort:
+      enabled: false
+    volumeMounts:
+      enabled: true
+      mountDetails:
+        - type: persistentVolumeClaim
+          mountPath: /training-data/images/
+          name: stream-data-vol
+          readOnly: false
+          claimName: stream-data-vol-claim
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    name: stream-data-vol
+    claimName: stream-data-vol-claim
+    storage: 10Gi
+  autoscaler:
+    enabled: false
+  service:
+    enabled: true
+    nameOverride: streamprocessor-headless
+    headless: true
+  ingress:
+    enabled: false
+
+training-watchdog:
+  deployment:
+    replicaCount: 1
+    strategy: Recreate
+    progressDeadlineSeconds: 10
+    image:
+      repository: rajagupt/training-watchdog
+      tag: 1.0.0
+    imagePullPolicy: Always
+    resources:
+      requests: {}
+      limits: {}
+    containerPort:
+      enabled: false
+    volumeMounts:
+      enabled: true
+      mountDetails:
+        - type: persistentVolumeClaim
+          mountPath: /training-data/images
+          name: stream-data-vol
+          readOnly: true
+          claimName: stream-data-vol-claim
+        - type: persistentVolumeClaim
+          mountPath: /app/facenet/resources
+          name: facenet-data-vol
+          readOnly: false
+          claimName: facenet-data-vol-claim
+  persistence:
+    enabled: false
+  autoscaler:
+    enabled: false
+  service:
+    enabled: false
+  ingress:
+    enabled: false
+
+user:
+  deployment:
+    replicaCount: 1
+    image:
+      repository: rajagupt/user
+      tag: 1.0.0
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 8082
+    env:
+      sagaEnabled: 1
+    volumeMounts:
+      enabled: true
+      mountDetails:
+        - type: persistentVolumeClaim
+          mountPath: /app/resources/images
+          name: user-data-vol
+          readOnly: false
+          claimName: user-data-vol-claim
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    name: user-data-vol
+    claimName: user-data-vol-claim
+    storage: 10Gi
+  autoscaler:
+    enabled: false
+  service:
+    enabled: true
+    headless: false
+    type: ClusterIP
+    ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8082
+      portName: user
+  ingress:
+    servicePort: 8080
+    hostName: user.upresent.ga
+    tls:
+      secretName: nginx-tls
+
+# vault:
+#   server:
+#     readinessProbe:
+#       enabled: false
+
+videoprocessor:
+  deployment:
+    replicaCount: 1
+    strategy: Recreate
+    progressDeadlineSeconds: 10
+    image:
+      repository: rajagupt/videoprocessor
+      tag: 1.0.0
+    imagePullPolicy: Always
+    resources:
+      requests: {}
+      limits: {}
+    containerPort:
+      enabled: true
+      portNumbers:
+        - 5000
+    env:
+      SRS_CLUSTER: rtmp://srs.upresent.ga/app/
+    volumeMounts:
+      enabled: false
+  persistence:
+    enabled: false
+  autoscaler:
+    enabled: false
+  service:
+    enabled: true
+    headless: false
+    nameOverride: videoprocessor
+    type: ClusterIP
+    ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      portName: videoprocessor
+  ingress:
+    enabled: false
+
+zookeeper:
+  replicaCount: 3
