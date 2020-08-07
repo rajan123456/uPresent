@@ -5646,10 +5646,10 @@ react-native-modal-dropdown@^0.7.0:
     deprecated-react-native-listview "0.0.5"
     prop-types "^15.6.0"
 
-react-native-nodemediaclient@^0.1.9:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/react-native-nodemediaclient/-/react-native-nodemediaclient-0.1.9.tgz#b22f54e84e12b4968779b6d241835f49ac10ccd1"
-  integrity sha512-2nNvDVINAxlaWZTFYJRz32Nbs9COtZCpFjyspTGh/RsCnb9Wr13oPTepZFE7B7RiPn/jfXXTT2p0ov6DUmWHxA==
+react-native-nodemediaclient@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/react-native-nodemediaclient/-/react-native-nodemediaclient-0.2.5.tgz#1829c7077f53d1336e1e191c84ae8fc5e9a57ab4"
+  integrity sha512-0hqBQFdgMHxcAwVG7DN+DbyE2fbpQwefIkrnfc/n1rlXh3I3sGPFn1YaKsXFcoj5ZDw1Tcx70fdy66vNWHUe/A==
 
 react-native-reanimated@^1.7.0:
   version "1.7.0"
