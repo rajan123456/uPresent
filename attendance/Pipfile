@@ -16,7 +16,7 @@ flask-restful-swagger = "0.20.2"
 kafka-python = "2.0.1"
 Flask = "1.1.2"
 Flask-RESTful = "0.3.8"
-flask-cors = "3.0.8"
+flask-cors = "3.0.10"
 azure-cognitiveservices-vision-face = "0.4.1"
 
 [requires]
