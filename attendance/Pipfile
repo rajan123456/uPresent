@@ -10,7 +10,7 @@ pylint = "2.5.3"
 flask-mongoengine = "0.9.5"
 geopy = "2.0.0"
 boto3 = "1.14.57"
-elastic-apm = {extras = ["flask"],version = "5.8.1"}
+elastic-apm = {extras = ["flask"],version = "6.3.3"}
 psutil = "5.7.2"
 flask-restful-swagger = "0.20.2"
 kafka-python = "2.0.1"
