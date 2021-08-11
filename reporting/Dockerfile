@@ -1,4 +1,4 @@
-FROM openjdk:12-alpine
+FROM openjdk:17-alpine
 
 ARG JAR_FILE=target/*.jar
 ARG ELASTIC_AGENT=lib/*.jar
