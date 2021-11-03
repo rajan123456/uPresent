@@ -22,7 +22,7 @@
     "react-native-material-buttons": "^0.6.0",
     "react-native-material-textfield": "^0.16.1",
     "react-native-modal-dropdown": "^0.7.0",
-    "react-native-nodemediaclient": "^0.1.9",
+    "react-native-nodemediaclient": "^0.2.18",
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.7.2",
     "react-native-screens": "^2.0.0-beta.2",
