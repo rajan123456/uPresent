@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-opencv-python = "4.3.0.36"
+opencv-python = "4.5.4.60"
 pillow = "7.2.0"
 
 [requires]
