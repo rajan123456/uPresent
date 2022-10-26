@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 bson = "0.5.10"
-elastic-apm = {extras = ["flask"],version = "5.8.1"}
+elastic-apm = {extras = ["flask"],version = "6.13.0"}
 flask = "1.1.2"
 flask-restful = "0.3.8"
 flask-restful-swagger = "0.20.2"
