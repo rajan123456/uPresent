@@ -11,7 +11,7 @@ flask-mongoengine = "0.9.5"
 geopy = "2.0.0"
 boto3 = "1.14.57"
 elastic-apm = {extras = ["flask"],version = "5.8.1"}
-psutil = "5.7.2"
+psutil = "5.9.4"
 flask-restful-swagger = "0.20.2"
 kafka-python = "2.0.1"
 Flask = "1.1.2"
