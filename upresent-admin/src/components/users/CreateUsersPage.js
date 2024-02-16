@@ -48,7 +48,7 @@ const CreateUsersPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
+      <div className="main" style={{padding: '10px', width: '30%'}}>
         <h2>Add User</h2>
         <CreateUserForm
           errors={errors}

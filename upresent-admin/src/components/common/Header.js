@@ -11,7 +11,7 @@ const rightStyle = {
 
 function Header() {
   return (
-    <nav>
+    <nav class="bg-dark">
       <ul>
         <li>
           <Link to="/home">Home</Link>
@@ -20,7 +20,7 @@ function Header() {
           <Link to="/users">Users</Link>
         </li>
         <li>
-          <Link to="/fences">Fences</Link>
+          <Link to="/schools">Schools</Link>
         </li>
         <li>
           <Link to="/modules">Modules</Link>

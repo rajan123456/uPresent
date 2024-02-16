@@ -6,9 +6,11 @@ import { getUsersOfType } from "../../api/userApi";
 import { toast } from "react-toastify";
 import { daysOfWeek } from "../../utils/constants";
 import moment from "moment";
+import { getFenceByUniversityName } from "../../api/fenceApi";
 
 const ManageModulesPage = (props) => {
   const [errors, setErrors] = useState({});
+  const [holidayOverlap, setHolidayOverlap] = useState([]);
 
   const [module, setModule] = useState({
     createdBy: "",
@@ -16,8 +18,12 @@ const ManageModulesPage = (props) => {
     endDate: moment(new Date()).format("MM/DD/YYYY"),
     moduleCode: "",
     moduleName: "",
+    schoolCode: "",
+    endTime: new Date(),
+    startTime: new Date(),
     scheduledDays: [],
     studentUsernames: [],
+    schedule: [],
   });
 
   const [students, setStudents] = useState([]);
@@ -27,6 +33,21 @@ const ManageModulesPage = (props) => {
     if (moduleCode) {
       moduleApi.getModuleByModuleCode(moduleCode).then((_module) => {
         setModule(_module.data);
+        getFenceByUniversityName(_module.data.schoolCode).then((_fences) => {
+          var overlap = [];
+          if (_fences.data.holiday !== null) {
+            // eslint-disable-next-line
+            _fences.data.holidays.map(function (holiday) {
+              // eslint-disable-next-line
+              _module.data.schedule.map(function (day) {
+                if (day.date === moment(holiday).format("MM/DD/YYYY")) {
+                  overlap.push(day.date);
+                }
+              });
+            });
+          }
+          setHolidayOverlap(overlap);
+        });
       });
     }
     getUsersOfType("STUDENT").then((_students) => {
@@ -75,6 +96,42 @@ const ManageModulesPage = (props) => {
     });
   }
 
+  function handleScheduleDate(scDays, value, index) {
+    scDays[index].date = value;
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["scheduledDays"]: scDays,
+    });
+  }
+
+  function handleScheduleStartTime(scDays, value, index) {
+    scDays[index].startTime = value;
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["scheduledDays"]: scDays,
+    });
+  }
+
+  function handleDeleteSchedule(scDays, index) {
+    scDays.splice(index, 1);
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["scheduledDays"]: scDays,
+    });
+  }
+
+  function handleScheduleEndTime(scDays, value, index) {
+    scDays[index].endTime = value;
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["scheduledDays"]: scDays,
+    });
+  }
+
   function formIsValid() {
     const _errors = {};
 
@@ -112,17 +169,22 @@ const ManageModulesPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
+      <div className="main" style={{ padding: "10px", width: "30%" }}>
         <h2>Manage Module</h2>
         <ManageModuleForm
           errors={errors}
           module={module}
+          holidayOverlap={holidayOverlap}
           daysOfWeek={daysOfWeek}
           availableStudents={students}
           onChange={handleChange}
           onChangeSelector={handleChangeSelector}
           onStartDateChange={handleDateChangeStartDate}
           onEndDateChange={handleDateChangeEndDate}
+          updateDate={handleScheduleDate}
+          deleteSchedule={handleDeleteSchedule}
+          updateEndTime={handleScheduleEndTime}
+          updateStartTime={handleScheduleStartTime}
           onSubmit={handleSubmit}
           onReset={handleDelete}
         />

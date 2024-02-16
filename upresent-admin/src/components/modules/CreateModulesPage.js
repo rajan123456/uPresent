@@ -16,8 +16,12 @@ const CreateModulesPage = (props) => {
     endDate: moment(new Date()).format("MM/DD/YYYY"),
     moduleCode: "",
     moduleName: "",
+    schoolCode: "",
+    endTime: new Date(),
+    startTime: new Date(),
     scheduledDays: [],
     studentUsernames: [],
+    schedule: [],
   });
 
   const [students, setStudents] = useState([]);
@@ -69,6 +73,55 @@ const CreateModulesPage = (props) => {
     });
   }
 
+  function handleDateChangeEndTime(time) {
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["endTime"]: time,
+    });
+  }
+
+  function handleDateChangeStartTime(time) {
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      ["startTime"]: time,
+    });
+  }
+
+  function getDates() {
+    var currentDate = new Date(module.startDate);
+    var stopDate = new Date(module.endDate);
+    var days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    var schedule = [];
+    while (currentDate <= stopDate) {
+      if (module.scheduledDays.includes(days[currentDate.getDay()])) {
+        var temp = {
+          createdBy: module.createdBy,
+          date: moment(currentDate).format("MM/DD/YYYY"),
+          endTime: moment(module.endTime).format("HH:mm"),
+          startTime: moment(module.startTime).format("HH:mm"),
+        };
+        schedule.push(temp);
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    setModule({
+      ...module,
+      // eslint-disable-next-line
+      [schedule]: schedule,
+    });
+    module.schedule = schedule;
+  }
+
   function formIsValid() {
     const _errors = {};
 
@@ -85,6 +138,7 @@ const CreateModulesPage = (props) => {
     event.preventDefault();
     if (!formIsValid()) return;
     module.createdBy = localStorage.getItem("user");
+    getDates();
     moduleApi.saveModule(module).then((_resp) => {
       if (_resp.message === "ok") {
         props.history.push("/modules");
@@ -96,7 +150,7 @@ const CreateModulesPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
+      <div className="main" style={{ padding: "10px", width: "30%" }}>
         <h2>Add Module</h2>
         <CreateModuleForm
           errors={errors}
@@ -106,6 +160,8 @@ const CreateModulesPage = (props) => {
           onStartDateChange={handleDateChangeStartDate}
           onEndDateChange={handleDateChangeEndDate}
           onSubmit={handleSubmit}
+          onStartTimeChange={handleDateChangeStartTime}
+          onEndTimeChange={handleDateChangeEndTime}
           daysOfWeek={daysOfWeek}
           availableStudents={students}
         />

@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from "react";
-import ManageFenceForm from "./ManageFenceForm";
+import ManageSchoolForm from "./ManageSchoolForm";
 import Header from "../common/Header";
 import * as fenceApi from "../../api/fenceApi";
 import { toast } from "react-toastify";
 
-const ManageFencesPage = (props) => {
+const ManageSchoolPage = (props) => {
   const [errors, setErrors] = useState({});
 
   const [fence, setFence] = useState({
-    universityName: "",
+    schoolName: "",
+    schoolCode: "",
     longitude: "",
     latitude: "",
     radiusInMeter: "",
-    username: "",
+    createdBy: "",
+    timeZone: "",
+    geoFenceData: "",
+    holidays: [new Date()],
   });
 
   useEffect(() => {
-    const universityName = props.match.params.universityName;
-    if (universityName) {
-      fenceApi
-        .getFenceByUniversityName(universityName)
-        .then((_fence) => setFence(_fence.data));
+    const schoolName = props.match.params.schoolCode;
+    if (schoolName) {
+      fenceApi.getFenceByUniversityName(schoolName).then((_fence) => {
+        var data = _fence.data;
+        data.longitude = _fence.data.geoFenceData.longitude;
+        data.latitude = _fence.data.geoFenceData.latitude;
+        data.radiusInMeter = _fence.data.geoFenceData.radiusInMeter;
+        setFence(data);
+      });
     }
-  }, [props.match.params.universityName]);
+  }, [props.match.params.schoolCode]);
 
   function handleChange({ target }) {
     setFence({
@@ -31,11 +39,18 @@ const ManageFencesPage = (props) => {
     });
   }
 
+  function handleHolidayChange(dates) {
+    setFence({
+      ...fence,
+      // eslint-disable-next-line
+      ["holidays"]: dates,
+    });
+  }
+
   function formIsValid() {
     const _errors = {};
 
-    if (!fence.universityName)
-      _errors.universityName = "University name is required.";
+    if (!fence.schoolName) _errors.schoolName = "School Name is required.";
     if (!fence.longitude) _errors.longitude = "Longitude is required";
     if (!fence.latitude) _errors.latitude = "Latitude is required.";
     if (!fence.radiusInMeter) _errors.radiusInMeter = "Radius is required.";
@@ -53,11 +68,15 @@ const ManageFencesPage = (props) => {
     fence.latitude = parseFloat(fence.latitude);
     fence.radiusInMeter = parseFloat(fence.radiusInMeter);
     fence.username = localStorage.getItem("user");
-
-    fenceApi.saveFence(fence).then((_resp) => {
+    fence.geoFenceData = {
+      longitude: fence.longitude,
+      latitude: fence.latitude,
+      radiusInMeter: fence.radiusInMeter,
+    };
+    fenceApi.updateFence(fence).then((_resp) => {
       if (_resp.message === "ok") {
-        props.history.push("/fences");
-        toast.success("Fence updated");
+        props.history.push("/schools");
+        toast.success("School updated");
       } else toast.warn("There was an error. Please try again later.");
     });
   }
@@ -65,11 +84,12 @@ const ManageFencesPage = (props) => {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
-        <h2>Manage Geo-Fence</h2>
-        <ManageFenceForm
+      <div className="main" style={{ padding: "10px" }}>
+        <h2>Manage Schools</h2>
+        <ManageSchoolForm
           errors={errors}
           fence={fence}
+          onChangeHoliday={handleHolidayChange}
           onChange={handleChange}
           onSubmit={handleSubmit}
         />
@@ -78,4 +98,4 @@ const ManageFencesPage = (props) => {
   );
 };
 
-export default ManageFencesPage;
+export default ManageSchoolPage;

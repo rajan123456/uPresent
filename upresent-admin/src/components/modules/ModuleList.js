@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 
 function ModuleList(props) {
   return (
-    <table className="table">
+    <table className="table table-bordered">
       <thead>
         <tr>
           <th>Code</th>
           <th>Name</th>
+          <th>Start Date</th>
+          <th>End Date</th>
           <th>Enrollments</th>
         </tr>
       </thead>
@@ -24,6 +26,8 @@ function ModuleList(props) {
                   </Link>
                 </td>
                 <td>{module.moduleName}</td>
+                <td>{module.startDate}</td>
+                <td>{module.endDate}</td>
                 <td>{module.studentUsernames.length}</td>
               </tr>
             );

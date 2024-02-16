@@ -1,7 +1,7 @@
 import { handleResponse, handleError } from "./apiUtils";
-import { baseUrlFenceApi } from "../config/config";
+import { baseUrlSchoolApi } from "../config/config";
 
-const baseUrl = baseUrlFenceApi;
+const baseUrl = baseUrlSchoolApi;
 
 export function getAllFences() {
   return fetch(baseUrl + "/all", {
@@ -15,7 +15,7 @@ export function getAllFences() {
 }
 
 export function getFenceByUniversityName(universityName) {
-  return fetch(baseUrl + "?universityName=" + universityName, {
+  return fetch(baseUrl + "?schoolCode=" + universityName, {
     method: "GET",
     headers: {
       "content-type": "application/json",
@@ -28,6 +28,18 @@ export function getFenceByUniversityName(universityName) {
 export function saveFence(fence) {
   return fetch(baseUrl, {
     method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(fence),
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function updateFence(fence) {
+  return fetch(baseUrl, {
+    method: "PUT",
     headers: {
       "content-type": "application/json",
     },

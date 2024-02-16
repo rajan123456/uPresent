@@ -1,18 +1,29 @@
 import React from "react";
 import TextInput from "../common/TextInput";
 import PropTypes from "prop-types";
+import MultipleDatePicker from 'react-multiple-datepicker'
 
-function ManageFenceForm(props) {
+function ManageSchoolForm(props) {
   return (
     <form onSubmit={props.onSubmit}>
       <TextInput
-        id="universityName"
+        id="schoolName"
         type="text"
-        label="University Name"
+        label="School Name"
         onChange={props.onChange}
-        name="universityName"
-        value={props.fence.universityName}
-        error={props.errors.universityName}
+        name="schoolName"
+        value={props.fence.schoolName}
+        error={props.errors.schoolName}
+        readOnly={false}
+      />
+      <TextInput
+        id="schoolCode"
+        type="text"
+        label="School Code"
+        onChange={props.onChange}
+        name="schoolCode"
+        value={props.fence.schoolCode}
+        error={props.errors.schoolCode}
         readOnly={false}
       />
       <TextInput
@@ -45,16 +56,37 @@ function ManageFenceForm(props) {
         error={props.errors.radiusInMeter}
         readOnly={false}
       />
+      <label>Holidays</label>
+      <MultipleDatePicker
+        id="holidays"
+        className="form-control"
+        label="Add Holidays"
+        onSubmit={props.onChangeHoliday}
+        name="holidays"
+        value={props.fence.holidays}
+        error={props.errors.holidays}
+        readOnly={false}
+      />
+      <TextInput
+        id="timeZone"
+        type="text"
+        label="Timezone"
+        onChange={props.onChange}
+        name="timeZone"
+        value={props.fence.timeZone}
+        error={props.errors.timeZone}
+        readOnly={false}
+      />
       <input type="submit" value="Save" className="btn btn-primary mr-1" />
     </form>
   );
 }
 
-ManageFenceForm.propTypes = {
+ManageSchoolForm.propTypes = {
   fence: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
 };
 
-export default ManageFenceForm;
+export default ManageSchoolForm;

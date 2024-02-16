@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import Button from "@material-ui/core/Button";
@@ -16,7 +14,9 @@ import moment from "moment";
 import Header from "../common/Header";
 import ReportsForm from "./ReportsForm";
 import { getModules, getModuleByModuleCode } from "../../api/moduleApi";
+import { revokeAttendance } from "../../api/attendanceApi";
 import { getAttendanceReport } from "../../api/reportingApi";
+import { baseUrlFileApi } from "../../config/config";
 
 const useStyles = makeStyles({
   table: {
@@ -28,6 +28,8 @@ function ReportsPage() {
   const [errors] = useState({});
   const [modules, setModules] = useState([]);
   const [reportData, setReportData] = useState({});
+  const [attendanceInfoData, setAttendanceInfoData] = useState({});
+
   const [report, setReport] = useState({
     moduleCode: "",
     startDate: moment(new Date()).format("MM/DD/YYYY"),
@@ -46,6 +48,51 @@ function ReportsPage() {
     });
     // eslint-disable-next-line
   }, []);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    await getAttendanceReport(
+      report.startDate,
+      report.endDate,
+      report.moduleCode
+    ).then(async (_resp) => {
+      if (_resp.message === "ok") {
+        setReportData(_resp.data);
+
+        var attendanceInfo = _resp.data.attendanceInfo;
+        var fr = {};
+        var result = {};
+        for (var key in attendanceInfo) {
+          // eslint-disable-next-line
+          result = attendanceInfo[key].reduce(function (map, obj) {
+            map[key + obj.studentUsername] = {
+              studentUsername: obj.studentUsername,
+              attendance: obj.attendance,
+              capturedImageId: obj.capturedImageId,
+              recognitionConfidence: obj.recognitionConfidence,
+              timestamp: obj.timestamp,
+              recognitionSource: obj.recognitionSource,
+              adminUsername: obj.adminUsername,
+              attendanceId: obj.attendanceId,
+            };
+            return map;
+          }, {});
+          fr = {
+            ...fr,
+            ...result,
+          };
+        }
+        setAttendanceInfoData(fr);
+
+        await getModuleByModuleCode(report.moduleCode).then((_respMod) => {
+          transformReportDataToAttendance(
+            _resp.data,
+            _respMod.data.studentUsernames
+          );
+        });
+      } else toast.warn("Something went wrong, please try again later.");
+    });
+  }
 
   function handleChange({ target }) {
     setReport({
@@ -94,49 +141,12 @@ function ReportsPage() {
     setAttendance(studentDetails);
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    await getAttendanceReport(
-      report.startDate,
-      report.endDate,
-      report.moduleCode
-    ).then(async (_resp) => {
-      if (_resp.message === "ok") {
-        setReportData(_resp.data);
-        await getModuleByModuleCode(report.moduleCode).then((_respMod) => {
-          transformReportDataToAttendance(
-            _resp.data,
-            _respMod.data.studentUsernames
-          );
-        });
-      } else toast.warn("Something went wrong, please try again later.");
+  function revoke(attendanceInfo, key) {
+    revokeAttendance(attendanceInfo[key].attendanceId).then((res) => {
+      var fr = attendanceInfoData;
+      fr[key].attendance = "REVOKED";
+      setAttendanceInfoData(fr);
     });
-  }
-
-  function exportPdf() {
-    if (attendance.length === 0) return;
-
-    const unit = "pt";
-    const size = "A4";
-    const orientation = "portrait";
-    const marginLeft = 40;
-    const doc = new jsPDF(orientation, unit, size);
-
-    doc.setFontSize(15);
-
-    const title = "Attendance Report";
-    const headers = [["NAME", reportData.dates.map((date) => date)]];
-    const data = attendance.map((elt) => [elt.key, elt.status]);
-
-    let content = {
-      startY: 50,
-      head: headers,
-      body: data,
-    };
-
-    doc.text(title, marginLeft, 40);
-    doc.autoTable(content);
-    doc.save("Attendance.pdf");
   }
 
   const classes = useStyles();
@@ -144,7 +154,7 @@ function ReportsPage() {
   return (
     <div className="container-fluid">
       <Header />
-      <div className="body">
+      <div className="main" style={{ padding: "10px" }}>
         <h2>Reports</h2>
         <ReportsForm
           report={report}
@@ -159,7 +169,10 @@ function ReportsPage() {
         <Grid container spacing={Number(2)}>
           {reportData.dates ? (
             <Grid item xs={12}>
-              <TableContainer component={Paper}>
+              <TableContainer
+                component={Paper}
+                className="table table-bordered"
+              >
                 <Table
                   className={classes.table}
                   size="small"
@@ -170,8 +183,8 @@ function ReportsPage() {
                       {reportData.dates ? (
                         <TableCell>Student/Date</TableCell>
                       ) : (
-                        <TableCell />
-                      )}
+                          <TableCell />
+                        )}
                       {reportData.dates &&
                         reportData.dates.map((date) => (
                           <TableCell align="right">{date}</TableCell>
@@ -185,9 +198,95 @@ function ReportsPage() {
                           <TableCell component="th" scope="row">
                             {record.key}
                           </TableCell>
-                          {record.status &&
-                            record.status.map((stat) => (
-                              <TableCell align="right">{stat}</TableCell>
+                          {reportData.dates &&
+                            reportData.dates.map((date) => (
+                              <TableCell align="right">
+                                <div>
+                                  <table className="table table-bordered">
+                                    <tr>
+                                      <th>Image</th>
+                                      <th>Confidence</th>
+                                      <th>Timestamp</th>
+                                      <th>Source</th>
+                                      <th>Status</th>
+                                      <th>Revoke</th>
+                                    </tr>
+                                    <tr>
+                                      <td>
+                                        <img
+                                          style={{ width: "100px" }}
+                                          src={
+                                            baseUrlFileApi +
+                                            "?filename=" +
+                                            attendanceInfoData[
+                                              date + record.key
+                                            ].capturedImageId
+                                          }
+                                          alt={
+                                            attendanceInfoData[
+                                              date + record.key
+                                            ].capturedImageId
+                                          }
+                                        ></img>
+                                      </td>
+                                      <td>
+                                        {
+                                          attendanceInfoData[date + record.key]
+                                            .recognitionConfidence
+                                        }
+                                      </td>
+                                      <td>
+                                        {
+                                          attendanceInfoData[date + record.key]
+                                            .timestamp
+                                        }
+                                      </td>
+                                      <td>
+                                        {
+                                          attendanceInfoData[date + record.key]
+                                            .recognitionSource
+                                        }
+                                      </td>
+                                      <td>
+                                        {
+                                          attendanceInfoData[date + record.key]
+                                            .attendance
+                                        }
+                                      </td>
+                                      {attendanceInfoData[date + record.key]
+                                        .attendance === "REVOKED" ? (
+                                          <td>
+                                            Revoked by{" "}
+                                            {
+                                              attendanceInfoData[
+                                                date + record.key
+                                              ].adminUsername
+                                            }
+                                          </td>
+                                        ) : attendanceInfoData[date + record.key]
+                                          .attendance === "ABSENT" ? (
+                                            <td>Student is ABSENT</td>
+                                          ) : (
+                                            <td>
+                                              <Button
+                                                type="submit"
+                                                onClick={() =>
+                                                  revoke(
+                                                    attendanceInfoData,
+                                                    date + record.key
+                                                  )
+                                                }
+                                                variant="contained"
+                                                color="primary"
+                                              >
+                                                Revoke
+                                          </Button>
+                                            </td>
+                                          )}
+                                    </tr>
+                                  </table>
+                                </div>
+                              </TableCell>
                             ))}
                         </TableRow>
                       ))}
@@ -196,15 +295,15 @@ function ReportsPage() {
               </TableContainer>
             </Grid>
           ) : (
-            <Button />
-          )}
+              <Button />
+            )}
           {reportData.dates ? (
             <Grid item xs={12}>
-              <Button type="submit" onClick={exportPdf()} />
+              <Button type="submit" />
             </Grid>
           ) : (
-            <Button />
-          )}
+              <Button />
+            )}
         </Grid>
       </div>
     </div>
